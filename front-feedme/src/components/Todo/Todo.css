@@ -27,8 +27,8 @@
 
 
 .TodoContainer {
-    width: 90%;
-    height: 85%;
+    width: 83%;
+    height: 78%;
     border-radius: 20px;
     background-color: rgba(255, 255, 255, 0.4);
     backdrop-filter: blur(12px);
@@ -42,7 +42,7 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    border: solid 1px;
+    /* border:  blue solid 5px; */
     width: 100%; /* 수정: 부모 요소에 맞춰 너비 조정 */
     height: 100%; /* 수정: 부모 요소에 맞춰 높이 조정 */
 }
@@ -51,19 +51,21 @@
     display: flex;
     flex: 1;
     justify-content: space-around;
-    border: solid 1px;
+    /* border: green solid 3px; */
     width: 100%; /* 수정: 부모 요소에 맞춰 너비 조정 */
     height: 100%; /* 수정: 부모 요소에 맞춰 높이 조정 */
 }
 
 .TodoList {
     flex: 1;
-    border: solid 1px;    
-    margin: 10px; /* 요소 사이 여백 추가 */
+    margin: 10px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* 자식 요소가 부모 요소를 넘어가지 않도록 설정 */
 }
 
 .TodoCreature {
     flex: 1;
-    border: solid 1px;
+    /* border: blueviolet solid 5px; */
     margin: 10px; /* 요소 사이 여백 추가 */
 }

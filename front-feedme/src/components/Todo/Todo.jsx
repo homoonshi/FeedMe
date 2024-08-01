@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Sidebar from '../Main/Sidebar';
 import Search from '../Main/Search';
-import ToDoList from './TodoList';
+import TodoMainList from './TodoMainList';
 import TodoCreature from './TodoCreature';
 import './Todo.css'
 
@@ -22,11 +22,11 @@ const Todo = () => {
           <Search />
             <div className="TodoDashboard">
               <div className="TodoList">
-                <ToDoList />
-                <button onClick={handleDrawClick}>DRAW</button>
+                <TodoMainList />
+                {/* <button onClick={handleDrawClick}>DRAW</button>
                   {drawing && (
                     <div/>
-                  )} 
+                  )}  */}
               </div>
               <div className="TodoCreature">
                 <TodoCreature />
