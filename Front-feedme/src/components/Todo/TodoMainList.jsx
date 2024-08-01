@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { FaAngleLeft, FaAngleRight, FaEllipsisH, FaPlus } from 'react-icons/fa';
 import './TodoMainList.css';
+import '../../assets/font/Font.css'
+
 
 const TodoMainList = () => {
   const [categories, setCategories] = useState([
