@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/backend.iml" filepath="$PROJECT_DIR$/.idea/backend.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/com.todoslave.feedme.main.iml" filepath="$PROJECT_DIR$/.idea/modules/com.todoslave.feedme.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/feedme.iml" filepath="$PROJECT_DIR$/.idea/modules/feedme.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/feedme.test.iml" filepath="$PROJECT_DIR$/.idea/modules/feedme.test.iml" />
+    </modules>
+  </component>
+</project>
