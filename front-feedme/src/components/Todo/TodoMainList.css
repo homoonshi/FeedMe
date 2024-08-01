@@ -1,12 +1,8 @@
 .TodoMainListContainer {
   padding: 20px;
-  background-color: rgba(255, 255, 255, 0.6);
-  border-radius: 10px;
-  backdrop-filter: blur(12px);
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  height: 100%; /* 컨테이너 높이 설정 */
+  height: 100%;
   position: relative; /* 자식 요소를 고정하기 위해 위치 설정 */
   overflow: hidden; /* 부모 요소를 넘어가지 않도록 설정 */
 }
@@ -17,7 +13,6 @@
   justify-content: space-between;
   position: sticky; /* 스크롤 시 고정 */
   top: 0; /* 상단에 고정 */
-  background-color: rgba(255, 255, 255, 0.6);
   z-index: 1; /* 다른 요소 위에 표시되도록 설정 */
   padding: 10px 0;
 }
@@ -38,7 +33,7 @@
   flex-direction: column;
   gap: 20px;
   overflow-y: auto; /* 스크롤 가능하게 설정 */
-  padding: 10px 0;
+  padding: 5% 10%; /* 패딩 추가 */
 }
 
 .TodoSection {
@@ -55,7 +50,6 @@
 
 .TodoSection h4 {
   font-size: 1.2em;
-  margin-bottom: 5px;
 }
 
 .TodoSection ul {
@@ -65,8 +59,26 @@
 
 .TodoSection ul li {
   display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.TodoItemContent {
+  display: flex;
   align-items: center;
+  justify-content: space-between; /* 옵션 버튼 정렬 */
   gap: 10px;
+  text-align: left; /* 왼쪽 정렬 추가 */
+}
+
+.TodoOptionsButton {
+  font-size: 1.2em;
+  cursor: pointer;
+}
+
+.TodoOptions {
+  display: flex;
+  gap: 5px;
 }
 
 .TodoActions {
@@ -75,9 +87,10 @@
   gap: 10px;
   position: sticky; /* 스크롤 시 고정 */
   bottom: 0; /* 하단에 고정 */
-  background-color: rgba(255, 255, 255, 0.6);
+  /* background-color: rgba(255, 255, 255, 0.6); */
   z-index: 1; /* 다른 요소 위에 표시되도록 설정 */
   padding: 10px 0;
+  justify-content: center; /* 가운데 정렬 */
 }
   
 .CreateDrawingButton {
