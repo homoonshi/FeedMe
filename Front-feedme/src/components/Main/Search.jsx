@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import NotificationModal from '../Notice/NotificationModal';
+import '../Main/Search.css';
 
 const Search = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -15,7 +16,7 @@ const Search = () => {
   };
 
   return (
-    <div>
+    <div className='SearchBar'>
       <input type="text" placeholder="search" />
       <button onClick={handleNotificationClick}>
         <img src="path_to_notification_icon" alt="notifications" />

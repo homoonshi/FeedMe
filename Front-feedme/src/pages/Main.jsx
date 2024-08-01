@@ -3,7 +3,7 @@ import Sidebar from '../components/Main/Sidebar';
 import SearchBar from '../components/Main/Search';
 import CreatureInfo from '../components/Main/CreatureInfo';
 import Calendar from '../components/Main/Calendar';
-import './Main.css';
+import '../pages/Main.css';
 
 const Main = () => {
   return (

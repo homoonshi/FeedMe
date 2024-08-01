@@ -1,10 +1,12 @@
 .Calendar {
     border-radius: 20px;
     background-color: rgba(255, 255, 255);
-    /* backdrop-filter: blur(12px); */
+    width: 60%;
+    margin: 0 25px;
 }
 
-.CalendarTop {
+/* .CalendarTop {
     display: flex;
     font-family: 'PretendardM';
-}
+} */
+

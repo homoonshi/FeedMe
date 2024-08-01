@@ -5,7 +5,6 @@ import Intro from './pages/Intro.jsx';
 import Login from './pages/Login.jsx';
 import Signup from './components/Login/Signup.jsx';
 import CreatureCreate from './components/Creature/CreatureCreate.jsx'
-import CreatureResult from './components/Creature/CreatureResult.jsx';
 import Main from './pages/Main.jsx';
 import Todo from './components/Todo/Todo.jsx';
 import Diary from './components/Diary/Diary.jsx';
@@ -37,7 +36,6 @@ function App() {
         <Route path="/Chatting" element={<Chat />} />
         <Route path="/Setting" element={<Setting />} />
         <Route path="/MyPage" element={<MyPage />} />
-        <Route path="/CreatureResult" element={<CreatureResult />} />
       </Routes>
     </div>
   );

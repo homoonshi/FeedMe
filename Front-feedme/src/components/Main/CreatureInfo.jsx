@@ -1,7 +1,7 @@
 import React from 'react';
 import ToDoList from '../Todo/TodoList';
 import Louvre from '../../assets/images/Louvre.JPG';
-import './CreatureInfo.css';
+import '../Main/CreatureInfo.css';
 
 const CreatureInfo = () => {
   
@@ -16,7 +16,7 @@ const CreatureInfo = () => {
     <div className='CreatureInfo'>
       <h2>NYAONG</h2>
       <img src={Louvre} alt="creature" style={sample}/>
-      <p>❤️ 247 days</p>
+      <p>❤️ 247 일째 함께하는 중</p>
       <div>
         <ToDoList />
       </div>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './Login.css'
+import '../pages/Login.css'
 import '../assets/font/Font.css'
 import MyNaverLoginButton from '../components/Buttons/NaverButton';
 import MyKakaoLoginButton from '../components/Buttons/KakaoButton';
