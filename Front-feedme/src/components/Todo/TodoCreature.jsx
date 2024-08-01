@@ -1,9 +1,19 @@
 import React from 'react';
+import CreatureImage from '../../assets/images/test1.png';
+import '../../assets/font/Font.css' 
+import './TodoCreature.css'
 
 const TodoCreature = () => {
   return (
-    <div>
-      
+    <div className="TodoCreature">
+      <p className="TodoCreatureName">Lv. 1</p> 
+      <img src={CreatureImage} alt="creature" />
+      <div className="TodoCreatureInfo">
+        <div className="TodoCreatureExp">
+          <p>EXP</p>
+          <progress value="60" max="100"></progress>
+        </div>
+      </div>
     </div>
   );
 };

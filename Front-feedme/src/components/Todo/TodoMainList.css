@@ -1,23 +1,19 @@
 .TodoMainListContainer {
   padding: 20px;
-  /* background-color: rgba(255, 255, 255, 0.6); */
-  /* border-radius: 10px; */
-  /* backdrop-filter: blur(12px); */
   display: flex;
   flex-direction: column;
   height: 100%;
-  position: relative; /* 자식 요소를 고정하기 위해 위치 설정 */
-  overflow: hidden; /* 부모 요소를 넘어가지 않도록 설정 */
+  position: relative;
+  overflow: hidden;
 }
 
 .TodoHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  position: sticky; /* 스크롤 시 고정 */
-  top: 0; /* 상단에 고정 */
-  /* background-color: rgba(255, 255, 255, 0.6); */
-  z-index: 1; /* 다른 요소 위에 표시되도록 설정 */
+  position: sticky;
+  top: 0;
+  z-index: 1;
   padding: 10px 0;
 }
 
@@ -33,18 +29,18 @@
 }
 
 .TodoSections {
-  flex: 1; /* 남은 공간을 차지하도록 설정 */
+  flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 0.5%; /* 간격 조정 */
-  overflow-y: auto; /* 스크롤 가능하게 설정 */
-  padding: 3% 10%; /* 패딩 추가 */
+  gap: 0.5%;
+  overflow-y: auto;
+  padding: 3% 10%;
 }
 
 .TodoSection {
   display: flex;
   flex-direction: column;
-  gap: 1%; /* 간격 조정 */
+  gap: 1%;
 }
 
 .TodoSectionHeader {
@@ -55,13 +51,12 @@
 
 .TodoSection h4 {
   font-size: 1.2em;
-  /* margin-bottom: 5px; */
 }
 
 .TodoSection ul {
   list-style-type: none;
   padding: 0;
-  margin-top: 0; /* 추가: ul의 상단 마진 제거 */
+  margin-top: 0;
   font-family: 'PretendardR';
 }
 
@@ -74,18 +69,18 @@
 .TodoItemContent {
   display: flex;
   align-items: center;
-  justify-content: flex-start; /* 왼쪽 정렬로 변경 */
+  justify-content: flex-start;
   margin-bottom: 4%;
-  text-align: left; /* 왼쪽 정렬 추가 */
-  position: relative; /* 옵션 버튼을 오른쪽에 배치하기 위해 추가 */
+  text-align: left;
+  position: relative;
 }
 
 .TodoOptionsButton {
   font-size: 1.2em;
   cursor: pointer;
   font-family: 'PretendardR';
-  position: absolute; /* 절대 위치로 변경 */
-  right: 0; /* 오른쪽에 배치 */
+  position: absolute;
+  right: 0;
 }
 
 .TodoOptions {
@@ -97,14 +92,13 @@
   display: flex;
   align-items: center;
   gap: 5%;
-  position: sticky; /* 스크롤 시 고정 */
-  bottom: 0; /* 하단에 고정 */
-  /* background-color: rgba(255, 255, 255, 0.6); */
-  z-index: 1; /* 다른 요소 위에 표시되도록 설정 */
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
   padding: 10px 0;
-  justify-content: center; /* 가운데 정렬 */
+  justify-content: center;
 }
-  
+
 .CreateDrawingButton {
   background-color: white;
   color: black;
@@ -112,6 +106,8 @@
   border-radius: 5px;
   padding: 10px;
   cursor: pointer;
+  display: flex; /* 아이콘과 텍스트를 나란히 배치하기 위해 flex 사용 */
+  align-items: center; /* 아이콘과 텍스트의 수직 정렬을 맞춤 */
 }
 
 .MoreOptionsButton {
@@ -122,4 +118,69 @@
 .AddTodoButton {
   font-size: 1.2em;
   cursor: pointer;
+}
+
+.DrawingIcon {
+  margin-right: 5px; /* 아이콘과 텍스트 사이의 간격 조정 */
+}
+
+.TodoMainModal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  right: auto;
+  bottom: auto;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  outline: none;
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* 입력 칸과 버튼 사이의 간격 */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* 모달 창에 그림자 추가 */
+}
+
+.TodoMainModalTitle {
+  font-size: 1.5em;
+  text-align: center; /* 제목을 가운데 정렬 */
+  margin: 0; /* 제목의 기본 마진 제거 */
+  font-family: 'PretendardM'; /* PretendardM 폰트 사용 */
+}
+
+.TodoMainModalInput {
+  padding: 10px;
+  font-size: 1em;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.TodoMainModalButtons {
+  display: flex;
+  justify-content: space-between; /* 버튼을 양 끝으로 정렬 */
+}
+
+.TodoMainModalButton {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+}
+
+.TodoMainModalButton:last-child {
+  background-color: #f44336; /* 취소 버튼의 배경색 변경 */
+}
+
+.TodoMainOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
 }

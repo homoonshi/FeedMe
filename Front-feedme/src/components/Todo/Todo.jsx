@@ -7,13 +7,6 @@ import './Todo.css'
 
 
 const Todo = () => {
-  const [drawing, setDrawing] = useState(false);
-
-  const handleDrawClick = () => {
-    alert('Drawing created!');
-    setDrawing(true);
-  };
-
   return (
     <div className="TodoBack">
       <div className="TodoContainer">
@@ -23,10 +16,6 @@ const Todo = () => {
             <div className="TodoDashboard">
               <div className="TodoList">
                 <TodoMainList />
-                {/* <button onClick={handleDrawClick}>DRAW</button>
-                  {drawing && (
-                    <div/>
-                  )}  */}
               </div>
               <div className="TodoCreature">
                 <TodoCreature />

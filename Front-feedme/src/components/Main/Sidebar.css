@@ -1,8 +1,9 @@
 .SidebarBack {
+    margin: 0 25px;
     width: 22%;
-    height: 92%;
+    height: 91%;
     border-radius: 20px;
-    background-color: rgba(255, 255, 255, 0.4);
+    background-color: rgba(255, 255, 255, 0.6);
     backdrop-filter: blur(12px);
 }
 
@@ -12,21 +13,39 @@
 
 .SidebarLogo>h2 {
     font-family: 'PretendardB';
-    font-size: 40px;
+    font-size: 35px;
     margin: 40px 0;
 }
 
 .SidebarList {
+    display: flex;
+    flex-direction: column;
 
-}
-
-.SidebarList img {
-    width: 35px;
-    height: 35px;
 }
 
 .SidebarList div {
     display: flex;
     align-items: center;
     font-size: 18px;
+    width: 100%;
+    height: 8vh;
+    margin-bottom: 15px;
+}
+
+.SidebarList img {
+    width: 35px;
+    height: 35px;
+    margin-right: 15px;
+    margin-left: 25px;
+}
+
+#SidebarBack {
+    background-color: rgba(135, 201, 8, 0.13);
+}
+
+#SidebarLine {
+    color: rgba(255, 255, 255, 0.0);
+    height: 100%;
+    margin-left: auto;
+    background-color: #87C908;
 }
