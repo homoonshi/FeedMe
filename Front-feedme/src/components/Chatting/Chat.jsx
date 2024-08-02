@@ -4,6 +4,7 @@ import Search from '../Main/Search';
 import ChattingFriendList from './ChattingFriendList';
 import ChattingFriendProfile from './ChattingFriendProfile';
 import ChatWindow from './ChatWindow';
+import Creature from '../Mypage/Creature';
 import './Chat.css';
 import test1 from '../../assets/images/test1.png';
 
@@ -14,11 +15,15 @@ const Chat = () => {
   const friends = [
     { id: 1, name: 'pi', avatar: test1 },
     { id: 2, name: '지나', avatar: test1 },
-    ];
+    { id: 3, name: '지수', avatar: test1 },
+    { id: 4, name: '수보', avatar: test1 },
+    { id: 5, name: '차미', avatar: test1 },
+    { id: 6, name: '미푸', avatar: test1 },
+  ];
 
   const handleFriendClick = (friend) => {
     setSelectedFriend(friend);
-    setView('profile');
+    setView(friend.id === 'my-avatar' ? 'creature' : 'profile');
   };
 
   const handleChatClick = (friend) => {
@@ -27,31 +32,36 @@ const Chat = () => {
   };
 
   return (
-    <div className="ChatContainer">
-      <Sidebar />
+    <div className="ChatBack">
+      <div className="ChatBox">
+        <Sidebar />
+        <div className="ChatRight">
+          <Search />
+          <div className="ChatRightContents">
+            <div className="ChatFriendList">
+              <ChattingFriendList
+                friends={friends}
+                onFriendClick={handleFriendClick}
+                onChatClick={handleChatClick}
+              />
+            </div>
 
-      <div className="ChatMain">
-        <Search />
-        <div className="ChatDashboard">
-        <div className="ChatFriendList">
-          <ChattingFriendList
-            friends={friends}
-            onFriendClick={handleFriendClick}
-            onChatClick={handleChatClick}
-          />
-        </div>
-
-        <div className="ChatDetail">
-          {selectedFriend ? (
-            view === 'profile' ? (
-              <ChattingFriendProfile friend={selectedFriend} />
-            ) : (
-              <ChatWindow friend={selectedFriend} />
-            )
-          ) : (
-            <div>친구를 선택하세요</div>
-          )}
-        </div>
+            <div className="ChatDetail">
+              {selectedFriend ? (
+                <div className="ChatDetailInner">
+                  {view === 'profile' ? (
+                    <ChattingFriendProfile friend={selectedFriend} />
+                  ) : view === 'chat' ? (
+                    <ChatWindow friend={selectedFriend} />
+                  ) : (
+                    <Creature />
+                  )}
+                </div>
+              ) : (
+                <div>친구를 선택하세요</div>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </div>

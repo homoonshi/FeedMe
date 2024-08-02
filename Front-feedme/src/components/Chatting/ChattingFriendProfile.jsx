@@ -1,20 +1,20 @@
 import React from 'react';
+import './ChattingFriendProfile.css';
+import '../../assets/font/Font.css';
 
 const ChattingFriendProfile = ({ friend }) => {
-  
-  // 이미지 사이즈 조정 삭제해도 됨
-  const sample = {
-    width:"100px",
-    height:'100px',
-    objectFit:"cover"
-  }
-
   return (
-    <div>
-      <h2>{friend.name}</h2>
-      <img src={friend.avatar} alt={friend.name} style={sample} />
-      <p>Level: 1</p>
-      <p>EXP: 305</p>
+    <div className="CFProfile">
+      <p className="CFProfileName">{friend.name}</p>
+      <p>🤍 305일째 함께하는 중</p>
+      <img src={friend.avatar} alt={friend.name} className="CFProfileImage" />
+      <div className="CFProfileInfo">
+        <p>Lv. 1</p>
+        <div className="CFProfileExp">
+          <p>EXP</p>
+          <progress value="50" max="100"></progress>
+        </div>
+      </div>
     </div>
   );
 };
