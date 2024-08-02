@@ -25,8 +25,8 @@ RUN rm /etc/nginx/conf.d/default.conf
 COPY --from=build /app/build /usr/share/nginx/html
 
 # Copy SSL certificate and key
-COPY certbot/etc/letsencrypt/live/Feedme/fullchain.pem /etc/ssl/certs/fullchain.pem
-COPY certbot/etc/letsencrypt/live/Feedme/privkey.pem /etc/ssl/private/privkey.pem
+COPY certbot/etc/letsencrypt/live/i11b104.p.ssafy.io/fullchain.pem /etc/ssl/certs/fullchain.pem
+COPY certbot/etc/letsencrypt/live/i11b104.p.ssafy.io/privkey.pem /etc/ssl/private/privkey.pem
 
 # Copy the custom Nginx configuration
 COPY nginx.conf /etc/nginx/nginx.conf
