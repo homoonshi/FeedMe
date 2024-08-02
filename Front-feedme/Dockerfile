@@ -1,39 +1,40 @@
-# Stage 1: Build the application using Node.js
-FROM node:20 AS build
+# Jenkins 빌드 스크립트 예제
 
-# Set the working directory for the build stage
-WORKDIR /app
+# Docker 빌드 전에 인증서 파일을 Jenkins 작업 디렉토리로 복사
+mkdir -p ./certs
+cp /home/ubuntu/project/certbot/etc/letsencrypt/live/i11b104.p.ssafy.io/fullchain.pem ./certs/
+cp /home/ubuntu/project/certbot/etc/letsencrypt/live/i11b104.p.ssafy.io/privkey.pem ./certs/
 
-# Copy the package.json and package-lock.json (if available) and install dependencies
-COPY package.json package-lock.json ./
-RUN npm install --silent
+# Docker 이미지 빌드
+echo docker image build
+docker build -t doki2580/feedme-front:latest -f ./Front-feedme/Dockerfile ./Front-feedme
 
-# Copy the public directory and source code
-COPY public ./public
-COPY src ./src
+# Docker 이미지 푸시
+echo docker image push
+docker push doki2580/feedme-front:latest
 
-# Build the application
-RUN npm run build 
+# 기존 도커 이미지 삭제를 위한 준비
+echo Checking for dangling images
+no_tag_image_ids=$(docker images -f "dangling=true" -q)
 
-# Stage 2: Serve the application using Nginx
-FROM nginx:latest
+if [ -z "$no_tag_image_ids" ]; then
+  echo "No dangling images to remove."
+else
+  echo "Removing dangling images"
 
-# Remove the default Nginx configuration
-RUN rm /etc/nginx/conf.d/default.conf
-
-# Copy the built application from the build stage to the Nginx HTML directory
-COPY --from=build /app/build /usr/share/nginx/html
-# Copy the custom Nginx configuration
-COPY nginx.conf /etc/nginx/nginx.conf
-
-# Copy SSL certificate and key
-ARG CERT_PATH
-COPY ${CERT_PATH}/fullchain.pem /etc/ssl/certs/fullchain.pem
-COPY ${CERT_PATH}/privkey.pem /etc/ssl/private/privkey.pem
-
-# Expose port 80 and 443
-EXPOSE 80
-EXPOSE 443
-
-# Start Nginx in the foreground
-CMD ["nginx", "-g", "daemon off;"]
+  # 각 이미지 ID에 대해 순회하며 삭제하기 전에 해당 이미지의 컨테이너를 먼저 중지하고 삭제
+  for image_id in $no_tag_image_ids; do
+    # 해당 이미지 ID를 사용하는 컨테이너 중지 및 삭제
+    container_ids=$(docker ps -a -q --filter "ancestor=$image_id")
+    if [ -n "$container_ids" ]; then
+      for container_id in $container_ids; do
+        docker stop $container_id
+        docker rm $container_id
+      done
+    fi
+    
+    # 이미지 삭제
+    docker rmi $image_id
+    echo "Deleted image $image_id"
+  done
+fi
