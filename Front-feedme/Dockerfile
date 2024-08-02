@@ -23,13 +23,13 @@ RUN rm /etc/nginx/conf.d/default.conf
 
 # Copy the built application from the build stage to the Nginx HTML directory
 COPY --from=build /app/build /usr/share/nginx/html
-
-# Copy SSL certificate and key
-COPY certbot/etc/letsencrypt/live/i11b104.p.ssafy.io/fullchain.pem /etc/ssl/certs/fullchain.pem
-COPY certbot/etc/letsencrypt/live/i11b104.p.ssafy.io/privkey.pem /etc/ssl/private/privkey.pem
-
 # Copy the custom Nginx configuration
 COPY nginx.conf /etc/nginx/nginx.conf
+
+# Copy SSL certificate and key
+ARG CERT_PATH
+COPY ${CERT_PATH}/fullchain.pem /etc/ssl/certs/fullchain.pem
+COPY ${CERT_PATH}/privkey.pem /etc/ssl/private/privkey.pem
 
 # Expose port 80 and 443
 EXPOSE 80
