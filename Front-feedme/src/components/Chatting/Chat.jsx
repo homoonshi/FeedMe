@@ -19,6 +19,7 @@ const Chat = () => {
     { id: 4, name: '수보', avatar: test1 },
     { id: 5, name: '차미', avatar: test1 },
     { id: 6, name: '미푸', avatar: test1 },
+    { id: 7, name: '미푸', avatar: test1 },
   ];
 
   const handleFriendClick = (friend) => {
