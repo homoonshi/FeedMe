@@ -13,7 +13,7 @@
 
 .Login::before {
   content: "";
-  background: url('../assets/images/test2.png') no-repeat center;
+  background: url('../assets/images/img-main.png') no-repeat center;
   background-size: cover;
   opacity: 0.6;
   position: absolute;
@@ -42,7 +42,7 @@
 .LoginImage {
   width: 60%;
   height: 100%;
-  background: url('../assets/images/test2.png') no-repeat center;
+  background: url('../assets/images/img-main.png') no-repeat center;
   background-size: cover;
   position: relative;
   border-radius: 30px 0px 0px 30px;

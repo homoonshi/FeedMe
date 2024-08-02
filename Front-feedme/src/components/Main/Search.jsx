@@ -19,21 +19,23 @@ const Search = () => {
   };
 
   return (
-    <div className="search-bar-container">
-      <input type="text" className="search-input" placeholder="전체 사용자 검색" />
-      <div className="search-icon">
-        <img src={search} alt="Search Icon" />
-      </div>
-      <div className='noti-mypage-icons'>
-        <div onClick={handleNotificationClick}>
-          <img src={noti} alt="Noti Icon" />
+    // <div className='SearchContainer'>
+      <div className="search-bar-container">
+        <input type="text" className="search-input" placeholder="전체 사용자 검색" />
+        <div className="search-icon">
+          <img src={search} alt="Search Icon" />
         </div>
-        <div onClick={handleProfileClick}>
-          <img src={mypage} alt="Mypage Icon" />
+        <div className='noti-mypage-icons'>
+          <div onClick={handleNotificationClick}>
+            <img src={noti} alt="Noti Icon" />
+          </div>
+          <div onClick={handleProfileClick}>
+            <img src={mypage} alt="Mypage Icon" />
+          </div>
         </div>
+        {isModalOpen && <NotificationModal onClose={handleNotificationClick} />}
       </div>
-      {isModalOpen && <NotificationModal onClose={handleNotificationClick} />}
-    </div>
+    // </div>
   );
 };
 

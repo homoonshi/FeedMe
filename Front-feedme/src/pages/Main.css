@@ -9,7 +9,7 @@
 
 .Main::before {
   content: "";
-  background: url('../assets/images/test2.png') no-repeat center;
+  background: url('../assets/images/img-main.png') no-repeat center;
   background-size: cover;
   opacity: 0.8;
   position: absolute;

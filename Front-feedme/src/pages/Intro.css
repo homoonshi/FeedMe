@@ -3,7 +3,7 @@
     height: 100vh;
     overflow: hidden;
     /* overflow-y: scroll; */
-    background: url('../assets/images/test2.png') no-repeat center;
+    background: url('../assets/images/img-main.png') no-repeat center;
     background-size: cover;
     display: flex;
     justify-content: center;
