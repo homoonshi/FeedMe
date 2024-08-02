@@ -1,6 +1,6 @@
 import React from 'react';
 import Creature from '../Creature/Creature';
-import './Mypage.css';
+import './MyPage.css';
 
 const MyPage = () => {
   return (

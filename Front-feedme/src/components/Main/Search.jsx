@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import NotificationModal from '../Notice/NotificationModal';
 import '../Main/Search.css';
+import noti from '../../assets/icons/icon-noti-gray.png';
+import search from '../../assets/icons/icon-search-gray-24.png';
+import mypage from '../../assets/icons/icon-account-gray-24.png';
 
 const Search = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -16,14 +19,19 @@ const Search = () => {
   };
 
   return (
-    <div className='SearchBar'>
-      <input type="text" placeholder="search" />
-      <button onClick={handleNotificationClick}>
-        <img src="path_to_notification_icon" alt="notifications" />
-      </button>
-      <button onClick={handleProfileClick}>
-        <img src="path_to_profile_icon" alt="profile" />
-      </button>
+    <div className="search-bar-container">
+      <input type="text" className="search-input" placeholder="전체 사용자 검색" />
+      <div className="search-icon">
+        <img src={search} alt="Search Icon" />
+      </div>
+      <div className='noti-mypage-icons'>
+        <div onClick={handleNotificationClick}>
+          <img src={noti} alt="Noti Icon" />
+        </div>
+        <div onClick={handleProfileClick}>
+          <img src={mypage} alt="Mypage Icon" />
+        </div>
+      </div>
       {isModalOpen && <NotificationModal onClose={handleNotificationClick} />}
     </div>
   );
