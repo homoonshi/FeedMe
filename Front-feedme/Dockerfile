@@ -24,11 +24,16 @@ RUN rm /etc/nginx/conf.d/default.conf
 # Copy the built application from the build stage to the Nginx HTML directory
 COPY --from=build /app/build /usr/share/nginx/html
 
+# Copy SSL certificate and key
+COPY certbot/etc/letsencrypt/live/Feedme/fullchain.pem /etc/ssl/certs/fullchain.pem
+COPY certbot/etc/letsencrypt/live/Feedme/privkey.pem /etc/ssl/private/privkey.pem
+
 # Copy the custom Nginx configuration
 COPY nginx.conf /etc/nginx/nginx.conf
 
-# Expose port 80
+# Expose port 80 and 443
 EXPOSE 80
+EXPOSE 443
 
 # Start Nginx in the foreground
 CMD ["nginx", "-g", "daemon off;"]
