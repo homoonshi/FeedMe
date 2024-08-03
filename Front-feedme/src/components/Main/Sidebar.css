@@ -20,7 +20,6 @@
 .SidebarList {
     display: flex;
     flex-direction: column;
-
 }
 
 .SidebarList div {
@@ -32,11 +31,12 @@
     margin-bottom: 15px;
 }
 
-.SidebarList img {
+.SidebarList .menu-icon {
     width: 35px;
     height: 35px;
     margin-right: 15px;
     margin-left: 25px;
+    color: #49454F;
 }
 
 #SidebarBack {

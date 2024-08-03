@@ -1,47 +1,30 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { NavLink } from "react-router-dom";
 import '../Main/Sidebar.css';
-import main from '../../assets/icons/icon-main-green-50.png'
-import todolist from '../../assets/icons/icon-todo-gray-50.png'
-import diary from '../../assets/icons/icon-diary-gray-50.png'
-import chat from '../../assets/icons/icon-chat-gray-50.png'
+import Menu from './SidebarMenu';
+import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
+import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
+import AutoStoriesOutlinedIcon from '@mui/icons-material/AutoStoriesOutlined';
+import ChatBubbleOutlineOutlinedIcon from '@mui/icons-material/ChatBubbleOutlineOutlined';
 
 const Sidebar = () => {
+  const [ clicked, setClicked ] = useState('#49454F');
+
+  const ClickedMenu = () => {
+    setClicked('#87C908');
+  }
+  
   return (
     <div className='SidebarBack'>
       <div className='SidebarLogo'>
         <h2>Feed me</h2>
       </div>
       <div className='SidebarList'>
-        <div id='SidebarBack'>
-          <img src={main} alt="main-icon" />
-          <Link style={{
-            fontFamily: 'PretendardM',
-            color: '#87C908'
-          }} to="/Main">메인</Link>
-          <span id='SidebarLine'>|</span>
-        </div>
-        <div>
-          <img src={todolist} alt="main-icon" />
-          <Link style={{
-            fontFamily: 'PretendardM',
-            color: '#49454F'
-          }} to="/Todo">할 일 목록</Link>
-        </div>
-        <div>
-          <img src={diary} alt="main-icon" />
-          <Link style={{
-            fontFamily: 'PretendardM',
-            color: '#49454F'
-          }} to="/Diary">그림일기</Link>
-        </div>
-        <div>
-          <img src={chat} alt="main-icon" />
-          <Link style={{
-            fontFamily: 'PretendardM',
-            color: '#49454F'
-          }} to="/Chatting">채팅</Link>
-        </div>
+        <Menu color={clicked} onClick={ClickedMenu} icon={GridViewOutlinedIcon} des="/Main" link="메인"/>
+        <Menu color={clicked} onClick={ClickedMenu} icon={FormatListBulletedIcon} des="/Todo" link="할 일 목록"/>
+        <Menu color={clicked} onClick={ClickedMenu} icon={AutoStoriesOutlinedIcon} des="/Diary" link="그림일기"/>
+        <Menu color={clicked} onClick={ClickedMenu} icon={ChatBubbleOutlineOutlinedIcon} des="/Chatting" link="채팅"/>
+        
       </div>
     </div>
   );

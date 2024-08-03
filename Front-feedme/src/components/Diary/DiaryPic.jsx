@@ -78,7 +78,7 @@ export default DiaryPic;
 
 const Container = styled.div`
   width: 500px;
-  height: 300px;
+  height: 330px;
   margin: 0 auto;
   overflow: hidden;
   position: relative;
@@ -129,11 +129,11 @@ const Arrow = styled.div`
   position: absolute;
   top: 0;
   bottom: 0;
-  margin: auto 10px;
+  margin: auto 80px;
   left: ${({ direction }) => direction === "prev" && "0px"};
   right: ${({ direction }) => direction === "next" && "0px"};
-  width: 36px;
-  height: 36px;
+  width: 45px;
+  height: 45px;
   border-radius: 50%;
   display: flex;
   justify-content: center;

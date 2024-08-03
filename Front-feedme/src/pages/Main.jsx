@@ -6,6 +6,7 @@ import Calendar from '../components/Main/Calendar';
 import '../pages/Main.css';
 
 const Main = () => {
+  
   return (
     <div className="Main">
       <div className="MainRectangle">
