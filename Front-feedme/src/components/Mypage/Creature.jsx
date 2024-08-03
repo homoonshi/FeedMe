@@ -7,10 +7,10 @@ const Creature = () => {
   return (
     <div className="MCreature">
       <p className="MCreatureName">불사조</p>
-      <p>🤍 247일째 함께하는 중</p>
+      <p className="MCreatureterm">🤍 247일째 함께하는 중</p>
       <img src={CreatureImage} alt="creature" />
       <div className="MCreatureInfo">
-        <p>Lv. 1</p>
+        <p className="MCreatureLv">Lv. 1</p>
         <div className="MCreatureExp">
           <p>EXP</p>
           <progress value="50" max="100"></progress>

@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Sidebar from '../Main/Sidebar';
 import Search from '../Main/Search';
 import TodoMainList from './TodoMainList';
+import TodoListMain from './TodoListMain';
 import TodoCreature from './TodoCreature';
 import './Todo.css'
 
@@ -15,9 +16,10 @@ const Todo = () => {
           <Search />
             <div className="TodoDashboard">
               <div className="TodoList">
-                <TodoMainList />
+                {/* <TodoMainList /> */}
+                <TodoListMain />
               </div>
-              <div className="TodoCreature">
+              <div className="TodoCreatures">
                 <TodoCreature />
               </div>
             </div>

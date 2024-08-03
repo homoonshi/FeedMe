@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FaAngleLeft, FaAngleRight, FaEllipsisH, FaPlus, FaPen } from 'react-icons/fa';
-import Modal from 'react-modal'; 
+import Modal from 'react-modal';
 import './TodoMainList.css';
 import '../../assets/font/Font.css';
 
@@ -13,11 +13,11 @@ const TodoMainList = () => {
   const [selectedTodo, setSelectedTodo] = useState({ categoryIndex: null, todoIndex: null });
   const [categoryModalIsOpen, setCategoryModalIsOpen] = useState(false);
   const [todoModalIsOpen, setTodoModalIsOpen] = useState(false);
-  const [addTodoModalIsOpen, setAddTodoModalIsOpen] = useState(false); 
+  const [addTodoModalIsOpen, setAddTodoModalIsOpen] = useState(false);
   const [newCategoryTitle, setNewCategoryTitle] = useState('');
-  const [newTodo, setNewTodo] = useState(''); 
+  const [newTodo, setNewTodo] = useState('');
   const [editedTodo, setEditedTodo] = useState('');
-  const [currentCategoryIndex, setCurrentCategoryIndex] = useState(null); 
+  const [currentCategoryIndex, setCurrentCategoryIndex] = useState(null);
 
   const handleAddCategory = () => {
     setCategoryModalIsOpen(true);
@@ -25,7 +25,7 @@ const TodoMainList = () => {
 
   const handleAddTodo = (categoryIndex) => {
     setCurrentCategoryIndex(categoryIndex);
-    setAddTodoModalIsOpen(true); 
+    setAddTodoModalIsOpen(true);
   };
 
   const handleAddTodoSubmit = () => {
@@ -34,7 +34,7 @@ const TodoMainList = () => {
       newCategories[currentCategoryIndex].items.push(newTodo);
       setCategories(newCategories);
       setNewTodo('');
-      setAddTodoModalIsOpen(false); 
+      setAddTodoModalIsOpen(false);
     }
   };
 
@@ -43,7 +43,7 @@ const TodoMainList = () => {
     newCategories[categoryIndex].items[todoIndex] = editedTodo;
     setCategories(newCategories);
     setSelectedTodo({ categoryIndex: null, todoIndex: null });
-    setTodoModalIsOpen(false); 
+    setTodoModalIsOpen(false);
   };
 
   const handleDeleteTodo = (categoryIndex, todoIndex) => {
@@ -51,13 +51,13 @@ const TodoMainList = () => {
     newCategories[categoryIndex].items.splice(todoIndex, 1);
     setCategories(newCategories);
     setSelectedTodo({ categoryIndex: null, todoIndex: null });
-    setTodoModalIsOpen(false); 
+    setTodoModalIsOpen(false);
   };
 
   const toggleOptions = (categoryIndex, todoIndex) => {
     setSelectedTodo({ categoryIndex, todoIndex });
     setEditedTodo(categories[categoryIndex].items[todoIndex]);
-    setTodoModalIsOpen(true); 
+    setTodoModalIsOpen(true);
   };
 
   const handleCategoryModalSubmit = () => {
@@ -69,7 +69,6 @@ const TodoMainList = () => {
   };
 
   const today = new Date().toLocaleDateString('ko-KR', {
-    // year: 'numeric',
     month: 'long',
     day: 'numeric',
     weekday: 'long'
@@ -82,6 +81,7 @@ const TodoMainList = () => {
         <h3>{today}</h3>
         <FaAngleRight className="TodoArrow" />
       </div>
+
       <div className="TodoSections">
         {categories.map((category, categoryIndex) => (
           <div className="TodoSection" key={categoryIndex}>
@@ -104,6 +104,7 @@ const TodoMainList = () => {
           </div>
         ))}
       </div>
+
       <div className="TodoActions">
         <button className="CreateDrawingButton">
           <FaPen className="DrawingIcon" />
@@ -111,6 +112,7 @@ const TodoMainList = () => {
         </button>
         <FaEllipsisH className="MoreOptionsButton" onClick={handleAddCategory} />
       </div>
+
       <Modal
         isOpen={categoryModalIsOpen}
         onRequestClose={() => setCategoryModalIsOpen(false)}
@@ -131,8 +133,9 @@ const TodoMainList = () => {
           <button className="TodoMainModalButton" onClick={() => setCategoryModalIsOpen(false)}>취소</button>
         </div>
       </Modal>
+
       <Modal
-        isOpen={addTodoModalIsOpen} 
+        isOpen={addTodoModalIsOpen}
         onRequestClose={() => setAddTodoModalIsOpen(false)}
         contentLabel="새로운 할 일 추가"
         className="TodoMainModal"
@@ -151,6 +154,7 @@ const TodoMainList = () => {
           <button className="TodoMainModalButton" onClick={() => setAddTodoModalIsOpen(false)}>취소</button>
         </div>
       </Modal>
+
       <Modal
         isOpen={todoModalIsOpen}
         onRequestClose={() => setTodoModalIsOpen(false)}
@@ -171,6 +175,7 @@ const TodoMainList = () => {
           <button className="TodoMainModalButton" onClick={() => handleDeleteTodo(selectedTodo.categoryIndex, selectedTodo.todoIndex)}>삭제</button>
         </div>
       </Modal>
+
     </div>
   );
 };

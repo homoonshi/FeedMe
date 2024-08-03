@@ -5,11 +5,11 @@ import './TodoCreature.css'
 
 const TodoCreature = () => {
   return (
-    <div className="TodoCreature">
-      <p className="TodoCreatureName">Lv. 1</p> 
+    <div className="TodoCreatureA">
+      <p className="TodoCreatureAName">Lv. 1</p> 
       <img src={CreatureImage} alt="creature" />
-      <div className="TodoCreatureInfo">
-        <div className="TodoCreatureExp">
+      <div className="TodoCreatureAInfo">
+        <div className="TodoCreatureAExp">
           <p>EXP</p>
           <progress value="60" max="100"></progress>
         </div>

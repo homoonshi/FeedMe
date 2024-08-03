@@ -45,7 +45,7 @@ const CreatureCreate = () => {
         <div className="CreatureCreateMainHeader">아바타 생성하기</div>
         <form className="CreatureCreateForm">
           <div className="CreatureCreateFormNicknameContainer">
-            <label htmlFor="nickname" className="CreatureCreateFormNickname">이  름</label>
+            <label htmlFor="nickname" className="CreatureCreateFormNickname">이ㅤ름</label>
             <input
               className="CreatureCreateFormNicknameInput"
               type="text"
@@ -56,7 +56,7 @@ const CreatureCreate = () => {
           </div>
 
           <div className="CreatureCreateFormImageUploadContainer">
-            <label htmlFor="imageUpload" className="CreatureCreateFormImageUploadLabel">사진 업로드</label>
+            <label htmlFor="imageUpload" className="CreatureCreateFormImageUploadLabel">사ㅤ진</label>
             <input
               className="CreatureCreateFormImageUpload"
               type="file"
@@ -73,7 +73,7 @@ const CreatureCreate = () => {
           )}
 
           <div className="CreatureCreateFormKeywordsContainer">
-            <label className="CreatureCreateFormKeywordsHeader">키워드 선택</label>
+            <label className="CreatureCreateFormKeywordsHeader">키워드</label>
             <div className="CreatureCreateFormKeywords">
               <div className="CreatureCreateFormKeywordOption">
                 <input
