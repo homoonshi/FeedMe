@@ -1,67 +1,75 @@
-import React from 'react';
-import './DiaryPic.css'
-// import { useState } from 'react';
-
-// const DiaryPic = () => {
-
-//   const [slideIndex, setSlideIndex] = useState(0);
-
-//   return (
-//     <div className='DiaryPic'>
-
-//     </div>
-//   );
-// };
-
-// export default DiaryPic;
-
-import { useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import data from "./data.js";
+import './DiaryPic.css';
 
 function DiaryPic() {
   const [slideIndex, setSlideIndex] = useState(0);
+  const [currentDate, setCurrentDate] = useState(data[0].date);
+  const [currentContent, setCurrentContent] = useState(data[0].content);
 
   const moveToPrevSlide = () => {
-    setSlideIndex((prev) => (prev === 0 ? data.length - 1 : prev - 1));
+    setSlideIndex((prev) => {
+      const newIndex = prev === 0 ? data.length - 1 : prev - 1;
+      setCurrentDate(data[newIndex].date);
+      setCurrentContent(data[newIndex].content);
+      return newIndex;
+    });
   };
 
   const moveToNextSlide = () => {
-    setSlideIndex((prev) => (prev === data.length - 1 ? 0 : prev + 1));
+    setSlideIndex((prev) => {
+      const newIndex = prev === data.length - 1 ? 0 : prev + 1;
+      setCurrentDate(data[newIndex].date);
+      setCurrentContent(data[newIndex].content);
+      return newIndex;
+    });
   };
 
   const moveDot = (index) => {
     setSlideIndex(index);
+    setCurrentDate(data[index].date);
+    setCurrentContent(data[index].content);
   };
 
   return (
     <div className='DiaryPic'>
+      <p className='DiaryPicDay'>{currentDate}</p>
+      <ThumbnailContainer>
+        {data.map((character, index) => (
+          <ThumbnailWrapper
+            key={character.id}
+            className={index === slideIndex ? "active" : ""}
+            onClick={() => moveDot(index)}
+          >
+            <Thumbnail
+              src={`/images/${character.thumbnail}`}
+              alt={character.content}
+            />
+          </ThumbnailWrapper>
+        ))}
+      </ThumbnailContainer>
+      <Arrow direction="prev" onClick={moveToPrevSlide}>
+        ◀
+      </Arrow>
       <Container>
-        <Arrow direction="prev" onClick={moveToPrevSlide}>
-          ◀
-        </Arrow>
         <Wrapper slideIndex={slideIndex}>
           {data.map((character) => (
             <Slide key={character.id}>
-              <Photo
-                src={`/images/${character.img}`}
-              />
+              <PhotoWrapper>
+                <Photo
+                  src={`/images/${character.img}`}
+                  alt={character.content}
+                />
+              </PhotoWrapper>
             </Slide>
           ))}
         </Wrapper>
-        <Arrow direction="next" onClick={moveToNextSlide}>
-          ▶
-        </Arrow>
-        <DotContainer>
-          {data.map((character, index) => (
-            <Dot
-              key={character.id}
-              className={index === slideIndex ? "active" : null}
-              onClick={() => moveDot(index)}
-            />
-          ))}
-        </DotContainer>
+        <span className="DiaryPicContents">{currentContent}</span>
       </Container>
+      <Arrow direction="next" onClick={moveToNextSlide}>
+        ▶
+      </Arrow>
     </div>
   );
 }
@@ -69,15 +77,24 @@ function DiaryPic() {
 export default DiaryPic;
 
 const Container = styled.div`
-  width: 200px;
-  height: 200px;
-  margin: 100px auto;
+  width: 500px;
+  height: 300px;
+  margin: 0 auto;
   overflow: hidden;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  font-family: PretendardR;
+  border-radius: 20px;
+  background-color: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(12px);
 `;
 
 const Wrapper = styled.div`
-  height: 100%;
+  width: 100%;
+  height: 70%;
   display: flex;
   transition: all 0.3s ease-in-out;
   transform: translateX(${({ slideIndex }) => slideIndex * -100 + "%"});
@@ -87,6 +104,19 @@ const Slide = styled.div`
   width: 100%;
   height: 100%;
   flex-shrink: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const PhotoWrapper = styled.div`
+  width: 90%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const Photo = styled.img`
@@ -99,13 +129,12 @@ const Arrow = styled.div`
   position: absolute;
   top: 0;
   bottom: 0;
-  margin: auto 0;
+  margin: auto 10px;
   left: ${({ direction }) => direction === "prev" && "0px"};
   right: ${({ direction }) => direction === "next" && "0px"};
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background-color: pink;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -113,24 +142,34 @@ const Arrow = styled.div`
   z-index: 1;
 `;
 
-const DotContainer = styled.div`
-  position: absolute;
-  bottom: 10px;
-  left: 0;
-  right: 0;
-  margin: 0 auto;
-  width: 100px;
+const ThumbnailContainer = styled.div`
+  margin: 10px 0;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
 `;
 
-const Dot = styled.div`
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background-color: pink;
+const ThumbnailWrapper = styled.div`
+  width: 50px;
+  height: 50px;
+  border-radius: 20px;
+  overflow: hidden;
   cursor: pointer;
+  border: 2px solid transparent;
+  transition: all 0.3s ease-in-out;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   &.active {
-    background-color: skyblue;
+    width: 55px;
+    height: 55px;
+    border-radius: 25px;
+    background-color: #FF5F5F;
   }
+`;
+
+const Thumbnail = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 20px;
 `;

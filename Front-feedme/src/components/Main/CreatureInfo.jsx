@@ -9,7 +9,8 @@ const CreatureInfo = () => {
   const sample = {
     width: "150px",
     height: '150px',
-    objectFit: "cover"
+    objectFit: "cover",
+    borderRadius: "50%"
   }
 
   return (

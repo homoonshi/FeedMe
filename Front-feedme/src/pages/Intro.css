@@ -23,7 +23,7 @@
 .IntroLogo {
     color: white;
     text-shadow: 0 2px 3px rgba(0, 0, 0, 0.17), 0 0 4px rgba(0, 0, 0, 0.08);
-    margin: 150px 0px;
+    margin: 152px 0px;
     font-family: 'PretendardB';
 }
 
@@ -33,7 +33,7 @@
 /* @import url("https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900&display=swap"); */
 
 .IntroClickWrapper {
-    margin: 80px 0px;
+    margin: 65px 0px;
 }
 
 .w-btn {
