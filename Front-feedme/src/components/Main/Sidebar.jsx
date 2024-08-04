@@ -9,16 +9,20 @@ import ChatBubbleOutlineOutlinedIcon from '@mui/icons-material/ChatBubbleOutline
 
 const Sidebar = () => {
   const [active, setActive] = useState('/Main');
-  // const navigate = useNavigate(); // 페이지 이동을 위해 useNavigate 훅 사용
+  const navigate = useNavigate(); // 페이지 이동을 위해 useNavigate 훅 사용
 
   const handleClick = (path) => {
     setActive(path);
     // navigate(path); // 지정된 경로로 페이지 이동
   };
 
+  const clickLogo = () => {
+    navigate('/');
+  }
+
   return (
     <div className='SidebarBack'>
-      <div className='SidebarLogo'>
+      <div className='SidebarLogo' onClick={clickLogo}>
         <h2>Feed me</h2>
       </div>
       <div className='SidebarList'>

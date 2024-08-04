@@ -163,7 +163,7 @@ const ThumbnailWrapper = styled.div`
     width: 55px;
     height: 55px;
     border-radius: 25px;
-    background-color: #FF5F5F;
+    background-color: #F55BA2;
   }
 `;
 

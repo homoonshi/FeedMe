@@ -9,6 +9,7 @@
 
 .SidebarLogo {
     text-align: center;
+    cursor: pointer;
 }
 
 .SidebarLogo>h2 {
@@ -39,7 +40,7 @@
     height: 8vh;
     margin-bottom: 15px;
     cursor: pointer; /* Added cursor to indicate clickability */
-    transition: background-color 0.4s, color 0.4s, transform 0.4s; /* Added transition */
+    transition: background-color 0.3s, color 0.3s, transform 0.3s; /* Added transition */
 }
 
 .SidebarList .menu:hover {
@@ -52,7 +53,7 @@
     margin-right: 15px;
     margin-left: 25px;
     color: #49454F;
-    transition: color 0.4s; /* Added transition */
+    transition: color 0.3s; /* Added transition */
 }
 
 #SidebarBack {
@@ -63,5 +64,4 @@
     color: rgba(255, 255, 255, 0.0);
     height: 100%;
     margin-left: auto;
-    background-color: #87C908;
 }
