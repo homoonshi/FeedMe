@@ -22,13 +22,28 @@
     flex-direction: column;
 }
 
-.SidebarList div {
+.SidebarList > div {
+    display: flex;
+    align-items: start;
+    width: 100%;
+    height: 8vh;
+    margin-bottom: 15px;
+    cursor: pointer; /* Added cursor to indicate clickability */
+}
+
+.SidebarList .menu {
     display: flex;
     align-items: center;
     font-size: 18px;
     width: 100%;
     height: 8vh;
     margin-bottom: 15px;
+    cursor: pointer; /* Added cursor to indicate clickability */
+    transition: background-color 0.4s, color 0.4s, transform 0.4s; /* Added transition */
+}
+
+.SidebarList .menu:hover {
+    transform: translateX(10px); /* Slide effect on hover */
 }
 
 .SidebarList .menu-icon {
@@ -37,6 +52,7 @@
     margin-right: 15px;
     margin-left: 25px;
     color: #49454F;
+    transition: color 0.4s; /* Added transition */
 }
 
 #SidebarBack {

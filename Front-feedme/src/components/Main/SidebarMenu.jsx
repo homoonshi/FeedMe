@@ -2,20 +2,34 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import '../Main/Sidebar.css';
 
-const Menu = ({ icon: Icon, des, link, color}) => {
+const Menu = ({ icon: Icon, des, link, isActive, onClick }) => {
     return (
-        <div>
-            <Icon className='menu-icon'/>
+        <div
+            onClick={onClick}
+            style={{
+                backgroundColor: isActive ? 'rgba(135, 201, 8, 0.13)' : 'transparent',
+                color: isActive ? '#87C908' : '#49454F'
+            }}
+        >
+            <div className='menu'>
+            <Icon
+                className='menu-icon'
+                style={{ color: isActive ? '#87C908' : '#49454F' }}
+            />
             <Link
                 style={{
                     fontFamily: 'PretendardM',
-                    color: {color},
+                    color: isActive ? '#87C908' : '#49454F',
                 }}
                 to={des}
             >
                 {link}
             </Link>
-            <span id='SidebarLine'>|</span>
+            </div>
+            <span
+                id='SidebarLine'
+                style={{ backgroundColor: isActive ? '#87C908' : 'transparent' }}
+            >|</span>
         </div>
     );
 };
