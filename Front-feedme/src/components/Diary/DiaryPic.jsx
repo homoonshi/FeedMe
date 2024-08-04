@@ -164,7 +164,7 @@ const ThumbnailWrapper = styled.div`
     width: 55px;
     height: 55px;
     border-radius: 25px;
-    background-color: #F55BA2;
+    background-color: #9E69FA;
   }
 `;
 

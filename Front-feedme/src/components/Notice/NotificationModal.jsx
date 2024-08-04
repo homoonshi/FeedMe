@@ -72,9 +72,9 @@ const NotificationModal = ({ onClose }) => {
           <div className="SettingsContent">
             <div className='SettingOnOff'>
               <p>알림 받기</p>
-              <Switch {...label} checked={isSwitchOn} onChange={handleSwitchChange} />
+              <Switch {...label} checked={isSwitchOn} onChange={handleSwitchChange} color="secondary" />
             </div>
-            <TimePicker defaultValue={dayjs('12:08', format)} format={format} disabled={!isSwitchOn} />
+            <TimePicker defaultValue={dayjs('12:08', format)} format={format} disabled={!isSwitchOn}/>
           </div>
         ) : (
           <ul>
