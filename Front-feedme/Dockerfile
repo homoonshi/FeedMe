@@ -8,9 +8,7 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm install --silent
 
-# Copy the public directory and source code
-COPY public ./public
-COPY src ./src
+COPY . .
 
 # Build the application
 RUN npm run build 
@@ -19,7 +17,7 @@ RUN npm run build
 FROM nginx:stable-alpine as production-stage
 
 # Remove the default Nginx configuration
-~~COPY ./default.conf /etc/nginx/conf.d~~
+COPY ./default.conf /etc/nginx/conf.d
 
 # Copy the built application from the build stage to the Nginx HTML directory
 COPY --from=build /app/build /usr/share/nginx/html
