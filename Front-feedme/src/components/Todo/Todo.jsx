@@ -16,8 +16,8 @@ const Todo = () => {
           <Search />
             <div className="TodoDashboard">
               <div className="TodoList">
-                {/* <TodoMainList /> */}
-                <TodoListMain />
+                <TodoMainList />
+                {/* <TodoListMain /> */}
               </div>
               <div className="TodoCreatures">
                 <TodoCreature />

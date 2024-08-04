@@ -5,6 +5,7 @@ import main from '../../assets/icons/icon-main-green-50.png'
 import todolist from '../../assets/icons/icon-todo-gray-50.png'
 import diary from '../../assets/icons/icon-diary-gray-50.png'
 import chat from '../../assets/icons/icon-chat-gray-50.png'
+import feed from '../../assets/icons/icon-main3-gray.png'
 
 const Sidebar = () => {
   return (
@@ -41,6 +42,13 @@ const Sidebar = () => {
             fontFamily: 'PretendardM',
             color: '#49454F'
           }} to="/Chatting">채팅</Link>
+        </div>
+        <div>
+          <img src={feed} alt="main-icon" />
+          <Link style={{
+            fontFamily: 'PretendardM',
+            color: '#49454F'
+          }} to="/Feed">게시판</Link>
         </div>
       </div>
     </div>

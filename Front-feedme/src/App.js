@@ -12,6 +12,7 @@ import Diary from './components/Diary/Diary.jsx';
 import Chat from './components/Chatting/Chat.jsx';
 import Setting from './components/Set/Setting.jsx';
 import MyPage from './components/Mypage/MyPage.jsx';
+import Feed from './components/Feed/Feed.jsx';
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
         <Route path="/Setting" element={<Setting />} />
         <Route path="/MyPage" element={<MyPage />} />
         <Route path="/CreatureResult" element={<CreatureResult />} />
+        <Route path="/Feed" element={<Feed />} />
       </Routes>
     </div>
   );
