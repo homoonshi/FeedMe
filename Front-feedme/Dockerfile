@@ -27,8 +27,12 @@ COPY --from=build /app/build /usr/share/nginx/html
 # Copy the custom Nginx configuration
 COPY nginx.conf /etc/nginx/nginx.conf
 
-# Expose port 80
-EXPOSE 80
+# Copy SSL certificates
+COPY /etc/letsencrypt/live/i11b104.p.ssafy.io/fullchain.pem /etc/ssl/certs/fullchain.pem
+COPY /etc/letsencrypt/live/i11b104.p.ssafy.io/privkey.pem /etc/ssl/private/privkey.pem
+
+# Expose port 80 and 443 (HTTPS)
+EXPOSE 80 443
 
 # Start Nginx in the foreground
 CMD ["nginx", "-g", "daemon off;"]
