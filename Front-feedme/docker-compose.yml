@@ -9,6 +9,9 @@ services:
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h; done;'"
 
   react-app:
+    build:
+      context: ./Front-feedme
+      dockerfile: Dockerfile
     image: doki2580/feedme-front:latest
     ports:
       - "8081:80"
