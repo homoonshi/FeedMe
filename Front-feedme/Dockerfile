@@ -16,10 +16,10 @@ COPY src ./src
 RUN npm run build 
 
 # Stage 2: Serve the application using Nginx
-FROM nginx:latest
+FROM nginx:stable-alpine as production-stage
 
 # Remove the default Nginx configuration
-COPY ./default.conf /etc/nginx/nginx.conf
+~~COPY ./default.conf /etc/nginx/conf.d~~
 
 # Copy the built application from the build stage to the Nginx HTML directory
 COPY --from=build /app/build /usr/share/nginx/html
