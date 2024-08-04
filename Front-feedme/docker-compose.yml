@@ -11,7 +11,7 @@ services:
   nginx:
     image: doki2580/feedme-front:latest
     ports:
-      - "80:80"
+      - "8081:80"
       - "443:443"
     volumes:
       - /home/ubuntu/project/certbot/etc/live/i11b104.p.ssafy.io/fullchain.pem:/etc/ssl/certs/fullchain.pem
