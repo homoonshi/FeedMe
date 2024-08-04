@@ -10,6 +10,7 @@ services:
 
   react-app:
     build:
+      context: ./
       dockerfile: Dockerfile
     image: doki2580/feedme-front:latest
     ports:
