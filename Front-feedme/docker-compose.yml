@@ -10,15 +10,15 @@ services:
 
   react-app:
     build:
-      context: ./
+      context: .
       dockerfile: Dockerfile
     image: doki2580/feedme-front:latest
     ports:
       - "8081:80"
       - "443:443"
     volumes:
-      - /home/ubuntu/project/certbot/etc/live/p.ssafy.io/fullchain.pem:/etc/ssl/certs/fullchain.pem
-      - /home/ubuntu/project/certbot/etc/live/p.ssafy.io/privkey.pem:/etc/ssl/private/privkey.pem
+      - ./certs/fullchain.pem:/etc/ssl/certs/fullchain.pem
+      - ./certs/privkey.pem:/etc/ssl/private/privkey.pem
     depends_on:
       - certbot
     restart: always
