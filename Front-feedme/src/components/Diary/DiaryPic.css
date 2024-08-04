@@ -12,3 +12,7 @@
     margin-bottom: 0;
     font-family: 'PretendardSB';
 }
+
+.DiaryArrows:hover {
+    transform: translateY(-4px);
+}

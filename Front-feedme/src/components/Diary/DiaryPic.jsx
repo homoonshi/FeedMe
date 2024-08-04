@@ -49,7 +49,7 @@ function DiaryPic() {
           </ThumbnailWrapper>
         ))}
       </ThumbnailContainer>
-      <Arrow direction="prev" onClick={moveToPrevSlide}>
+      <Arrow className="DiaryArrows" direction="prev" onClick={moveToPrevSlide}>
         ◀
       </Arrow>
       <Container>
@@ -67,7 +67,7 @@ function DiaryPic() {
         </Wrapper>
         <span className="DiaryPicContents">{currentContent}</span>
       </Container>
-      <Arrow direction="next" onClick={moveToNextSlide}>
+      <Arrow className="DiaryArrows" direction="next" onClick={moveToNextSlide}>
         ▶
       </Arrow>
     </div>
@@ -140,6 +140,7 @@ const Arrow = styled.div`
   align-items: center;
   cursor: pointer;
   z-index: 1;
+  transition: transform 0.3s ease-in-out;
 `;
 
 const ThumbnailContainer = styled.div`

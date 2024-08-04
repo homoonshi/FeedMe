@@ -25,3 +25,16 @@
     font-family: 'PretendardM';
     color: #FF5F5F;
 }
+
+.CreatureInfoPhoto {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 50%;
+    transition: transform 0.3s ease-in-out;
+    cursor: pointer;
+}
+
+.CreatureInfoPhoto:hover {
+    transform: translateY(-6px); 
+}

@@ -46,4 +46,10 @@
     width: 33px;
     height: 33px;
     margin-left: 10px;
+    transition: transform 0.3s ease-in-out;
+    cursor: pointer;
+}
+
+.noti-mypage-icons img:hover {
+    transform: translateY(-3px); 
 }

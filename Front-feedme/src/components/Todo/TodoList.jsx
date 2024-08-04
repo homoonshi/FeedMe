@@ -1,9 +1,9 @@
 import React from 'react';
 import './TodoList.css';
 
-const ToDoList = () => {
+const ToDoList = ({onClick}) => {
   return (
-    <div className='ToDoList'>
+    <div className='ToDoList' onClick={onClick}>
       <div>
         <span className='ToDoListTitle'>TO DO</span>
         <span className='ToDoListNotDo'>(02)</span>

@@ -82,10 +82,22 @@
 
 .LoginGoogleButton {
   margin-bottom: 35px;
+  transition: transform 0.3s ease-in-out;
+  cursor: pointer;
 }
 
 .LoginNaverButton {
   margin-bottom: 80px;
+  transition: transform 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+.LoginGoogleButton:hover {
+  transform: translateY(-6px); 
+}
+
+.LoginNaverButton:hover {
+  transform: translateY(-6px); 
 }
 
 .LoginButtons span {
