@@ -19,20 +19,13 @@ RUN npm run build
 FROM nginx:latest
 
 # Remove the default Nginx configuration
-RUN rm /etc/nginx/conf.d/default.conf
+COPY ./default.conf /etc/nginx/nginx.conf
 
 # Copy the built application from the build stage to the Nginx HTML directory
 COPY --from=build /app/build /usr/share/nginx/html
 
-# Copy the custom Nginx configuration
-COPY nginx.conf /etc/nginx/nginx.conf
-
-# Copy SSL certificates
-COPY certs/fullchain.pem /etc/ssl/certs/fullchain.pem
-COPY certs/privkey.pem /etc/ssl/private/privkey.pem
-
 # Expose port 80 and 443 (HTTPS)
-EXPOSE 80 443
+EXPOSE 80
 
 # Start Nginx in the foreground
 CMD ["nginx", "-g", "daemon off;"]
