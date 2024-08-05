@@ -1,12 +1,16 @@
 import React from 'react';
+<<<<<<< HEAD
 import Sidebar from '../Main/Sidebar';
 import Search from '../Main/Search';
 import Creature from './Creature'
+=======
+import Creature from '../Creature/Creature';
+>>>>>>> origin/front-jin
 import './MyPage.css';
-import '../../assets/font/Font.css'
 
 const MyPage = () => {
   return (
+<<<<<<< HEAD
     <div className="MyPageBack">
       <div className="MyPageMain">
         <Sidebar />
@@ -40,6 +44,27 @@ const MyPage = () => {
             </div>
           </div>
         </div>
+=======
+    <div className="MyPage">
+      <div className="MyPageInfo">
+        <h2>마이페이지</h2>
+        <label>
+          닉네임:
+          <input type="text" defaultValue="soo" />
+        </label>
+        <label>
+          이메일:
+          <input type="email" defaultValue="eee@gmail.com" />
+        </label>
+        <label>
+          생년월일:
+          <input type="date" defaultValue="2000-00-00" />
+        </label>
+        <button>정보 수정</button>
+      </div>
+      <div className="MyPageCreature">
+        <Creature />
+>>>>>>> origin/front-jin
       </div>
     </div>
   );

@@ -6,7 +6,6 @@ import TodoListMain from './TodoListMain';
 import TodoCreature from './TodoCreature';
 import './Todo.css'
 
-
 const Todo = () => {
   return (
     <div className="TodoBack">
@@ -23,7 +22,7 @@ const Todo = () => {
                 <TodoCreature />
               </div>
             </div>
-        </div>
+          </div>
       </div>
     </div>
   );

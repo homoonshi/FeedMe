@@ -23,5 +23,28 @@
 
 #CreatureInfoDay {
     font-family: 'PretendardM';
-    color: #FF5F5F;
+    color: #9E69FA;
+}
+
+.CreatureInfoPhoto {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 50%;
+    transition: transform 0.3s ease-in-out;
+    cursor: pointer;
+}
+
+.CreatureInfoPhoto:hover {
+    transform: translateY(-6px);
+}
+
+.CreatureInfoTodo {
+    width: 100%;
+    transition: transform 0.3s ease-in-out;
+    cursor: pointer;
+}
+
+.CreatureInfoTodo:hover {
+    transform: translateY(-6px);
 }
