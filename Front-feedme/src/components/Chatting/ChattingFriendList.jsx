@@ -18,11 +18,11 @@ const ChattingFriendList = ({ friends, onFriendClick, onChatClick }) => {
 
   return (
     <div className="ChatFriendListContainer">
-      <input 
-        type="text" 
-        placeholder="친구 검색" 
-        value={searchTerm} 
-        onChange={handleSearchChange} 
+      <input
+        type="text"
+        placeholder="친구 검색"
+        value={searchTerm}
+        onChange={handleSearchChange}
         className="ChatFriendSearch"
       />
       <div className="ChatFriendList">
