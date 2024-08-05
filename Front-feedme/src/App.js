@@ -5,12 +5,14 @@ import Intro from './pages/Intro.jsx';
 import Login from './pages/Login.jsx';
 import Signup from './components/Login/Signup.jsx';
 import CreatureCreate from './components/Creature/CreatureCreate.jsx'
+import CreatureResult from './components/Creature/CreatureResult.jsx'
 import Main from './pages/Main.jsx';
 import Todo from './components/Todo/Todo.jsx';
 import Diary from './components/Diary/Diary.jsx';
 import Chat from './components/Chatting/Chat.jsx';
 import Setting from './components/Set/Setting.jsx';
 import MyPage from './components/Mypage/MyPage.jsx';
+import Feed from './components/Feed/Feed.jsx';
 
 function App() {
   return (
@@ -36,6 +38,8 @@ function App() {
         <Route path="/Chatting" element={<Chat />} />
         <Route path="/Setting" element={<Setting />} />
         <Route path="/MyPage" element={<MyPage />} />
+        <Route path="/CreatureResult" element={<CreatureResult />} />
+        <Route path="/Feed" element={<Feed />} />
       </Routes>
     </div>
   );

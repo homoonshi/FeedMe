@@ -1,0 +1,180 @@
+.FeedList {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+  
+.FeedListPhoto {
+    flex: 0.6;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 60%; 
+    height: 100%;
+    /* border: solid 1px black; */
+}
+  
+.FeedListCom{
+    flex: 0.4;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    /* border: solid 1px pink; */
+    padding: 10px;
+    height: 100%;
+    overflow-y: hidden; 
+    max-height: 100%; 
+}
+
+.FeedListImg {
+    width: 100%;
+    max-width: 70%;
+    max-height: 100%;
+    object-fit: cover;
+}
+  
+.FeedListCaption {
+    margin-top: 1rem;
+    font-size: 1.3rem; 
+    text-align: center;
+    font-family: 'PretendardR';
+}
+  
+.arrowleft, .arrowright {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.arrowleft {
+    left: 0;
+}
+
+.arrowright {
+    right: 0;
+}
+
+.commentsList {
+    list-style-type: none;
+    padding: 0;
+    width: 100%;
+    margin-top: 10px;
+    height: calc(100% - 50px); 
+    overflow-y: hidden; 
+    position: relative;
+}
+
+.commentsList li {
+    background: #f1f1f1;
+    margin-bottom: 5px;
+    padding: 5px;
+    border-radius: 5px;
+    width: 100%;
+    text-align: left;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.commentItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.commentActions {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.optionsDropdown {
+    position: absolute;
+    top: 20px;
+    right: 0;
+    background: rgba(255, 255, 255, 0.479);
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+    z-index: 10;
+    width: 100px; 
+    white-space: nowrap; 
+}
+
+.optionsDropdown button {
+    display: block;
+    width: 100%;
+    padding: 5px 10px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    text-align: left;
+}
+
+.optionsDropdown button:hover {
+    background: #f1f1f1;
+}
+
+.editCommentInput {
+    flex: 1;
+    padding: 5px;
+    /* border: 1px solid #ccc; */
+    border-radius: 3px;
+}
+
+.ellipsisButton, .deleteButton, .saveButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-left: 5px;
+}
+
+.ellipsisButton {
+    font-size: 1rem;
+}
+
+.saveButton {
+    color: green;
+}
+
+.deleteButton {
+    color: red;
+}
+
+.commentForm {
+    display: flex;
+    width: 100%;
+    position: sticky;
+    top: 0;
+    padding-right: 3%;
+    /* background: white; */
+    padding-bottom: 1rem;
+    z-index: 1; /* 댓글 입력 폼이 스크롤보다 위에 오도록 설정 */
+}
+
+.commentInput {
+    flex: 1;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+.commentButton {
+    padding: 5px 10px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    border-radius: 3px;
+    cursor: pointer;
+    margin-left: 5px;
+}

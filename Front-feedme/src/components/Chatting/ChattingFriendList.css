@@ -1,0 +1,63 @@
+.ChatFriendListContainer {
+  width: 100%;
+}
+
+.ChatFriendSearch {
+  width: 100%;
+  padding: 1rem; 
+  border-radius: 25px;
+  border: 1px solid #ccc;
+  margin-bottom: 1%;
+  box-sizing: border-box;
+  font-family: 'PretendardR';
+  font-size: 1rem;
+  line-height: 1.5; 
+}
+
+.ChatFriendList {
+  display: flex;
+  flex-direction: column;
+  max-height: 100%;
+  overflow-y: auto;
+  padding-top: 4%;
+  padding-left: 3%;
+  padding-right: 3%;
+}
+
+.ChatFriendItem {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 3px solid #BABABA;
+}
+
+.ChatFriendAvatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.ChatFriendInfo {
+  display: flex;
+  align-items: center; 
+  justify-content: space-between;
+  width: 100%;
+}
+
+.ChatFriendName {
+  cursor: pointer;
+  color: #000; 
+  margin-right: auto; 
+  font-family: 'PretendardR';
+  font-size: 1.2rem;
+  padding-left: 3%;
+}
+
+.ChatIconButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #000; 
+  margin-left: 10px;
+}

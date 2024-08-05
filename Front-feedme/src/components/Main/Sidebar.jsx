@@ -54,6 +54,13 @@ const Sidebar = () => {
           des="/Chatting"
           link="채팅"
         />
+         <Menu
+          isActive={active === '/Feed'}
+          onClick={() => handleClick('/Feed')}
+          icon={ChatBubbleOutlineOutlinedIcon}
+          des="/Feed"
+          link="게시판"
+        />
       </div>
     </div>
   );
