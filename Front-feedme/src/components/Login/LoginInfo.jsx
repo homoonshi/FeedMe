@@ -5,8 +5,7 @@ import { faAngleLeft } from '@fortawesome/free-solid-svg-icons';
 import './LoginInfo.css';
 import '../../assets/font/Font.css'
 
-
-const Signup = () => {
+const LoginInfo = () => {
   const [nickname, setNickname] = useState('');
   const [email, setEmail] = useState('');
   const [birthdate, setBirthdate] = useState('');
@@ -61,4 +60,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default LoginInfo;
