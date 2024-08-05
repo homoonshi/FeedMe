@@ -4,13 +4,18 @@ import { faMessage } from '@fortawesome/free-solid-svg-icons';
 import './ChattingFriendList.css';
 import '../../assets/font/Font.css';
 import myAvatar from '../../assets/images/test1.png';
-import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 
 const ChattingFriendList = ({ friends, onFriendClick, onChatClick }) => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [activeFriendId, setActiveFriendId] = useState(null); // 활성화된 친구 ID 상태
 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
+  };
+
+  const handleChatButtonClick = (friend) => {
+    setActiveFriendId(friend.id); // 버튼 클릭 시 활성화된 친구 ID 업데이트
+    onChatClick(friend);
   };
 
   const filteredFriends = friends.filter(friend =>
@@ -31,7 +36,10 @@ const ChattingFriendList = ({ friends, onFriendClick, onChatClick }) => {
           <img src={myAvatar} alt="내 아바타" className="ChatFriendAvatar" />
           <div className="ChatFriendInfo">
             <span onClick={() => onFriendClick({ id: 'my-avatar', name: '내 아바타', avatar: myAvatar })} className="ChatFriendName">내 아바타</span>
-            <button onClick={() => onChatClick({ id: 'my-avatar', name: '내 아바타', avatar: myAvatar })} className="ChatIconButton">
+            <button
+              onClick={() => handleChatButtonClick({ id: 'my-avatar', name: '내 아바타', avatar: myAvatar })}
+              className={`ChatIconButton ${activeFriendId === 'my-avatar' ? 'active' : ''}`}
+            >
               <FontAwesomeIcon icon={faMessage} style={{ fontSize: '1.5rem' }} />
             </button>
           </div>
@@ -41,7 +49,10 @@ const ChattingFriendList = ({ friends, onFriendClick, onChatClick }) => {
             <img src={friend.avatar} alt={friend.name} className="ChatFriendAvatar" />
             <div className="ChatFriendInfo">
               <span onClick={() => onFriendClick(friend)} className="ChatFriendName">{friend.name}</span>
-              <button onClick={() => onChatClick(friend)} className="ChatIconButton">
+              <button
+                onClick={() => handleChatButtonClick(friend)}
+                className={`ChatIconButton ${activeFriendId === friend.id ? 'active' : ''}`}
+              >
                 <FontAwesomeIcon icon={faMessage} style={{ fontSize: '1.5rem' }} />
               </button>
             </div>
