@@ -10,10 +10,11 @@ function ReactCalendar() {
 
   // 각 타일에 숫자를 표시하는 함수
   const tileContent = ({ date, view }) => {
-    if (view === 'month') {
-      return <div className="date-number">{date.getDate()}</div>;
-    }
-    return null;
+    // if (view === 'month') {
+    //   return <div className="date-number">{date.getDate()}</div>;
+    // }
+    // return null;
+    return <div className='date-number'>2</div>
   };
 
   return (
