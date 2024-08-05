@@ -16,7 +16,9 @@ const CreatureInfo = () => {
       <h2>냐옹이</h2>
       <img className='CreatureInfoPhoto' src={creature} alt="creature" onClick={() => MoveTo('/MyPage')} />
       <p>❤️ <span id='CreatureInfoDay'>247</span> 일째 함께하는 중</p>
-      <ToDoList onClick={() => MoveTo('/Todo')}/>
+      <div className='CreatureInfoTodo'>
+        <ToDoList onClick={() => MoveTo('/Todo')} />
+      </div>
     </div>
   );
 };
