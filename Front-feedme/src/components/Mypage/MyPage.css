@@ -1,16 +1,11 @@
-<<<<<<< HEAD
 .MyPageBack{
     width: 100%;
     height: 100vh;
-=======
-.MyPage {
->>>>>>> origin/front-jin
     display: flex;
-    justify-content: space-between;
-    padding: 20px;
-    border: solid 1px;
+    justify-content: center;
+    align-items: center;
+    position: relative;
 }
-<<<<<<< HEAD
 
 .MyPageBack::before {
     content: "";
@@ -148,37 +143,3 @@
     margin: 0;
     line-height: 1;
 }
-=======
-  
-.MyPageInfo {
-    flex: 1;
-    margin-right: 20px;
-    border: solid 1px;
-}
-  
-.MyPageInfo label {
-    display: block;
-    margin-bottom: 10px;
-}
-  
-.MyPageInfo input {
-    width: 100%;
-    padding: 8px;
-    margin-top: 5px;
-}
-  
-.MyPageInfo button {
-    margin-top: 20px;
-    padding: 10px 20px;
-    background-color: #4caf50;
-    color: white;
-    border: none;
-    cursor: pointer;
-}
-  
-.MyPageCreature {
-    flex: 1;
-    border: solid 1px;
-}
-  
->>>>>>> origin/front-jin

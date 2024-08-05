@@ -1,20 +1,41 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faAngleLeft } from '@fortawesome/free-solid-svg-icons';
+import './CreatureCreate.css';
+import '../../assets/font/Font.css';
 
-function Checkbox({ children, disabled, checked, onChange }) {
-  return (
-    <label>
-      <input
-        type="checkbox"
-        disabled={disabled}
-        checked={checked}
-        onChange={({ target: { checked } }) => onChange(checked)}
-      />
-      {children}
-    </label>
-  );
-}
+// function Checkbox({ children, disabled, checked, onChange }) {
+//   return (
+//     <label>
+//       <input
+//         type="checkbox"
+//         disabled={disabled}
+//         checked={checked}
+//         onChange={({ target: { checked } }) => onChange(checked)}
+//       />
+//       {children}
+//     </label>
+//   );
+// }
 
 const CreatureCreate = () => {
+  const [nickname, setNickname] = useState('');
+  const [selectedKeywords, setSelectedKeywords] = useState([]);
+  const [image, setImage] = useState(null);
+
+  const handleKeywordChange = (keyword) => {
+    setSelectedKeywords((prevKeywords) =>
+      prevKeywords.includes(keyword)
+        ? prevKeywords.filter((kw) => kw !== keyword)
+        : [...prevKeywords, keyword]
+    );
+  };
+
+  const handleImageUpload = (e) => {
+    setImage(URL.createObjectURL(e.target.files[0]));
+  };
+
   return (
     <div className="CreatureCreateMain">
       <div className="CreatureCreateFormContainer">
