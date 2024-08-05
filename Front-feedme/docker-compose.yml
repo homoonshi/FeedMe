@@ -1,0 +1,24 @@
+version: '3'
+services:
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - /home/ubuntu/project/certbot/etc:/etc/letsencrypt
+      - /home/ubuntu/project/certbot/lib:/var/lib/letsencrypt
+      - /home/ubuntu/project/certbot/log:/var/log/letsencrypt
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h; done;'"
+
+  react-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: doki2580/feedme-front:latest
+    ports:
+      - "8081:80"
+      - "443:443"
+    volumes:
+      - ./certs/fullchain.pem:/etc/ssl/certs/fullchain.pem
+      - ./certs/privkey.pem:/etc/ssl/private/privkey.pem
+    depends_on:
+      - certbot
+    restart: always
