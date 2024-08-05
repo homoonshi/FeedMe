@@ -147,14 +147,17 @@
     background: rgba(255, 170, 161, 0.2) !important;
 }
 
-/*hover, focus, 선택됐을 시 */
-.react-calendar__tile:enabled:hover,
-.react-calendar__tile:enabled:focus,
-.react-calendar__tile--active {
-    background: #FFAAA1 !important;
-    border-radius: 50%;
+.date-number {
+    color: black;
 }
 
+/*hover, focus, 선택됐을 시 */
+/* .react-calendar__tile:enabled:hover, */
+/* .react-calendar__tile:enabled:focus, */
+.react-calendar__tile--active {
+    background: #FF5F5F !important;
+    border-radius: 50%;
+}
 
 /* 현재 날짜 */
 .react-calendar__tile--now {

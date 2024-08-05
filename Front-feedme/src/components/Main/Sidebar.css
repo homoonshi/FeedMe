@@ -29,7 +29,6 @@
     width: 100%;
     height: 8vh;
     margin-bottom: 15px;
-    cursor: pointer; /* Added cursor to indicate clickability */
 }
 
 .SidebarList .menu {
@@ -39,7 +38,6 @@
     width: 100%;
     height: 8vh;
     margin-bottom: 15px;
-    cursor: pointer; /* Added cursor to indicate clickability */
     transition: background-color 0.3s, color 0.3s, transform 0.3s; /* Added transition */
 }
 
