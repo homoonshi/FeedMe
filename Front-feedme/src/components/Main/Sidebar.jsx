@@ -6,6 +6,8 @@ import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import AutoStoriesOutlinedIcon from '@mui/icons-material/AutoStoriesOutlined';
 import ChatBubbleOutlineOutlinedIcon from '@mui/icons-material/ChatBubbleOutlineOutlined';
+import CreateOutlinedIcon from '@mui/icons-material/CreateOutlined';
+
 
 const Sidebar = () => {
   const [active, setActive] =useState(useLocation().pathname);
@@ -57,7 +59,7 @@ const Sidebar = () => {
          <Menu
           isActive={active === '/Feed'}
           onClick={() => handleClick('/Feed')}
-          icon={ChatBubbleOutlineOutlinedIcon}
+          icon={CreateOutlinedIcon}
           des="/Feed"
           link="게시판"
         />
