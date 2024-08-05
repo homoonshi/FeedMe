@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import '../Main/Sidebar.css';
 import Menu from './SidebarMenu';
 import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
@@ -8,7 +8,7 @@ import AutoStoriesOutlinedIcon from '@mui/icons-material/AutoStoriesOutlined';
 import ChatBubbleOutlineOutlinedIcon from '@mui/icons-material/ChatBubbleOutlineOutlined';
 
 const Sidebar = () => {
-  const [active, setActive] = useState('/Main');
+  const [active, setActive] =useState(useLocation().pathname);
   const navigate = useNavigate(); // 페이지 이동을 위해 useNavigate 훅 사용
 
   const handleClick = (path) => {
