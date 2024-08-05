@@ -4,6 +4,7 @@ import { faMessage } from '@fortawesome/free-solid-svg-icons';
 import './ChattingFriendList.css';
 import '../../assets/font/Font.css';
 import myAvatar from '../../assets/images/test1.png';
+import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 
 const ChattingFriendList = ({ friends, onFriendClick, onChatClick }) => {
   const [searchTerm, setSearchTerm] = useState('');
