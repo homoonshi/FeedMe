@@ -137,11 +137,12 @@
 /* 일 (각 타일) */
 .react-calendar__tile {
     text-align: center;
-    height: 50px !important;
-    width: 50px !important;
+    height: 60px !important;
+    width: 60px !important;
+    /* margin: 2px; */
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
+    justify-content: space-evenly;
     align-items: center;
     border-radius: 50%;
     background: rgba(255, 170, 161, 0.2) !important;
