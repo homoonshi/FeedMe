@@ -1,14 +1,13 @@
-.TodoBack {
+.FeedBack{
     width: 100%;
     height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
-    /* overflow-x: hidden; */
-} 
+}
 
-.TodoBack::before {
+.FeedBack::before {
     content: '';
     background: url('../../assets/images/test2.png') no-repeat center;
     background-size: cover;
@@ -25,7 +24,7 @@
     align-items: center;
 }
 
-.TodoContainer {
+.FeedContainer {
     width: 83%;
     height: 78%;
     border-radius: 20px;
@@ -37,26 +36,14 @@
     position: relative;
 }
 
-.TodoMain {
+.FeedMain {
     width: 80%;
     height: 91%;
     display: flex;
     flex-direction: column;
 }
 
-/* .TodoMain > .Search {
-    width: 100%; 
-    height: 10%; 
-    margin-bottom: 20px; 
-} */
-
-.TodoDashboard {
-    /* display: flex;
-    justify-content: flex-start;
-    margin-top: 25px;
-    height: 93%;
-    border: solid 1px; */
-
+.FeedDashboard {
     display: flex;
     justify-content: flex-start;
     margin-top: 25px;
@@ -65,23 +52,4 @@
     border-radius: 20px;
     background-color: rgba(255, 255, 255, 0.6);
     backdrop-filter: blur(12px);
-}
-
-.TodoList {
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-    overflow-y: auto;
-    
-    align-items: center;
-    /* border: 1px solid red; */
-    /* height: 80%; */
-}
-
-.TodoCreatures {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    /* align-items: center; */
-    flex-direction: column;
 }

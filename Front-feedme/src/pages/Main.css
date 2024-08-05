@@ -6,7 +6,7 @@
   align-items: center;
   position: relative;
 }
-
+ 
 .Main::before {
   content: "";
   background: url('../assets/images/img-main.png') no-repeat center;

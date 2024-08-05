@@ -19,23 +19,33 @@ const Search = () => {
   };
 
   return (
-    // <div className='SearchContainer'>
-      <div className="search-bar-container">
-        <input type="text" className="search-input" placeholder="전체 사용자 검색" />
-        <div className="search-icon">
-          <img src={search} alt="Search Icon" />
-        </div>
-        <div className='noti-mypage-icons'>
-          <div onClick={handleNotificationClick}>
-            <img src={noti} alt="Noti Icon" />
-          </div>
-          <div onClick={handleProfileClick}>
-            <img src={mypage} alt="Mypage Icon" />
-          </div>
-        </div>
-        {isModalOpen && <NotificationModal onClose={handleNotificationClick} />}
-      </div>
+    // <div className='SearchBar'>
+    //   <div className='Search'>
+    //     <input type="text" placeholder="전체 사용자 검색" />
+    //     <button onClick={handleNotificationClick}>
+    //       {/* <img src={noti} alt="알림" /> */}
+    //     </button>
+    //     <button onClick={handleProfileClick}>
+    //       {/* <img src={account} alt="마이페이지" /> */}
+    //     </button>
+    //     {isModalOpen && <NotificationModal onClose={handleNotificationClick} />}
+    //   </div>
     // </div>
+    <div className="search-bar-container">
+      <input type="text" className="search-input" placeholder="전체 사용자 검색" />
+      <div className="search-icon">
+        <img src={search} alt="Search Icon" />
+      </div>
+      <div className='noti-mypage-icons'>
+        <div onClick={handleNotificationClick}>
+          <img src={noti} alt="Noti Icon" />
+        </div>
+        <div onClick={handleProfileClick}>
+          <img src={mypage} alt="Mypage Icon" />
+        </div>
+      </div>
+      {isModalOpen && <NotificationModal onClose={handleNotificationClick} />}
+    </div>
   );
 };
 

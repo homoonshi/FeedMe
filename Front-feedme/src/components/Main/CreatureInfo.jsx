@@ -1,6 +1,6 @@
 import React from 'react';
 import ToDoList from '../Todo/TodoList';
-import creature from '../../assets/images/img-cat.png';
+import creature from '../../assets/images/test3.png';
 import '../Main/CreatureInfo.css';
 
 const CreatureInfo = () => {
