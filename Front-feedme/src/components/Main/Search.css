@@ -88,3 +88,19 @@
 .suggestions-list li:hover {
     background-color: rgba(0, 0, 0, 0.1);
 }
+
+
+/* Webkit 기반 브라우저 (Chrome, Safari) */
+.suggestions-list::-webkit-scrollbar {
+    width: 10px;
+    /* 스크롤바의 너비 */
+}
+
+.suggestions-list::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 20px;
+}
+
+.suggestions-list::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}

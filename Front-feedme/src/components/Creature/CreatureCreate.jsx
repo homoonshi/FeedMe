@@ -82,7 +82,7 @@ const CreatureCreate = () => {
                   checked={selectedKeywords.includes('cute')}
                   onChange={() => handleKeywordChange('cute')}
                 />
-                <label htmlFor="cute">귀여움</label>
+                <label htmlFor="cute">강아지</label>
               </div>
               <div className="CreatureCreateFormKeywordOption">
                 <input
@@ -91,7 +91,7 @@ const CreatureCreate = () => {
                   checked={selectedKeywords.includes('innocent')}
                   onChange={() => handleKeywordChange('innocent')}
                 />
-                <label htmlFor="innocent">순수함</label>
+                <label htmlFor="innocent">고양이</label>
               </div>
               <div className="CreatureCreateFormKeywordOption">
                 <input
@@ -100,7 +100,7 @@ const CreatureCreate = () => {
                   checked={selectedKeywords.includes('bright')}
                   onChange={() => handleKeywordChange('bright')}
                 />
-                <label htmlFor="bright">밝음</label>
+                <label htmlFor="bright">새</label>
               </div>
               <div className="CreatureCreateFormKeywordOption">
                 <input
@@ -109,7 +109,7 @@ const CreatureCreate = () => {
                   checked={selectedKeywords.includes('joy')}
                   onChange={() => handleKeywordChange('joy')}
                 />
-                <label htmlFor="joy">기쁨</label>
+                <label htmlFor="joy">팬더</label>
               </div>
             </div>
           </div>
