@@ -6,12 +6,12 @@
     display: flex;
     flex-direction: column;
     /* position: relative; */
-    /* overflow: hidden; */
+    overflow: hidden;
     width: 90%;
-    height: 100%;
+    /* height: 100%; */
     max-height: 80vh;
 
-    border: 1px saddlebrown solid;
+    /* border: 1px saddlebrown solid; */
 }
 
 .TodoListMainHeader{
@@ -20,7 +20,7 @@
     justify-content: space-between;
     height: 10%;
 
-    border: 1px solid red;
+    /* border: 1px solid red; */
 }
 
 .TodoListMainHeaderDate {
@@ -39,30 +39,42 @@
 
 
 .TodoListMainContent {
-    flex-grow: 1;
+    /* flex-grow: 1; */
+    height: 400px;
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    border: 1px solid blue;
+    /* border: 1px solid blue; */
 }
 
 .TodoListMainSections{
-    flex: 1;
+    flex-grow: 1;
     overflow-y: auto;
     padding: 3% 10%;
 
-    border: 1px solid blue;
+    /* border: 1px solid blue; */
 
     /* height: calc(80% - 20%); */
     /* flex-shrink: 0; */
+    /* display: flex;
+    flex-direction: column;
+    max-height: 80%;
+    overflow-y: scroll;
+    padding-top: 4%;
+    padding-left: 3%;
+    padding-right: 3%; */
 }
+
+.TodoListMainSections::-webkit-scrollbar {
+    display: none;
+  }
 
 .TodoListMainSection{
     display: flex;
     flex-direction: column;
-    flex-shrink: 0;
+    flex-shrink: 2;
 
-    border: 1px solid greenyellow;
+    /* border: 1px solid greenyellow; */
 }
 
 .TodoListMainSectionHeader{
@@ -106,37 +118,3 @@
     border: none;
     border-radius: 50%;
 }
-
-/* 
-
-@media (max-width: 768px) {
-    .TodoListMainContainer {
-        width: 95%;
-        max-height: 90vh;
-    }
-
-    .TodoListMainHeader,
-    .TodoListMainActions {
-        height: 8%;
-    }
-
-    .TodoListMainSections {
-        padding: 2% 3%;
-    }
-}
-
-@media (max-width: 480px) {
-    .TodoListMainContainer {
-        width: 100%;
-        max-height: 95vh;
-    }
-
-    .TodoListMainHeader,
-    .TodoListMainActions {
-        height: 7%;
-    }
-
-    .TodoListMainSections {
-        padding: 1% 2%;
-    }
-} */

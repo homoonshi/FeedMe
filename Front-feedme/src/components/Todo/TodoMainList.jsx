@@ -73,7 +73,7 @@ const TodoMainList = () => {
     day: 'numeric',
     weekday: 'long'
   });
-
+ 
   return (
     <div className="TodoMainListContainer">
       <div className="TodoHeader">

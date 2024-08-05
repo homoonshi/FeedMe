@@ -25,7 +25,8 @@
     align-items: center;
     justify-content: flex-start;
     /* border: solid 1px pink; */
-    padding: 10px;
+    padding-top: 5%;
+    padding-right: 5%;
     height: 100%;
     overflow-y: hidden; 
     max-height: 100%; 
@@ -68,21 +69,36 @@
     padding: 0;
     width: 100%;
     margin-top: 10px;
-    height: calc(100% - 50px); 
-    overflow-y: hidden; 
+    height: 350px; 
+    overflow-y: auto; 
     position: relative;
 }
 
+.commentsList::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+.commentsList::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 20px;
+  }
+  
+.commentsList::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+
 .commentsList li {
-    background: #f1f1f1;
-    margin-bottom: 5px;
-    padding: 5px;
-    border-radius: 5px;
+    background: #f9f9f9; 
+    margin-bottom: 10px; 
+    padding: 10px; 
+    border-radius: 10px; 
     width: 100%;
     text-align: left;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+    transition: background-color 0.3s, box-shadow 0.3s;
 }
 
 .commentItem {
@@ -90,39 +106,49 @@
     justify-content: space-between;
     align-items: center;
     width: 100%;
+    padding: 5px 0;
 }
 
 .commentActions {
     display: flex;
     align-items: center;
     position: relative;
+    font-family: 'PretendardR';
 }
 
 .optionsDropdown {
     position: absolute;
     top: 20px;
     right: 0;
-    background: rgba(255, 255, 255, 0.479);
-    border: 1px solid #ccc;
-    border-radius: 3px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     z-index: 10;
     width: 100px; 
     white-space: nowrap; 
+    overflow: hidden;
+    align-items: center; 
+    text-align: center;
 }
 
 .optionsDropdown button {
     display: block;
     width: 100%;
-    padding: 5px 10px;
+    padding: 10px 15px;
     border: none;
     background: none;
     cursor: pointer;
     text-align: left;
+    font-size: 14px;
+    color: #333;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    text-align: center;
 }
 
 .optionsDropdown button:hover {
-    background: #f1f1f1;
+    background: #77d4ff;
+    color: #000;
 }
 
 .editCommentInput {
@@ -136,7 +162,7 @@
     background: none;
     border: none;
     cursor: pointer;
-    margin-left: 5px;
+    margin-left: 0px;
 }
 
 .ellipsisButton {
@@ -156,7 +182,6 @@
     width: 100%;
     position: sticky;
     top: 0;
-    padding-right: 3%;
     /* background: white; */
     padding-bottom: 1rem;
     z-index: 1; /* 댓글 입력 폼이 스크롤보다 위에 오도록 설정 */
@@ -164,17 +189,44 @@
 
 .commentInput {
     flex: 1;
-    padding: 5px;
+    padding: 10px;
     border: 1px solid #ccc;
-    border-radius: 3px;
+    border-radius: 20px;
+    font-size: 16px;
+    color: #333;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s, box-shadow 0.3s;
+    font-family: 'PretendardR';
 }
 
+.commentInput:focus {
+    border-color: #007BFF;
+    box-shadow: 0 2px 8px rgba(0, 123, 255, 0.2);
+    outline: none;  
+}
+
+
 .commentButton {
-    padding: 5px 10px;
+    padding: 1% 5%; 
     border: none;
     background-color: #007bff;
     color: white;
-    border-radius: 3px;
+    border-radius: 20px;
     cursor: pointer;
-    margin-left: 5px;
+    margin-left: 3%;
+    font-size: 1rem;
+    font-family: 'PretendardSB';
+    transition: background-color 0.3s, transform 0.2s; 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+}
+
+.commentButton:hover {
+    background-color: #0056b3; 
+    transform: scale(1.05); 
+}
+
+.commentButton:active {
+    background-color: #004494; 
+    transform: scale(0.98);
 }
