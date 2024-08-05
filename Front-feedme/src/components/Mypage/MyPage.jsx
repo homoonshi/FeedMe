@@ -10,7 +10,6 @@ const MyPage = () => {
       <div className="MyPageMain">
         <Sidebar />
         <div className="MyPageRight">
-          <Search />
           <div className="MyPageRightContents">
 
             <span className="MyPageContentSide"></span>
@@ -38,6 +37,7 @@ const MyPage = () => {
               <Creature />
             </div>
           </div>
+          <Search />
         </div>
       </div>
     </div>

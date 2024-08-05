@@ -37,7 +37,6 @@ const Chat = () => {
       <div className="ChatBox">
         <Sidebar />
         <div className="ChatRight">
-          <Search />
           <div className="ChatRightContents">
             <div className="ChatFriendList">
               <ChattingFriendList
@@ -63,6 +62,7 @@ const Chat = () => {
               )}
             </div>
           </div>
+          <Search />
         </div>
       </div>
     </div>

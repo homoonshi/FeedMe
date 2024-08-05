@@ -9,12 +9,12 @@ const Feed = () => {
   return (
     <div className="FeedBack">
       <div className="FeedContainer">
-        <Sidebar/>
+        <Sidebar />
         <div className="FeedMain">
+          <div className="FeedDashboard">
+            <FeedList />
+          </div>
           <Search />
-            <div className="FeedDashboard">
-                <FeedList />
-            </div>
         </div>
       </div>
     </div>

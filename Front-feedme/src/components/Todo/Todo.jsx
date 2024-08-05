@@ -10,19 +10,19 @@ const Todo = () => {
   return (
     <div className="TodoBack">
       <div className="TodoContainer">
-        <Sidebar/>
+        <Sidebar />
         <div className="TodoMain">
-          <Search />
-            <div className="TodoDashboard">
-              <div className="TodoList">
-                <TodoMainList />
-                {/* <TodoListMain /> */}
-              </div>
-              <div className="TodoCreatures">
-                <TodoCreature />
-              </div>
+          <div className="TodoDashboard">
+            <div className="TodoList">
+              <TodoMainList />
+              {/* <TodoListMain /> */}
+            </div>
+            <div className="TodoCreatures">
+              <TodoCreature />
             </div>
           </div>
+          <Search />
+        </div>
       </div>
     </div>
   );
