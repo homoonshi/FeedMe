@@ -5,6 +5,7 @@ import '../../assets/font/Font.css'
 import photo1 from '../../assets/images/test1.png';
 import photo2 from '../../assets/images/test2.png';
 import photo3 from '../../assets/images/test3.png';
+import '../../assets/font/Font.css' 
 
 const initialPhotos = [
   { src: photo1, caption: '불사조', comments: [] },

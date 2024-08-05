@@ -4,7 +4,7 @@ import Search from '../Main/Search';
 import FeedList from './FeedList';
 import './Feed.css'
 
-
+ 
 const Feed = () => {
   return (
     <div className="FeedBack">
