@@ -1,17 +1,3 @@
-# frontend
-
-### 화면 구조 잡기
--src
-  - api : http 요청들을 관리하여 구분한 폴더
-  - assets : 프로젝트의 자산 관리(폰트, 이미지, 동영상 등을 저장하여 프로젝트에서 사용할 수 있도록 저장)
-    - font
-    - images
-  - components : 공통적으로 사용하는 component들을 관리, 여러가지 페이지에 렌더링 될 수 있는 컴포넌트들을 재사용 가능하게 정리
-  - hooks : custom hook들을 담아 놓은 폴더
-  - pages : 페이지 단위의 컴포넌트를 폴더로 구성, 어떤 특정 화면에 위치하였을 때 렌더링 될 코드, 특정 페이지에서만 사용되는 컴포넌트는 components 폴더로 분리하기 보다 해당 페이지 폴더의 하위 폴더에서 관리하는 것이 좋을 듯
-  - store : redux를 정의 해놓은 폴더
-
-
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

@@ -1,0 +1,55 @@
+/* SearchBar.css */
+.search-bar-container {
+    position: relative;
+    border-radius: 20px;
+    background-color: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(12px);
+    margin-right: 25px;
+    height: 11%;
+}
+
+.search-input {
+    font-family: 'PretendardR';
+    font-size: 16px;
+    width: 50%;
+    height: 100%;
+    padding: 10px 10px 10px 60px;
+    border-radius: 20px;
+    box-sizing: border-box;
+    border: none;
+    background: transparent;
+    outline: none;
+}
+
+.search-icon {
+    position: absolute;
+    top: 55%;
+    left: 25px;
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+
+.search-icon img {
+    width: 28px;
+    height: 28px;
+}
+
+.noti-mypage-icons {
+    display: flex;
+    position: absolute;
+    top: 55%;
+    right: 25px;
+    transform: translateY(-50%);
+}
+
+.noti-mypage-icons img {
+    width: 33px;
+    height: 33px;
+    margin-left: 10px;
+    transition: transform 0.3s ease-in-out;
+    cursor: pointer;
+}
+
+.noti-mypage-icons img:hover {
+    transform: translateY(-3px); 
+}
