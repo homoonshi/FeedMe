@@ -22,11 +22,11 @@ const CreatureResult = () => {
         <Link to="/Main">
           <button type="submit" className="CreatureResultStartButton">Start</button>
         </Link>
-        <Link to="/CreatureResult" className="CreatureResultReloadButton">
+        {/* <Link to="/CreatureResult" className="CreatureResultReloadButton">
           <button>
             <FontAwesomeIcon icon={faRotate} rotation={180} size="xl" style={{color: "#ffffff",}} />
           </button>
-        </Link>
+        </Link> */}
       </div>
     </div>
   );
