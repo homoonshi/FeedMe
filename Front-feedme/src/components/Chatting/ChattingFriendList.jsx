@@ -7,14 +7,14 @@ import myAvatar from '../../assets/images/test1.png';
 
 const ChattingFriendList = ({ friends, onFriendClick, onChatClick }) => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [activeFriendId, setActiveFriendId] = useState(null); // 활성화된 친구 ID 상태
+  const [activeFriendId, setActiveFriendId] = useState(null); 
 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
   };
 
   const handleChatButtonClick = (friend) => {
-    setActiveFriendId(friend.id); // 버튼 클릭 시 활성화된 친구 ID 업데이트
+    setActiveFriendId(friend.id); 
     onChatClick(friend);
   };
 

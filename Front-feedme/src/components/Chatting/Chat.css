@@ -87,3 +87,61 @@
 
   flex-direction: column; 
 }
+
+.ChatModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.ChatModalContent {
+  background: white;
+  padding: 2%;
+  border-radius: 40px;
+  text-align: center;
+  font-family: 'PretendardB';
+  font-size: 1.3rem;
+}
+
+.ChatModalContentCancel {
+  background-color: #808080;
+  color: #FFFFFF;
+  margin: 5%;
+  padding: 3% 7%;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-family: 'PretendardR';
+  font-size: 1rem;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.ChatModalContentCancel:hover {
+  background-color: #696969;
+  transform: scale(1.05);
+}
+
+.ChatModalContentDel {
+  background-color: #FF5F5F;
+  color: #FFFFFF;
+  margin: 5%;
+  padding: 3% 7%;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-family: 'PretendardR';
+  font-size: 1rem;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.ChatModalContentDel:hover {
+  background-color: #CC0000;
+  transform: scale(1.05);
+}

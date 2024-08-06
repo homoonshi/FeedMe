@@ -6,21 +6,24 @@ import ChattingFriendProfile from './ChattingFriendProfile';
 import ChatWindow from './ChatWindow';
 import Creature from '../Mypage/Creature';
 import './Chat.css';
+import '../../assets/font/Font.css';
 import test1 from '../../assets/images/test1.png';
 
 const Chat = () => {
-  const [selectedFriend, setSelectedFriend] = useState(null);
-  const [view, setView] = useState('profile');
-
-  const friends = [
+  const [friends, setFriends] = useState([
     { id: 1, name: 'pi', avatar: test1 },
     { id: 2, name: '지나', avatar: test1 },
     { id: 3, name: '지수', avatar: test1 },
     { id: 4, name: '수보', avatar: test1 },
     { id: 5, name: '차미', avatar: test1 },
     { id: 6, name: '미푸', avatar: test1 },
-    { id: 7, name: '미푸', avatar: test1 }, 
-  ];
+    { id: 7, name: '미푸', avatar: test1 },
+  ]);
+
+  const [selectedFriend, setSelectedFriend] = useState(null);
+  const [view, setView] = useState('profile');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [friendToDelete, setFriendToDelete] = useState(null);
 
   const handleFriendClick = (friend) => {
     setSelectedFriend(friend);
@@ -30,6 +33,22 @@ const Chat = () => {
   const handleChatClick = (friend) => {
     setSelectedFriend(friend);
     setView('chat');
+  };
+
+  const handleDeleteFriend = (friend) => {
+    setFriendToDelete(friend);
+    setIsModalOpen(true);
+  };
+
+  const confirmDeleteFriend = () => {
+    setFriends(friends.filter(friend => friend.id !== friendToDelete.id));
+    setSelectedFriend(null);
+    setIsModalOpen(false);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setFriendToDelete(null);
   };
 
   return (
@@ -50,7 +69,7 @@ const Chat = () => {
               {selectedFriend ? (
                 <div className="ChatDetailInner">
                   {view === 'profile' ? (
-                    <ChattingFriendProfile friend={selectedFriend} />
+                    <ChattingFriendProfile friend={selectedFriend} onDelete={handleDeleteFriend} />
                   ) : view === 'chat' ? (
                     <ChatWindow friend={selectedFriend} />
                   ) : (
@@ -65,6 +84,16 @@ const Chat = () => {
           <Search />
         </div>
       </div>
+
+      {isModalOpen && (
+        <div className="ChatModal">
+          <div className="ChatModalContent">
+            <p>정말로 친구를 삭제하시겠습니까?</p>
+            <button className="ChatModalContentCancel" onClick={closeModal}>취소</button>
+            <button className="ChatModalContentDel" onClick={confirmDeleteFriend}>삭제</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

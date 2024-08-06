@@ -10,6 +10,13 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
+}
+
+.CFProfileDeleteIcon {
+  position: absolute;
+  right: 1%; 
+  cursor: pointer; 
 }
 
 .CFProfileName {
