@@ -117,7 +117,6 @@
 /* 월 달력 (내비게이션 제외) */
 .react-calendar__month-view {
     /* padding: 12px 32px; */
-
     abbr {
         /* color: brown; */
         font-size: 14px;
@@ -144,8 +143,15 @@
     flex-direction: column;
     justify-content: space-evenly;
     align-items: center;
-    border-radius: 50%;
+    border-radius: 50% !important;
     background: rgba(255, 170, 161, 0.2) !important;
+}
+
+.react-calendar__tile.react-calendar__year-view__months__month,
+.react-calendar__tile.react-calendar__decade-view__years__year,
+.react-calendar__tile.react-calendar__century-view__decades__decade {
+    height: 100px !important;
+    border-radius: 50% !important;
 }
 
 .date-number {

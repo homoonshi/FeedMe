@@ -10,7 +10,7 @@ import CreateOutlinedIcon from '@mui/icons-material/CreateOutlined';
 
 
 const Sidebar = () => {
-  const [active, setActive] =useState(useLocation().pathname);
+  const [active, setActive] = useState(useLocation().pathname);
   const navigate = useNavigate(); // 페이지 이동을 위해 useNavigate 훅 사용
 
   const handleClick = (path) => {
@@ -56,7 +56,7 @@ const Sidebar = () => {
           des="/Chatting"
           link="채팅"
         />
-         <Menu
+        <Menu
           isActive={active === '/Feed'}
           onClick={() => handleClick('/Feed')}
           icon={CreateOutlinedIcon}

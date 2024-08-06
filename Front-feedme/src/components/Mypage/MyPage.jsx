@@ -30,9 +30,12 @@ const MyPage = () => {
                 생ㅤ일:
                 <input type="text" defaultValue="1999.05.20" />
               </label>
-              <button className="MyPageButton">정보 수정</button>
+              <div className='MyPageButtons'>
+                <button className="MyPageButtonLogout">로그아웃</button>
+                <button className="MyPageButton">정보 수정</button>
+              </div>
             </div>
-            
+
             <div className="MypageCreture">
               <Creature />
             </div>

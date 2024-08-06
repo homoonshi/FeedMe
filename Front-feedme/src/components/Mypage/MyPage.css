@@ -101,8 +101,13 @@
     align-items: center;
 }
 
+.MyPageButtons {
+    display: flex;    
+    justify-content: end;
+}
 .MyPageButton {
     margin-top: 20px;
+    margin-left: 20px;
     padding: 2% 4%;
     background-color: #FF5F5F;
     color: white;
@@ -112,6 +117,20 @@
     font-size: 1rem;
     align-self: flex-end;
     font-family: 'PretendardM';
+}
+
+.MyPageButtonLogout {
+    margin-top: 20px;
+    padding: 2% 4%;
+    background-color: #6D6D6D;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1rem;
+    align-self: flex-end;
+    font-family: 'PretendardM';
+
 }
 
 .MyPageContentSide{
@@ -126,6 +145,7 @@
     top: 3%; 
     z-index: 1;
 }
+
 
 .MyPageTitle {
     position: absolute;

@@ -81,3 +81,20 @@
 .NoticeContent::-webkit-scrollbar-thumb:hover {
     background: #555;
 }
+
+.AlarmFriends {
+    padding: 5px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    font-family: 'PretendardM';
+    cursor: pointer;
+}
+
+.AlarmFriends span {
+    margin-left: 10px;
+}
+
+.RequestButtons {
+    margin-left: auto;
+}

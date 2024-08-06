@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import data from "./data.js";
 import './DiaryPic.css';
+import UploadOutlinedIcon from '@mui/icons-material/UploadOutlined';
 
 function DiaryPic() {
   const [slideIndex, setSlideIndex] = useState(0);
@@ -70,6 +71,11 @@ function DiaryPic() {
       <Arrow className="DiaryArrows" direction="next" onClick={moveToNextSlide}>
         ▶
       </Arrow>
+      <div className="CreateFeedContainer">
+        <button className="CreateFeedButton">
+          <UploadOutlinedIcon className="CreateFeedIcon" /> 피드 올리기
+        </button>
+      </div>
     </div>
   );
 }

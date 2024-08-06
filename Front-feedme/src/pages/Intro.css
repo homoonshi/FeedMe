@@ -75,6 +75,7 @@
     font-weight: 600;
     font-size: 18px;
     transition: 0.25s;
+    cursor: pointer;
 }
 
 .w-btn-gra1 {

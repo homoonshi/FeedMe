@@ -14,7 +14,11 @@ function ReactCalendar() {
     //   return <div className="date-number">{date.getDate()}</div>;
     // }
     // return null;
-    return <div className='date-number'>2</div>
+
+    if (view === 'month') {
+      return <div className='date-number'>2/5</div>;
+    }
+    // return <div className='date-number'>2</div>
   };
 
   return (

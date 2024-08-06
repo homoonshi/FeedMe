@@ -26,6 +26,48 @@ const data = [
       thumbnail: "thumbnail3.png",
       date: "08.04",
       content: "오늘은 집에서 강아지와 놀았다."
+    },
+    {
+      id: 4,
+      img: "thumbnail3.png",
+      thumbnail: "thumbnail3.png",
+      date: "08.05",
+      content: "오늘은 집에서 강아지와 놀았다."
+    },
+    {
+      id: 4,
+      img: "thumbnail3.png",
+      thumbnail: "thumbnail3.png",
+      date: "08.06",
+      content: "오늘은 집에서 강아지와 놀았다."
+    },
+    {
+      id: 4,
+      img: "thumbnail3.png",
+      thumbnail: "thumbnail3.png",
+      date: "08.07",
+      content: "오늘은 집에서 강아지와 놀았다."
+    },
+    {
+      id: 4,
+      img: "thumbnail3.png",
+      thumbnail: "thumbnail3.png",
+      date: "08.08",
+      content: "오늘은 집에서 강아지와 놀았다."
+    },
+    {
+      id: 4,
+      img: "thumbnail3.png",
+      thumbnail: "thumbnail3.png",
+      date: "08.09",
+      content: "오늘은 집에서 강아지와 놀았다."
+    },
+    {
+      id: 4,
+      img: "thumbnail3.png",
+      thumbnail: "thumbnail3.png",
+      date: "08.10",
+      content: "오늘은 집에서 강아지와 놀았다."
     }
   ];
   
