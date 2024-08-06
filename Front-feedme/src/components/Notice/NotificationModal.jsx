@@ -110,32 +110,6 @@ const NotificationModal = ({ onClose }) => {
               <div>
                 <div className='AlarmFriends'
                   onClick={toggleRequestMode}>
-                  <GroupAddOutlinedIcon />
-                  <span>친구 요청 목록 보기</span>
-                </div>
-                <ul>
-                  {notifications.map((notification, index) => (
-                    <li key={index}>
-                      <NotificationsNoneOutlinedIcon
-                        style={{
-                          width: "19px",
-                          marginRight: "13px"
-                        }} />
-                      <span>{notification}</span>
-                      <CloseIcon
-                        style={{
-                          width: "19px",
-                          marginLeft: "auto"
-                        }}
-                        className="NoticeButton" onClick={() => handleDelete(index)} />
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ) : (
-              <div>
-                <div className='AlarmFriends'
-                  onClick={toggleRequestMode}>
                   <NotificationsNoneOutlinedIcon />
                   <span>알림 목록 보기</span>
                 </div>
@@ -168,6 +142,32 @@ const NotificationModal = ({ onClose }) => {
                           }}
                           className="NoticeButton" onClick={() => handleDelete(index)}>수락</span>
                       </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : (
+              <div>
+                <div className='AlarmFriends'
+                  onClick={toggleRequestMode}>
+                  <GroupAddOutlinedIcon />
+                  <span>친구 요청 목록 보기</span>
+                </div>
+                <ul>
+                  {notifications.map((notification, index) => (
+                    <li key={index}>
+                      <NotificationsNoneOutlinedIcon
+                        style={{
+                          width: "19px",
+                          marginRight: "13px"
+                        }} />
+                      <span>{notification}</span>
+                      <CloseIcon
+                        style={{
+                          width: "19px",
+                          marginLeft: "auto"
+                        }}
+                        className="NoticeButton" onClick={() => handleDelete(index)} />
                     </li>
                   ))}
                 </ul>
