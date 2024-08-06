@@ -14,8 +14,8 @@
     align-items: center;
     justify-content: center;
     width: 60%; 
-    height: 100%;
-    /* border: solid 1px black; */
+    height: auto;
+    position: relative;
 }
   
 .FeedListCom{
@@ -24,7 +24,6 @@
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    /* border: solid 1px pink; */
     padding-top: 5%;
     padding-right: 5%;
     height: 100%;
@@ -33,15 +32,15 @@
 }
 
 .FeedListImg {
-    width: 100%;
-    max-width: 70%;
-    max-height: 100%;
+    width: 60%;
+    height: auto;
     object-fit: cover;
 }
   
 .FeedListCaption {
-    margin-top: 1rem;
-    font-size: 1.3rem; 
+    margin-top: 2%;
+    margin-bottom: 0;
+    font-size: 1rem; 
     text-align: center;
     font-family: 'PretendardR';
 }
@@ -95,24 +94,49 @@
     width: 100%;
     text-align: left;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
+    position: relative;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
     transition: background-color 0.3s, box-shadow 0.3s;
 }
 
 .commentItem {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
     width: 100%;
     padding: 5px 0;
+    position: relative;
+}
+
+.commentHeader {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    font-size: 0.8rem;
+    color: gray;
+    font-family: 'PretendardR';
+    margin-bottom: 5px;
+}
+
+.commentBody {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.commentText {
+    flex: 1;
+    padding-right: 2rem; 
+}
+
+.editCommentContainer { 
+    display: flex;
+    align-items: center;
 }
 
 .commentActions {
     display: flex;
     align-items: center;
-    position: relative;
     font-family: 'PretendardR';
 }
 
@@ -154,7 +178,6 @@
 .editCommentInput {
     flex: 1;
     padding: 5px;
-    /* border: 1px solid #ccc; */
     border-radius: 3px;
 }
 
@@ -171,24 +194,25 @@
 
 .saveButton {
     color: green;
+    margin-left: 5px;
 }
 
 .deleteButton {
     color: red;
 }
 
-.commentForm {
+.FeedListcommentForm {
     display: flex;
     width: 100%;
     position: sticky;
     top: 0;
-    /* background: white; */
     padding-bottom: 1rem;
-    z-index: 1; /* 댓글 입력 폼이 스크롤보다 위에 오도록 설정 */
+    z-index: 1;
 }
 
-.commentInput {
+.FeedListCommentInput {
     flex: 1;
+    width: 80%;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 20px;
@@ -200,12 +224,11 @@
     font-family: 'PretendardR';
 }
 
-.commentInput:focus {
+.FeedListCommentInput:focus {
     border-color: #007BFF;
     box-shadow: 0 2px 8px rgba(0, 123, 255, 0.2);
     outline: none;  
 }
-
 
 .commentButton {
     padding: 1% 5%; 
@@ -229,4 +252,36 @@
 .commentButton:active {
     background-color: #004494; 
     transform: scale(0.98);
+}
+
+.FeedListPhotoHeader {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px;
+}
+
+.FeedListPhotoauthor {
+    font-size: 0.8rem;
+    color: gray;
+    font-family: 'PretendardR';
+}
+
+.FeedListPhototime {
+    font-size: 0.8rem;
+    color: gray;
+    font-family: 'PretendardR';
+}
+
+.FeedListPhotolikeSection {
+    display: flex;
+    align-items: center;
+    margin-top: 3%;
+}
+
+.FeedListPhotolikeButton {
+    font-size: 1.5rem;
+    color: red;
+    cursor: pointer;
+    margin-right: 10px;
 }

@@ -24,6 +24,21 @@
   padding-right: 3%;
 }
 
+/* Webkit 기반 브라우저 (Chrome, Safari) */
+.ChatFriendList::-webkit-scrollbar {
+  width: 10px;
+  /* 스크롤바의 너비 */
+}
+
+.ChatFriendList::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 20px;
+}
+
+.ChatFriendList::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
 .ChatFriendItem {
   display: flex;
   align-items: center;
@@ -54,6 +69,9 @@
   padding-left: 3%;
 }
 
+
+
+
 .ChatIconButton {
   background: none;
   border: none;
@@ -62,6 +80,7 @@
   margin-left: 10px;
 }
 
-.ChatIconButton:hover {
+.ChatIconButton:hover,
+.ChatIconButton.active {
   color: #9E69FA;
 }
