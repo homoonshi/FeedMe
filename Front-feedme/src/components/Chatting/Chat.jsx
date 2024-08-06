@@ -21,7 +21,7 @@ const Chat = () => {
   ]);
 
   const [selectedFriend, setSelectedFriend] = useState(null);
-  const [view, setView] = useState('profile');
+  const [view, setView] = useState('profile'); 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [friendToDelete, setFriendToDelete] = useState(null);
 
