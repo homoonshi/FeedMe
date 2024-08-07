@@ -23,16 +23,12 @@ public class AuthController {
     private final RefreshTokenRepository tokenRepository;
     private final RefreshTokenService tokenService;
     private final JWTUtill jwtUtil;
-//    private final EmitterRepository emitterRepository;
-
-
-
 
     @PostMapping("token/logout")
     public ResponseEntity<StatusResponseDto> logout(@RequestHeader("Authorization") final String accessToken) {
-
         // 엑세스 토큰으로 현재 Redis 정보 삭제
         tokenService.removeRefreshToken(accessToken);
+
         return ResponseEntity.ok(StatusResponseDto.addStatus(200));
     }
 

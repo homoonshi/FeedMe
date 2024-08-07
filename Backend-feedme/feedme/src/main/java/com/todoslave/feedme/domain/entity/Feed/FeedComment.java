@@ -16,7 +16,7 @@ public class FeedComment {
 
     //피드 댓글 ID
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     //피드 ID

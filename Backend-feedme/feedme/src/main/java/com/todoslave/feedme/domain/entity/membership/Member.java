@@ -1,20 +1,26 @@
 package com.todoslave.feedme.domain.entity.membership;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import com.todoslave.feedme.domain.entity.avatar.Creature;
 import com.todoslave.feedme.domain.entity.Feed.Feed;
 import com.todoslave.feedme.domain.entity.Feed.FeedComment;
 import com.todoslave.feedme.domain.entity.Feed.FeedLike;
 import com.todoslave.feedme.domain.entity.Feed.FeedRecomment;
-import com.todoslave.feedme.domain.entity.check.Alarm;
+
 import com.todoslave.feedme.domain.entity.communication.Friend;
 import com.todoslave.feedme.domain.entity.communication.FriendRequest;
 import com.todoslave.feedme.domain.entity.diary.PictureDiary;
 import com.todoslave.feedme.domain.entity.task.CreatureTodo;
+import com.todoslave.feedme.domain.entity.task.DayOff;
 import com.todoslave.feedme.domain.entity.task.Todo;
 import com.todoslave.feedme.domain.entity.task.TodoCategory;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 
@@ -29,6 +35,7 @@ import java.util.List;
 @Table(name = "member")
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Member { //유저 디테일은 사용자 인증 정보를 담아두는 인터페이스이다.
 
     //회원 ID
@@ -50,23 +57,9 @@ public class Member { //유저 디테일은 사용자 인증 정보를 담아두
     @Column (nullable = false)
     private String nickname;
 
-    //크리쳐 이름
-    @Column(name = "creature_name")
-    private String creatureName;
-
     //생일
     @Column //(nullable = false)
     private Timestamp birthday;
-
-    //토큰
-    @Column
-    private String token;
-
-    //유저를 하나로 합침
-
-    // 경험치
-    @Column(name = "exp", nullable = false, updatable = false)
-    private int exp = 0 ;
 
     // 상태
     @Column(name = "status", nullable = false)
@@ -91,6 +84,11 @@ public class Member { //유저 디테일은 사용자 인증 정보를 담아두
     private String userRole;
 
     //여기부터 1대 N
+
+    //크리쳐와 매핑
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY, orphanRemoval = true) //1:1 중에 1을 맡는다.
+    @JsonManagedReference
+    private Creature creature;
 
     //친구와 매핑
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
@@ -117,10 +115,10 @@ public class Member { //유저 디테일은 사용자 인증 정보를 담아두
     @JsonManagedReference
     private List<CreatureTodo> creatureTodos = new ArrayList<>();
 
-    //크리쳐와 매핑
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
-    @JsonManagedReference
-    private List<Creature> creatures = new ArrayList<>();
+//    //크리쳐와 매핑
+//    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+//    @JsonManagedReference
+//    private List<Creature> creatures = new ArrayList<>();
 
     // 그림일기와 매핑
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -150,9 +148,31 @@ public class Member { //유저 디테일은 사용자 인증 정보를 담아두
     //알람과 매핑
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
-    private List<Alarm> alarms = new ArrayList<>();
+    private List<com.todoslave.feedme.domain.entity.check.Alarm> alarms = new ArrayList<>();
+
+    //끝내는 날과 매핑
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<DayOff>  dayOffs= new ArrayList<>();
 
 }
+
+// 메인에 있던건데, 뭐에 쓰는교?!
+//     @Override
+//     public Collection<? extends GrantedAuthority> getAuthorities() {
+//         return List.of(new SimpleGrantedAuthority("MEMBER"));
+//     }
+
+//     @Override
+//     public String getPassword() {
+//         return "";
+//     }
+
+//     @Override
+//     public String getUsername() {
+//         return "";
+//     }
+
 
 
 //package com.todoslave.feedme.domain.entity.membership;

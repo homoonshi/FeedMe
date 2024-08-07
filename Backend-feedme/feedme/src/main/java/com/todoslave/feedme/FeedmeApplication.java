@@ -27,4 +27,5 @@ public class FeedmeApplication {
 		// Run the Spring Boot application
 		SpringApplication.run(FeedmeApplication.class, args);
 	}
+
 }

@@ -17,7 +17,7 @@ public class Feed {
 
     // 피드 아이디
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     // 회원 ID

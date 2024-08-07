@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 @Data
 @Builder
@@ -23,9 +24,10 @@ public class MemberChatRoom {
 
     @Id
     private String id;
-    private List<String> participantIds;
-
+    @Field("participant_ids")
+    private List<Integer> participantIds;
     @CreatedDate
+    @Field("created_at")
     private LocalDate createdAt;
 
 }

@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,24 +27,19 @@ import java.util.List;
 @RestController
 @RequestMapping("/users")
 @Tag(name = "회원 CRUD")
-//@CrossOrigin(origins = "*", allowedHeaders = "*")
+@RequiredArgsConstructor
 public class MemberController {
 
-    @Autowired
-    MemberRepository memberRepository;
+    private final MemberService memberService;
 
-    @Autowired
-    MemberService memberService;
+    @Operation(summary = "맴버 검색 (for 친구추가)")
+    @GetMapping("/{searchvalue}")
+    public ResponseEntity<List<MemberSearchResponseDTO>> getUsers(@PathVariable String searchvalue) {
+        List<MemberSearchResponseDTO> list = memberService.getMemberList(searchvalue);
+        return new ResponseEntity<List<MemberSearchResponseDTO>>(list, HttpStatus.OK);
+    }
 
-    @Autowired
-    JwtProperties jwtProperties;
 
-//    @Operation(summary = "맴버 검색 (for 친구추가)")
-//    @GetMapping("/{searchvalue}")
-//    public ResponseEntity<List<MemberSearchResponseDTO>> getUsers(@PathVariable String searchvalue) {
-//        List<MemberSearchResponseDTO> list = memberService.getMemberList(searchvalue);
-//        return new ResponseEntity<List<MemberSearchResponseDTO>>(list, HttpStatus.OK);
-//    }
 
 
     @Operation(summary = "맴버 가입")

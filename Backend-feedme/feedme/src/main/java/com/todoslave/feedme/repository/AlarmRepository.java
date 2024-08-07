@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AlarmRepository extends JpaRepository<Alarm, Integer> {
 
-//  List<Alarm> findByMemberIdAndReadFalse(int memberId, boolean read);
+  List<Alarm> findByMemberIdAndIsChecked(int memberId, int isChecked);
 
 }
 

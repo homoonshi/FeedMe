@@ -19,7 +19,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
   @Override
   public void registerStompEndpoints(StompEndpointRegistry registry) {
     registry.addEndpoint("/friendChat")
-        .setAllowedOriginPatterns("http://localhost:8080", "null") // 명시적인 오리진 사용
+        .setAllowedOriginPatterns("http://localhost:8080","null") // 명시적인 오리진 사용
         .withSockJS();
   }
 }
