@@ -5,10 +5,18 @@ import './TodoMainList.css';
 import '../../assets/font/Font.css';
 
 const TodoMainList = () => {
-  const [categories, setCategories] = useState([
-    { title: '공부', items: ['CS 공부하기', '알고리즘 공부하기', '자격증 공부하기'] },
-    { title: '일일 미션', items: ['산책 다녀오기', '우산 챙기기'] }
-  ]);
+  const [categories, setCategories] = useState({
+    '2024-08-07': [
+      { title: '공부', items: ['CS 공부하기', '알고리즘 공부하기', '자격증 공부하기'] },
+      { title: '일일 미션', items: ['산책 다녀오기', '우산 챙기기'] }
+    ],
+    '2024-08-08': [
+      { title: '공부', items: ['새로운 과목 공부하기'] },
+      { title: '일일 미션', items: ['운동하기'] }
+    ],
+  });
+
+  const [currentDate, setCurrentDate] = useState(new Date());
 
   const [selectedTodo, setSelectedTodo] = useState({ categoryIndex: null, todoIndex: null });
   const [categoryModalIsOpen, setCategoryModalIsOpen] = useState(false);
@@ -18,6 +26,23 @@ const TodoMainList = () => {
   const [newTodo, setNewTodo] = useState('');
   const [editedTodo, setEditedTodo] = useState('');
   const [currentCategoryIndex, setCurrentCategoryIndex] = useState(null);
+
+  const formatDate = (date) => {
+    return date.toISOString().split('T')[0];
+  };
+
+  const handleIncreaseDate = () => {
+    setCurrentDate(new Date(currentDate.setDate(currentDate.getDate() + 1)));
+  };
+
+  const handleDecreaseDate = () => {
+    setCurrentDate(new Date(currentDate.setDate(currentDate.getDate() - 1)));
+  };
+
+  const getCurrentDateCategories = () => {
+    const formattedDate = formatDate(currentDate);
+    return categories[formattedDate] || [];
+  };
 
   const handleAddCategory = () => {
     setCategoryModalIsOpen(true);
@@ -30,8 +55,9 @@ const TodoMainList = () => {
 
   const handleAddTodoSubmit = () => {
     if (newTodo) {
-      const newCategories = [...categories];
-      newCategories[currentCategoryIndex].items.push(newTodo);
+      const formattedDate = formatDate(currentDate);
+      const newCategories = { ...categories };
+      newCategories[formattedDate][currentCategoryIndex].items.push(newTodo);
       setCategories(newCategories);
       setNewTodo('');
       setAddTodoModalIsOpen(false);
@@ -39,16 +65,18 @@ const TodoMainList = () => {
   };
 
   const handleEditTodo = (categoryIndex, todoIndex) => {
-    const newCategories = [...categories];
-    newCategories[categoryIndex].items[todoIndex] = editedTodo;
+    const formattedDate = formatDate(currentDate);
+    const newCategories = { ...categories };
+    newCategories[formattedDate][categoryIndex].items[todoIndex] = editedTodo;
     setCategories(newCategories);
     setSelectedTodo({ categoryIndex: null, todoIndex: null });
     setTodoModalIsOpen(false);
   };
 
   const handleDeleteTodo = (categoryIndex, todoIndex) => {
-    const newCategories = [...categories];
-    newCategories[categoryIndex].items.splice(todoIndex, 1);
+    const formattedDate = formatDate(currentDate);
+    const newCategories = { ...categories };
+    newCategories[formattedDate][categoryIndex].items.splice(todoIndex, 1);
     setCategories(newCategories);
     setSelectedTodo({ categoryIndex: null, todoIndex: null });
     setTodoModalIsOpen(false);
@@ -56,34 +84,50 @@ const TodoMainList = () => {
 
   const toggleOptions = (categoryIndex, todoIndex) => {
     setSelectedTodo({ categoryIndex, todoIndex });
-    setEditedTodo(categories[categoryIndex].items[todoIndex]);
+    setEditedTodo(getCurrentDateCategories()[categoryIndex].items[todoIndex]);
     setTodoModalIsOpen(true);
   };
 
   const handleCategoryModalSubmit = () => {
     if (newCategoryTitle) {
-      setCategories([...categories, { title: newCategoryTitle, items: [] }]);
+      const formattedDate = formatDate(currentDate);
+      const newCategories = { ...categories };
+      if (!newCategories[formattedDate]) {
+        newCategories[formattedDate] = [];
+      }
+      newCategories[formattedDate].push({ title: newCategoryTitle, items: [] });
+      setCategories(newCategories);
       setNewCategoryTitle('');
       setCategoryModalIsOpen(false);
     }
   };
 
-  const today = new Date().toLocaleDateString('ko-KR', {
+  const isSameDay = (date1, date2) => {
+    return date1.getFullYear() === date2.getFullYear() &&
+           date1.getMonth() === date2.getMonth() &&
+           date1.getDate() === date2.getDate();
+  };
+
+  const today = new Date();
+  const yesterday = new Date();
+  yesterday.setDate(today.getDate() - 1);
+
+  const formattedCurrentDate = currentDate.toLocaleDateString('ko-KR', {
     month: 'long',
     day: 'numeric',
     weekday: 'long'
   });
- 
+
   return (
     <div className="TodoMainListContainer">
       <div className="TodoHeader">
-        <FaAngleLeft className="TodoArrow" />
-        <h3>{today}</h3>
-        <FaAngleRight className="TodoArrow" />
+        <FaAngleLeft className="TodoArrow" onClick={handleDecreaseDate} /> 
+        <h3>{formattedCurrentDate}</h3>
+        <FaAngleRight className="TodoArrow" onClick={handleIncreaseDate} />
       </div>
 
       <div className="TodoSections">
-        {categories.map((category, categoryIndex) => (
+        {getCurrentDateCategories().map((category, categoryIndex) => (
           <div className="TodoSection" key={categoryIndex}>
             <div className="TodoSectionHeader">
               <h4>{category.title}</h4>
@@ -106,10 +150,12 @@ const TodoMainList = () => {
       </div>
 
       <div className="TodoActions">
-        <button className="CreateDrawingButton">
-          <FaPen className="DrawingIcon" />
-          그림일기 생성
-        </button>
+        {(isSameDay(currentDate, today) || isSameDay(currentDate, yesterday)) && (
+          <button className="CreateDrawingButton">
+            <FaPen className="DrawingIcon" />
+            그림일기 생성
+          </button>
+        )}
         <FaEllipsisH className="MoreOptionsButton" onClick={handleAddCategory} />
       </div>
 
@@ -175,7 +221,6 @@ const TodoMainList = () => {
           <button className="TodoMainModalButton" onClick={() => handleDeleteTodo(selectedTodo.categoryIndex, selectedTodo.todoIndex)}>삭제</button>
         </div>
       </Modal>
-
     </div>
   );
 };

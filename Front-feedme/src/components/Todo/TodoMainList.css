@@ -12,6 +12,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 0% 10%;
+  margin-top: 5%;
   height: 10%;
 }
 
@@ -21,13 +22,13 @@
   font-family: 'PretendardM';
 }
 
-/* .TodoArrow {
-  font-size: 1.5em;
+.TodoArrow {
+  font-size: 1.3rem;
   cursor: pointer;
-} */
+}
 
 .TodoSections {
-  height: 400px;
+  height: 380px;
   display: flex;
   flex-direction: column;
   gap: 0.5%; 
@@ -65,6 +66,8 @@
 
 .TodoSection h4 {
   font-size: 1.2em;
+  margin-top: 5%;
+  margin-bottom: 5%;
 }
 
 .TodoSection ul {
@@ -72,6 +75,7 @@
   padding: 0;
   margin-top: 0;
   font-family: 'PretendardR';
+  margin-bottom: 1%;
 }
 
 .TodoSection ul li {
@@ -125,8 +129,11 @@
 }
 
 .MoreOptionsButton {
-  font-size: 1.5em;
+  font-size: 1.8rem;
   cursor: pointer;
+  background-color: white;
+  border: none;
+  border-radius: 50%;
 }
 
 .AddTodoButton {

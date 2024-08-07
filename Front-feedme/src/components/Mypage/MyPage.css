@@ -183,8 +183,8 @@
     padding: 2%;
     border-radius: 40px;
     text-align: center;
-    font-family: 'PretendardB';
-    font-size: 1rem;
+    font-family: 'PretendardSB';
+    font-size: 1.3rem;
 }
   
 .MyPageLogoutModalCancel{
@@ -238,5 +238,22 @@
 
 .MyPageLogoutModalcorrection:hover {
     background-color: #CC0000;
+    transform: scale(1.05);
+}
+
+.MCreatureDelButton {
+    position: absolute;
+    top: 6%;
+    right: 3%;
+    border: none;
+    border-radius: 50px;
+    padding: 1.8% 2%;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    font-size: 1.5rem;
+}
+
+.MCreatureDelButton:hover {
+    background-color: #FF5F5F;
     transform: scale(1.05);
 }

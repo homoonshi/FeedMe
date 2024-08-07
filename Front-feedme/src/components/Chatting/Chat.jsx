@@ -19,9 +19,13 @@ const Chat = () => {
     { id: 6, name: '미푸', avatar: test1 },
     { id: 7, name: '미푸', avatar: test1 },
   ]);
+  const [creatures, setCreatures] = useState([
+    { id: 1, name: '불사조', daysTogether: 247, level: 1, exp: 50 }
+  ]);
+  const [selectedCreatureId, setSelectedCreatureId] = useState(null);
 
   const [selectedFriend, setSelectedFriend] = useState(null);
-  const [view, setView] = useState('profile'); 
+  const [view, setView] = useState('profile');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [friendToDelete, setFriendToDelete] = useState(null);
 
@@ -73,7 +77,9 @@ const Chat = () => {
                   ) : view === 'chat' ? (
                     <ChatWindow friend={selectedFriend} />
                   ) : (
-                    <Creature />
+                    creatures.map(creature => (
+                      <Creature key={creature.id} creature={creature} />
+                    ))
                   )}
                 </div>
               ) : (
