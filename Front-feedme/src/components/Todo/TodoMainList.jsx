@@ -3,6 +3,7 @@ import { FaAngleLeft, FaAngleRight, FaEllipsisH, FaPlus, FaPen } from 'react-ico
 import Modal from 'react-modal';
 import './TodoMainList.css';
 import '../../assets/font/Font.css';
+import diary from '../../assets/images/test2.png';
 
 const TodoMainList = () => {
   const [categories, setCategories] = useState({
@@ -22,6 +23,7 @@ const TodoMainList = () => {
   const [categoryModalIsOpen, setCategoryModalIsOpen] = useState(false);
   const [todoModalIsOpen, setTodoModalIsOpen] = useState(false);
   const [addTodoModalIsOpen, setAddTodoModalIsOpen] = useState(false);
+  const [drawingModalIsOpen, setDrawingModalIsOpen] = useState(false); 
   const [newCategoryTitle, setNewCategoryTitle] = useState('');
   const [newTodo, setNewTodo] = useState('');
   const [editedTodo, setEditedTodo] = useState('');
@@ -151,7 +153,7 @@ const TodoMainList = () => {
 
       <div className="TodoActions">
         {(isSameDay(currentDate, today) || isSameDay(currentDate, yesterday)) && (
-          <button className="CreateDrawingButton">
+          <button className="CreateDrawingButton" onClick={() => setDrawingModalIsOpen(true)}>
             <FaPen className="DrawingIcon" />
             그림일기 생성
           </button>
@@ -221,6 +223,22 @@ const TodoMainList = () => {
           <button className="TodoMainModalButton" onClick={() => handleDeleteTodo(selectedTodo.categoryIndex, selectedTodo.todoIndex)}>삭제</button>
         </div>
       </Modal>
+
+      <Modal
+        isOpen={drawingModalIsOpen}
+        onRequestClose={() => setDrawingModalIsOpen(false)}
+        contentLabel="그림일기 생성"
+        className="TodoMainModalD"
+        overlayClassName="TodoMainOverlay"
+      >
+        <h2 className="TodoMainModalTitle">그림일기 생성</h2>
+        <img src={diary} alt="그림일기 이미지" className="TodoMainModalDImage" /> 
+        <div className="TodoMainModalButtons">
+          <button className="TodoMainModalButton">생성</button>
+          <button className="TodoMainModalButton" onClick={() => setDrawingModalIsOpen(false)}>취소</button>
+        </div>
+      </Modal>
+
     </div>
   );
 };
