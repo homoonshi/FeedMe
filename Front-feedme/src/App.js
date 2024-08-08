@@ -14,6 +14,7 @@ import Setting from './components/Set/Setting.jsx';
 import MyPage from './components/Mypage/MyPage.jsx';
 import Feed from './components/Feed/Feed.jsx';
 import Weather from './components/Weather/Weather.jsx';
+import LoginLoding from './components/Login/LoginLoding.jsx';
 
 function App() {
   return (
@@ -42,6 +43,7 @@ function App() {
         <Route path="/CreatureResult" element={<CreatureResult />} />
         <Route path="/Feed" element={<Feed />} />
         <Route path="/Weather" element={<Weather />} />
+        <Route path="/LoginLoding" element={<LoginLoding />} />
       </Routes>
     </div>
   );
