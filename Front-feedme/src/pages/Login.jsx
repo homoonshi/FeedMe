@@ -16,20 +16,20 @@ const Login = () => {
           <hr />
           <div class="LoginButtons">
             <div className='LoginGoogleButton'>
-              <Link to='/Main'>
+              {/* <Link to='/Main'> */}
                 <MyKakaoLoginButton style={{
                   height: "45px",
                   fontSize: "17px"
                 }}/>
-              </Link>
+              {/* </Link> */}
             </div>
             <div className='LoginNaverButton'>
-              <Link to='/Main'>
+              {/* <Link to='/Main'> */}
                 <MyNaverLoginButton style={{
                   height: "45px",
                   fontSize: "17px"
                 }} />
-              </Link>
+              {/* </Link> */}
             </div>
           </div>
           <div>

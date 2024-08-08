@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { logout } from '../../store/slice'; // Redux slice에서 logout 액션 임포트
 import Sidebar from '../Main/Sidebar';
 import Search from '../Main/Search';
 import Creature from './Creature';
@@ -42,6 +45,9 @@ const ReleaseModal = ({ onClose, onConfirm }) => {
 };
 
 const MyPage = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const [isLogoutModalOpen, setLogoutModalOpen] = useState(false);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
   const [isReleaseModalOpen, setReleaseModalOpen] = useState(false); 
@@ -70,8 +76,9 @@ const MyPage = () => {
   };
 
   const handleConfirmLogout = () => {
-    console.log("Logged out");
-    setLogoutModalOpen(false);
+    dispatch(logout()); // Redux 상태 초기화
+    sessionStorage.removeItem('accessToken'); // 세션 스토리지에서 토큰 삭제
+    navigate('/login'); // 로그인 페이지로 리디렉션
   };
 
   const handleConfirmEdit = () => {
