@@ -1,14 +1,13 @@
 package com.todoslave.feedme.controller;
 
-import com.todoslave.feedme.DTO.CreatureTodoResponseDTO;
-import com.todoslave.feedme.DTO.TodoCreateRequestDTO;
-import com.todoslave.feedme.DTO.TodoRequestDTO;
-import com.todoslave.feedme.DTO.TodoResponseDTO;
+import com.todoslave.feedme.DTO.*;
 import com.todoslave.feedme.service.CreatureTodoService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,15 +17,44 @@ import java.util.List;
 public class CreatureTodoController {
 
     final private CreatureTodoService creatureTodoService;
-    // 투두 생성 -> 자돟으로 2개 생성?
-    @GetMapping
-    public ResponseEntity<List<CreatureTodoResponseDTO>> createTodo(@RequestBody String weather){
+
+    @Operation(summary = "크리쳐 투두 생성 / 있으면 생성 X")
+    @GetMapping("/{weather}")
+    public ResponseEntity<List<CreatureTodoResponseDTO>> createTodo(@PathVariable String weather) {
+        System.out.println("이거 맞아?");
         List<CreatureTodoResponseDTO> list = new ArrayList<>();
         list = creatureTodoService.insertTodo(weather);
         return ResponseEntity.ok(list);
     }
-    // 크리쳐 투두 생성
 
+    // 투두 완료
+    @PostMapping("/complete/{id}")
+    @Operation(summary = "투두 일정 하나 완료/취소")
+    public ResponseEntity<CreatureTodoResponseDTO> completeTodo(@PathVariable int id){
+        return ResponseEntity.ok(creatureTodoService.completeTodo(id));
+    }
+
+    // 오늘 완료되지 않은 투두 목록 가져오기
+    @GetMapping("/main/daily")
+    @Operation(summary = "오늘 완료되지 않은 크리쳐 투두 목록 가져오기")
+    public ResponseEntity<List<CreatureTodoResponseDTO>> getCreatureTodoMainDaily() {
+        List<CreatureTodoResponseDTO> list = creatureTodoService.getCreatureTodoMainDaily();
+        return ResponseEntity.ok(list);
+    }
+
+    //  메인 달력에서 일정 불러오기
+    @GetMapping("/calendar/daily")
+    @Operation(summary = "해당일의 크리쳐 투두 목록 가져오기")
+    public ResponseEntity<List<CreatureTodoResponseDTO>> findCalendarCreatureTodoList(@RequestBody CretureTodoRequestDTO cretureTodoRequestDTO) {
+        List<CreatureTodoResponseDTO> list = creatureTodoService.getCreatureTodoCalendarDaily(cretureTodoRequestDTO);
+        return ResponseEntity.ok(list);
+    }
+
+    // 할일 목록에서 일정(일) 불러오기
+    @GetMapping("/todolist/daily")
+    public ResponseEntity<List<CreatureTodoResponseDTO>> findDailyCreatureTodoList(@RequestBody CreatureTodoDailyRequestDTO creatureTodoDailyRequestDTO){
+        return ResponseEntity.ok(creatureTodoService.getCreatureTodoListDaily(creatureTodoDailyRequestDTO));
+    }
 
 
 

@@ -1,7 +1,9 @@
 package com.todoslave.feedme.login.Handler;
 
+import com.todoslave.feedme.domain.entity.membership.Member;
 import com.todoslave.feedme.login.Handler.JWTUtill;
 import com.todoslave.feedme.login.dto.GeneratedToken;
+import com.todoslave.feedme.repository.MemberRepository;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -24,6 +26,7 @@ import java.nio.charset.StandardCharsets;
 public class MyAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private final JWTUtill jwtUtil;
+    private final MemberRepository memberRepository;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
@@ -43,14 +46,21 @@ public class MyAuthenticationSuccessHandler extends SimpleUrlAuthenticationSucce
                 .orElseThrow(IllegalAccessError::new) // 존재하지 않을 시 예외를 던진다.
                 .getAuthority(); // Role을 가져온다.
 
-        // 회원이 존재할경우
         if (isExist) {
             // 회원이 존재하면 jwt token 발행을 시작한다.
             GeneratedToken token = jwtUtil.generateToken(email, role);
             log.info("jwtToken = {}", token.getAccessToken());
 
-            // accessToken을 쿼리스트링에 담는 url을 만들어준다.
-            String targetUrl = UriComponentsBuilder.fromUriString("http://localhost:3000/main")
+            // 해당 멤버의 크리쳐가 있는지 체크하기
+            Member member = memberRepository.findByEmail(email).orElse(null);
+            boolean hasCreature = member != null && member.getCreature() != null;
+
+//            // accessToken을 헤더에 추가
+//            response.setHeader("Authorization", "Bearer " + token.getAccessToken());
+
+            // 크리쳐 존재 여부를 쿼리스트링에 담는 url을 만들어준다.
+            String targetUrl = UriComponentsBuilder.fromUriString("http://localhost:3000/LoginLoding")
+                    .queryParam("hasCreature", hasCreature)
                     .queryParam("accessToken", token.getAccessToken())
                     .build()
                     .encode(StandardCharsets.UTF_8)
@@ -59,11 +69,10 @@ public class MyAuthenticationSuccessHandler extends SimpleUrlAuthenticationSucce
             // 로그인 확인 페이지로 리다이렉트 시킨다.
             getRedirectStrategy().sendRedirect(request, response, targetUrl);
 
-
         } else {
 
             // 회원이 존재하지 않을경우, 서비스 제공자와 email을 쿼리스트링으로 전달하는 url을 만들어준다.
-            String targetUrl = UriComponentsBuilder.fromUriString("http://localhost:8080/signup")
+            String targetUrl = UriComponentsBuilder.fromUriString("http://localhost:3000/Signup")
                     .queryParam("email", (String) oAuth2User.getAttribute("email"))
                     .queryParam("provider", provider)
                     .build()

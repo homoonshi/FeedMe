@@ -2,6 +2,7 @@ package com.todoslave.feedme.login.Handler;
 
 import com.todoslave.feedme.config.jwt.JwtProperties;
 import com.todoslave.feedme.login.Service.RefreshTokenService;
+import com.todoslave.feedme.login.Service.TokenBlacklistService;
 import com.todoslave.feedme.login.dto.GeneratedToken;
 import com.todoslave.feedme.service.MemberService;
 import io.jsonwebtoken.Claims;
@@ -25,6 +26,7 @@ public class JWTUtill {
     private final JwtProperties jwtProperties;
     private final RefreshTokenService tokenService;
     private final MemberService memberService;
+    private final TokenBlacklistService tokenBlacklistService;
     private String secretKey;
 
     @PostConstruct
@@ -73,8 +75,8 @@ public class JWTUtill {
 
 
     public String generateAccessToken(String email, String role) {
-        long tokenPeriod = 1000L * 60L * 30L; // 30분
-//        long tokenPeriod = 1000L * 10L;
+        long tokenPeriod = 1000L * 60L * 30L * 4; // 30분
+//        long tokenPeriod = 1000L * 30L;
         Claims claims = Jwts.claims().setSubject(email);
         claims.put("role", role);
 
@@ -94,20 +96,42 @@ public class JWTUtill {
     }
 
 
-    public boolean verifyToken(String token) { //토큰 검증 하기 (시간 체크)
-        try {
-            Jws<Claims> claims = Jwts.parser()
-                    .setSigningKey(secretKey) // 비밀키를 설정하여 파싱한다.
-                    .parseClaimsJws(token);  // 주어진 토큰을 파싱하여 Claims 객체를 얻는다.
-            // 토큰의 만료 시간과 현재 시간비교
-            return claims.getBody()
-                    .getExpiration()
-                    .after(new Date());  // 만료 시간이 현재 시간 이후인지 확인하여 유효성 검사 결과를 반환
-        } catch (Exception e) {
+//    public boolean verifyToken(String token) { //토큰 검증 하기 (시간 체크)
+//        try {
+//            Jws<Claims> claims = Jwts.parser()
+//                    .setSigningKey(secretKey) // 비밀키를 설정하여 파싱한다.
+//                    .parseClaimsJws(token);  // 주어진 토큰을 파싱하여 Claims 객체를 얻는다.
+//            // 토큰의 만료 시간과 현재 시간비교
+//            return claims.getBody()
+//                    .getExpiration()
+//                    .after(new Date());  // 만료 시간이 현재 시간 이후인지 확인하여 유효성 검사 결과를 반환
+//        } catch (Exception e) {
+//            return false;
+//        }
+//    }
+public boolean verifyToken(String token) {
+    try {
+        if (tokenBlacklistService.isBlacklisted(token)) {
             return false;
         }
+        Jws<Claims> claims = Jwts.parser()
+                .setSigningKey(secretKey)
+                .parseClaimsJws(token);
+        return claims.getBody()
+                .getExpiration()
+                .after(new Date());
+    } catch (Exception e) {
+        return false;
     }
-
+}
+    //토큰을 블랙리스트에 추가
+    public void invalidateToken(String token) {
+        // 토큰의 만료 날짜를 얻음
+        Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
+        Date expiryDate = claims.getExpiration();
+        // 블랙리스트 서비스에 토큰을 추가
+        tokenBlacklistService.addToBlacklist(token, expiryDate);
+    }
 
     // 토큰에서 Email을 추출한다.
     public String getUid(String token) {

@@ -6,12 +6,14 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.todoslave.feedme.domain.entity.membership.Member;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 
 
 @Entity
 @Data
 @Table(name = "creature")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@ToString
 public class Creature {
 
     // 크리쳐 ID

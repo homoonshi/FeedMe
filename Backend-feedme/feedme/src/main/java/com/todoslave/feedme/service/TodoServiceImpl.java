@@ -31,6 +31,7 @@ public class TodoServiceImpl implements TodoService {
   private final CreatureTodoReposito creatureTodoReposito;
   private final DayOffService dayOffService;
   private  final CreatureService creatureService;
+
   // 할일 목록에서 일정(일) 불러오기
   @Override
   public List<TodoResponseDTO> getTodoListDaily(TodoDailyRequestDTO todoDailyRequestDTO) {
@@ -136,16 +137,21 @@ public class TodoServiceImpl implements TodoService {
 
       TodoCalendarResponseDTO todoCalendarResponseDTO = new TodoCalendarResponseDTO();
 
-      long inCompleted = todoRepository.countTodoByDateAndIsCompleted(date, 0);
+      long inCompleted = todoRepository.countTodoByDateAndIsCompleted(date, 0)+creatureTodoReposito.countByCreatedAtAndIsCompleted(date,0);
+
       todoCalendarResponseDTO.setInCompleted((int)inCompleted);
-      long completed = todoRepository.countTodoByDateAndIsCompleted(date, 1);
+
+      long completed = todoRepository.countTodoByDateAndIsCompleted(date, 1)+creatureTodoReposito.countByCreatedAtAndIsCompleted(date,1);
+
       todoCalendarResponseDTO.setCompleted((int)completed);
+
       todoCalendarResponseDTO.setTotal((int)(inCompleted+completed));
       todoCalendarResponseDTO.setDate(date);
 
       todoCounts.add(todoCalendarResponseDTO);
 
     }
+
 
     return todoCounts;
   }
@@ -215,19 +221,22 @@ public class TodoServiceImpl implements TodoService {
   }
 
   @Override
-  public TodoResponseDTO AllcompleteTodo(LocalDate date) {
+  public boolean AllcompleteTodo(TodoRequestDTO todoRequestDTO) {
+    LocalDate date = todoRequestDTO.getDate();
+    System.out.println("일");
 
     //만약에 완료를 이미 했다면
-    if(dayOffService.findDayOffByMemberIdAndDate(SecurityUtil.getCurrentUserId(),date)!=null){
-      return null;
+    if(!dayOffService.isActionAllowed(SecurityUtil.getCurrentUserId(),date)){
+      return false;
     }
 
+    System.out.println("이");
     //완료처리
     DayOff dayOff = new DayOff();
     dayOff.setEndDay(date);
     dayOff.setMember(SecurityUtil.getCurrentMember());
     dayOffService.saveDayOff(dayOff);
-
+    System.out.println("삼");
     //일정 끝내기
     List<Todo> todoList = todoRepository.findByMemberIdAndCreatedAt(SecurityUtil.getCurrentUserId(),date);
     //크리쳐 일정 끝내기
@@ -243,7 +252,8 @@ public class TodoServiceImpl implements TodoService {
 
     //경험치 올리기
     creatureService.expUp(completedTodos+completedCreatureTodos);
-//예본 해
-      return new TodoResponseDTO();
+
+    //예본 해
+      return true;
     }
 }

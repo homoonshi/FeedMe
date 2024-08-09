@@ -13,5 +13,5 @@ public interface DayOffRepository extends JpaRepository<DayOff, Integer> {
 
     // 특정 회원의 특정 날짜의 DayOff를 찾습니다.
     Optional<DayOff> findByMemberIdAndEndDay(int memberId, LocalDate endDay);
-
+    long countByMemberIdAndEndDay(int memberId, LocalDate date);
 }

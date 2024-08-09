@@ -59,7 +59,6 @@ public class TodoController {
     return ResponseEntity.ok(todoService.getTodoCalendarCompleted(todoRequestDTO));
   }
 
-
   // 투두 생성
   @PostMapping
   public ResponseEntity<TodoResponseDTO> createTodo(@RequestBody TodoCreateRequestDTO todo){
@@ -87,8 +86,8 @@ public class TodoController {
 
   //오늘 (어제 포함) 일정 완료하기
   @PostMapping("/complete/complateAll")
-  public ResponseEntity<TodoResponseDTO> allCompleteTodo(@RequestBody LocalDate endDate){
-    return ResponseEntity.ok(todoService.AllcompleteTodo(endDate));
+  public ResponseEntity<Boolean> allCompleteTodo(@RequestBody TodoRequestDTO todoRequestDTO){
+    return ResponseEntity.ok(todoService.AllcompleteTodo(todoRequestDTO));
   }
 
 

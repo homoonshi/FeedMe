@@ -91,41 +91,50 @@ public class CreatureServiceImpl implements CreatureService {
     //크리쳐 성장
     @Override
     public void expUp(int toDoCnt) {
+
         Creature creature = SecurityUtil.getCurrentMember().getCreature();
 
-        int nowExp = creature.getExp()+toDoCnt;
-        if(nowExp>7){nowExp=7;} // 하루 오를 수 있는 최대한의 경험치
-
-        if (creature.getLevel()==0) { // 알
-
-            if( nowExp >= 10) { //레벨업 한다면
-                creature.setLevel(1);
-                creature.setExp(nowExp % 10);
-            }else{
-                creature.setExp(nowExp);
-            }
-
-        } else if (creature.getLevel()==1) { // 1렙
-
-            if( nowExp >= 30) { //레벨업 한다면
-                creature.setLevel(2);
-                creature.setExp(nowExp % 30);
-            }else{
-                creature.setExp(nowExp);
-            }
-        } else if (creature.getLevel()==2) { // 2렙
-
-            if( nowExp >= 100) { //레벨업 한다면
-                creature.setLevel(3);
-                creature.setExp(nowExp % 100);
-            }else{
-                creature.setExp(nowExp);
-            }
-
-        } else { //3렙
-            creature.setExp(nowExp);
+        // 하루 오를 수 있는 최대한의 경험치 제한
+        if (toDoCnt > 7) {
+            toDoCnt = 7;
         }
 
+        int nowExp = creature.getExp() + toDoCnt;
+
+        // 현재 레벨에 따른 경험치와 레벨업 조건 처리
+        switch (creature.getLevel()) {
+            case 0: // 알
+                System.out.println("여기 들어가니?");
+                if (nowExp >= 10) { // 레벨업 조건
+                    creature.setLevel(1);
+                    creature.setExp(nowExp - 10);
+                } else {
+                    System.out.println("여기 들어가야 하는데");
+                    creature.setExp(nowExp);
+                }
+                break;
+            case 1: // 1레벨
+                if (nowExp >= 30) { // 레벨업 조건
+                    creature.setLevel(2);
+                    creature.setExp(nowExp - 30);
+                } else {
+                    creature.setExp(nowExp);
+                }
+                break;
+            case 2: // 2레벨
+                if (nowExp >= 100) { // 레벨업 조건
+                    creature.setLevel(3);
+                    creature.setExp(nowExp - 100);
+                } else {
+                    creature.setExp(nowExp);
+                }
+                break;
+            case 3: // 3레벨
+            default:
+                creature.setExp(nowExp);
+                break;
+        }
+        //왜 안되는겨!!
     }
 
     //크리쳐 레벨업
@@ -137,11 +146,10 @@ public class CreatureServiceImpl implements CreatureService {
 
     //크리쳐 이미지 주소
     private String generateCreatureImgPath(Member member) {
-        Emotion state = member.getStatus();
         Creature creature = member.getCreature();
         int creatureLevel = creature.getLevel();
         int creatureId = creature.getId();
-        return "http://localhost:8080/image/creature/" + creatureId + "_" +creatureLevel + "_" + state;
+        return "http://localhost:8080/image/creature/" + creatureId + "_" +creatureLevel;
     }
 
 

@@ -132,11 +132,10 @@ public class MemberService {
     }
 
     private String generateCreatureImgPath(Member member) {
-            Emotion state = member.getStatus();
             Creature creature = member.getCreature();
             int creatureLevel = creature.getLevel();
             int creatureId = creature.getId();
-            return "http://localhost:8080/image/creature/" + creatureId + "_" +creatureLevel + "_" + state;
+            return "http://localhost:8080/image/creature/" + creatureId + "_" +creatureLevel;
     }
 
 }

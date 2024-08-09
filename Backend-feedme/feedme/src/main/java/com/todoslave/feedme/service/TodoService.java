@@ -23,7 +23,7 @@ public interface TodoService {
   // 메인화면에서 당일 안한 일정들 불러오기
   public List<TodoMainResponseDTO> getTodoMainDaily();
 
-  // 월별 일정 완/미완 불러오기
+  // 월별 일정 완/미완 불러오기 (크리쳐 미션 포함)
   public List<TodoCalendarResponseDTO> getTodoCalendarCompleted(TodoRequestDTO todoRequestDTO);
 
   // 일정 추가하기
@@ -38,8 +38,8 @@ public interface TodoService {
   //일정 완료하기
   public TodoResponseDTO completeTodo(int todoId);
 
-  //모든 일정 끝내기
-  public TodoResponseDTO AllcompleteTodo(LocalDate endDate);
+  //모든 일정 끝내기 (크리쳐 미션 포함)
+  public boolean AllcompleteTodo(TodoRequestDTO todoRequestDTO);
 
   // 그림일기 생성
 

@@ -6,12 +6,18 @@ import com.todoslave.feedme.config.jwt.JwtProperties;
 
 import com.todoslave.feedme.domain.entity.membership.Member;
 
+import com.todoslave.feedme.login.Handler.JWTUtill;
+import com.todoslave.feedme.login.Service.RefreshTokenService;
+import com.todoslave.feedme.login.Service.TokenBlacklistService;
 import com.todoslave.feedme.login.dto.TokenResponseStatus;
 import com.todoslave.feedme.login.util.SecurityUtil;
 import com.todoslave.feedme.repository.MemberRepository;
 import com.todoslave.feedme.service.MemberService;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +28,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Base64;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -30,7 +38,17 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MemberController {
 
+    private final JwtProperties jwtProperties;
     private final MemberService memberService;
+    private final TokenBlacklistService tokenBlacklistService;
+    private final RefreshTokenService tokenService;
+    private String secretKey;
+
+    @PostConstruct
+    protected void init() {
+        secretKey = Base64.getEncoder().encodeToString(jwtProperties.getSecretKey().getBytes());
+    }
+
 
     @Operation(summary = "맴버 검색 (for 친구추가)")
     @GetMapping("/{searchvalue}")
@@ -38,8 +56,6 @@ public class MemberController {
         List<MemberSearchResponseDTO> list = memberService.getMemberList(searchvalue);
         return new ResponseEntity<List<MemberSearchResponseDTO>>(list, HttpStatus.OK);
     }
-
-
 
 
     @Operation(summary = "맴버 가입")
@@ -59,14 +75,7 @@ public class MemberController {
         return ResponseEntity.ok(member);
     }
 
-    @Tag(name = "holder test")
-    @GetMapping("/holder")
-    public int getCurrentUserId() {
-        return SecurityUtil.getCurrentUserId();
-
-    }
-
-    @Tag(name = "holder test2")
+    @Operation(summary = "맴버 정보 가져오기 (테스트용)")
     @GetMapping("/holder/test")
     public Member getCurrentMember() {
         return SecurityUtil.getCurrentMember();
@@ -74,12 +83,23 @@ public class MemberController {
 
 
 
-//    @Tag(name = "로그아웃 하기", description = "유저 테스트")
+    @Operation(summary = "로그아웃")
     @GetMapping("/logout")
-    public String logout(HttpServletRequest request, HttpServletResponse response) {
-        new SecurityContextLogoutHandler().logout(request, response, SecurityContextHolder.getContext().getAuthentication());
-        return "redirect:/login";
+    public ResponseEntity<String> logout(@RequestHeader("Authorization") final String accessToken) {
+
+        // 토큰을 블랙리스트에 추가하여 무효화
+        Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(accessToken).getBody();
+        Date expiryDate = claims.getExpiration();
+
+        // 블랙리스트 서비스에 토큰을 추가
+        tokenBlacklistService.addToBlacklist(accessToken, expiryDate);
+
+        //레디스에서 제거
+        tokenService.removeRefreshToken(accessToken);
+
+        return new ResponseEntity<>("Logged out successfully", HttpStatus.OK);
     }
+
 
     @Operation(summary = "맴버 탈퇴")
     @DeleteMapping

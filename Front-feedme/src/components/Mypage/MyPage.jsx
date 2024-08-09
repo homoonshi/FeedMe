@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { logout } from '../../store/slice'; // Redux slice에서 logout 액션 임포트
+import { logout } from '../../store/slice';
 import Sidebar from '../Main/Sidebar';
 import Search from '../Main/Search';
 import Creature from './Creature';

@@ -29,6 +29,11 @@ public class DayOffService {
         return dayOffRepository.save(dayOff);
     }
 
+    //있는지 검사
+    public boolean isActionAllowed(int memberId, LocalDate date) {
+        // 특정 날짜에 한 개라도 DayOff가 있으면 false 반환
+        return dayOffRepository.countByMemberIdAndEndDay(memberId, date) == 0;
+    }
     //쓸일 없어
     public void deleteDayOff(int id) {
         dayOffRepository.deleteById(id);
