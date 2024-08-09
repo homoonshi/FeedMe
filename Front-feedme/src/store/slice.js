@@ -6,6 +6,9 @@ const initialState = {
   email: null,
   nickname: null,
   birthday: null,
+  creatureName: null,
+  keywords: [],
+  keyword: 'pink',
   token: null,
   hasCreature: false,
 };
@@ -23,6 +26,25 @@ const authSlice = createSlice({
     setEmail: (state, action) => {
       state.email = action.payload;
     },
+    setCreatureName: (state, action) => {
+      state.creatureName = action.payload;
+    },
+    setKeyword: (state, action) => {
+      state.keyword = action.payload;
+    },
+    addKeyword: (state, action) => {
+      const { type, value } = action.payload;
+      state.keywords.push({ type, value });
+    },
+    removeKeyword: (state, action) => {
+      const { type, value } = action.payload;
+      state.keywords = state.keywords.filter(
+        (keyword) => keyword.type !== type || keyword.value !== value
+      );
+    },
+    resetKeywords: (state) => {
+      state.keywords = [];
+    },
     setToken: (state, action) => {
       state.token = action.payload;
     },
@@ -36,5 +58,17 @@ const authSlice = createSlice({
   },
 });
 
-export const { setNickname, setBirthday, setEmail, setToken, setCreature, logout } = authSlice.actions;
+export const { 
+  setNickname, 
+  setBirthday, 
+  setEmail,
+  setCreatureName,
+  setKeyword,
+  addKeyword, 
+  removeKeyword, 
+  resetKeywords,
+  setToken, 
+  setCreature, 
+  logout 
+} = authSlice.actions;
 export default authSlice.reducer;

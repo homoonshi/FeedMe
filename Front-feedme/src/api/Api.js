@@ -14,6 +14,8 @@ API.interceptors.request.use(
         const token = sessionStorage.getItem('accessToken');
         if (token) {
             config.headers['Authorization'] = token;  // Bearer 없이 토큰 설정
+        } else {
+            console.log('토큰이 없습니다.');
         }
         return config;
     },
