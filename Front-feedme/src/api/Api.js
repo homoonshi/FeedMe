@@ -1,15 +1,15 @@
 import axios from 'axios';
 
-// Axios 인스턴스 생성
-const apiClient = axios.create({
-    baseURL: 'http://localhost:8080/',  // 기본 URL 설정
+const API = axios.create({
+	BASE_URL: 'http://localhost:8080/',
     headers: {
-        'Content-Type': 'application/json'
-    }
+      	'Content-Type': 'application/json',
+    },
+    withCredentials: true,
 });
 
 // 요청 인터셉터 설정 : 요청 전 실행
-apiClient.interceptors.request.use(
+API.interceptors.request.use(
     config => {
         const token = sessionStorage.getItem('accessToken');
         if (token) {
@@ -22,4 +22,4 @@ apiClient.interceptors.request.use(
     }
 );
 
-export default apiClient;
+export default API;

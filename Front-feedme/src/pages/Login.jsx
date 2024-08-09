@@ -33,8 +33,8 @@ const Login = () => {
             </div>
           </div>
           <div>
-            <span>New User?</span>
-            <Link className='LoginSignup' to='/Signup'>Signup</Link>
+            <span>©Phoenix</span>
+            {/* <Link className='LoginSignup' to='/Signup'>Signup</Link> */}
           </div>
         </div>
       </div>
