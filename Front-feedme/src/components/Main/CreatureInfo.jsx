@@ -4,7 +4,7 @@ import '../Main/CreatureInfo.css';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUserData } from '../../store/userSlice';
-
+import { setToken } from '../../store/slice';
 
 const CreatureInfo = () => {
   const navigate = useNavigate();
@@ -14,8 +14,14 @@ const CreatureInfo = () => {
   const { creatureName, image, togetherDay, status, error } = user;
 
   useEffect(() => {
-    if (status === 'idle') {
-      dispatch(fetchUserData(token));
+    // 세션 스토리지에서 토큰 가져오기
+    const storedToken = sessionStorage.getItem('accessToken');
+    if (storedToken && !token) {
+      dispatch(setToken(storedToken));
+    }
+
+    if (status === 'idle' && storedToken) {
+      dispatch(fetchUserData(storedToken));
     }
   }, [status, dispatch, token]);
 
@@ -23,7 +29,7 @@ const CreatureInfo = () => {
   if (status === 'failed') return <div>Error: {error}</div>;
 
   const MoveTo = (path) => {
-    navigate(path)
+    navigate(path);
   }
 
   return (

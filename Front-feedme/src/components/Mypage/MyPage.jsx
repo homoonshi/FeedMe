@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { logout } from '../../store/slice';
+import { logout, setToken } from '../../store/slice';
 import Sidebar from '../Main/Sidebar';
 import Search from '../Main/Search';
 import Creature from './Creature';
 import CreatureDel from './CreatureDel';
 import './MyPage.css';
+import { fetchUserData } from '../../store/userSlice';
 
 const LogoutModal = ({ onClose, onConfirm }) => {
   return (
@@ -48,13 +49,29 @@ const MyPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  // 새로고침 시 세션 스토리지에서 토큰 가져오기
+  useEffect(() => {
+    const sessionToken = sessionStorage.getItem('accessToken');
+    if (sessionToken) {
+      dispatch(setToken(sessionToken));
+    } else {
+      navigate('/login'); // 토큰이 없으면 로그인 페이지로 이동
+    }
+  }, [dispatch, navigate]);
+
+  const token = useSelector((state) => state.auth.token);
+  const user = useSelector((state) => state.user);
+  const { nickname, email, brithday, creatureId, creatureName, exp, level, image, togetherDay, status, error } = user;
+
+  useEffect(() => {
+    if (status === 'idle' && token) {
+      dispatch(fetchUserData(token));
+    }
+  }, [status, dispatch, token]);
+
   const [isLogoutModalOpen, setLogoutModalOpen] = useState(false);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
   const [isReleaseModalOpen, setReleaseModalOpen] = useState(false); 
-  const [creatures, setCreatures] = useState([
-    { id: 1, name: '불사조', daysTogether: 247, level: 1, exp: 50 }
-  ]);
-  const [selectedCreatureId, setSelectedCreatureId] = useState(null);
 
   const handleLogoutClick = () => {
     setLogoutModalOpen(true);
@@ -64,8 +81,7 @@ const MyPage = () => {
     setEditModalOpen(true);
   };
 
-  const handleReleaseClick = (id) => {
-    setSelectedCreatureId(id);
+  const handleReleaseClick = () => {
     setReleaseModalOpen(true);
   };
 
@@ -76,9 +92,9 @@ const MyPage = () => {
   };
 
   const handleConfirmLogout = () => {
-    dispatch(logout()); // Redux 상태 초기화
-    sessionStorage.removeItem('accessToken'); // 세션 스토리지에서 토큰 삭제
-    navigate('/login'); // 로그인 페이지로 리디렉션
+    dispatch(logout()); 
+    sessionStorage.removeItem('accessToken'); 
+    navigate('/login'); 
   };
 
   const handleConfirmEdit = () => {
@@ -87,8 +103,7 @@ const MyPage = () => {
   };
 
   const handleConfirmRelease = () => {
-    setCreatures(creatures.filter(creature => creature.id !== selectedCreatureId));
-    console.log(`Creature with id ${selectedCreatureId} released`);
+    console.log(`Creature with id ${creatureId} released`);
     setReleaseModalOpen(false);
   };
 
@@ -105,15 +120,15 @@ const MyPage = () => {
             <div className="MyPageInformation">
               <label>
                 닉네임:
-                <input type="text" defaultValue="HENZEE" />
+                <div className="MyPageInfoBox">{nickname}</div> 
               </label>
               <label>
                 이메일:
-                <input type="email" defaultValue="jinhyunji520@gmail.com" />
+                <div className="MyPageInfoBox">{email}</div> 
               </label>
               <label>
                 생ㅤ일:
-                <input type="text" defaultValue="1999.05.20" />
+                <div className="MyPageInfoBox">{brithday}</div> 
               </label>
               <div className='MyPageButtons'>
                 <button className="MyPageButtonLogout" onClick={handleLogoutClick}>로그아웃</button>
@@ -121,9 +136,9 @@ const MyPage = () => {
               </div>
             </div>
             <div className="MypageCreture">
-              {creatures.map(creature => (
-                <Creature key={creature.id} creature={creature} />
-              ))}
+              <Creature 
+                creature={{ id: creatureId, name: creatureName, daysTogether: togetherDay, level: level, exp: exp, image: image }} 
+              />
               <CreatureDel onRelease={handleReleaseClick} /> 
             </div>
           </div>

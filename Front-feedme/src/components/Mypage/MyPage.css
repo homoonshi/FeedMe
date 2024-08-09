@@ -81,7 +81,7 @@
     margin: 5% 0;
 }
 
-.MyPageInformation input{
+.MyPageInfoBox{
     background-color: #33333300;
     width: 100%;
     height: auto;
@@ -257,3 +257,4 @@
     background-color: #FF5F5F;
     transform: scale(1.05);
 }
+
