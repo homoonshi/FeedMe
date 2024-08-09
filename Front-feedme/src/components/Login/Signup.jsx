@@ -24,6 +24,10 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    console.log(nickname);
+    console.log(email);
+    console.log(birthday);
+
     try {
       const response = await axios.post('http://localhost:8080/users', {
         nickname,

@@ -15,13 +15,13 @@ const LoginLoding = () => {
   const isCreature = (params.get('hasCreature') === 'true') ? true : false;
 
   useEffect(() => {
-    if (urlToken) {
-      sessionStorage.setItem('accessToken', urlToken);
-      dispatch(setToken(urlToken));
-    } else {
+    if (!urlToken) {
       navigate('/Login');
     }
-    
+
+    sessionStorage.setItem('accessToken', urlToken);
+    dispatch(setToken(urlToken));
+
     if (!isCreature) {
       navigate('/CreatureCreate');
     } else {
@@ -43,7 +43,7 @@ const LoginLoding = () => {
           </motion.div>
         </div>
       </div>
-    </div>  
+    </div>
   );
 };
 
