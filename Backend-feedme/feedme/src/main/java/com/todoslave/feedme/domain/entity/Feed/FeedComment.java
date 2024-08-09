@@ -40,7 +40,6 @@ public class FeedComment {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-
     // 대댓글과 매핑
     @OneToMany(mappedBy = "feedComment", cascade = CascadeType.ALL)
     private List<FeedRecomment> feedRecomments = new ArrayList<>();

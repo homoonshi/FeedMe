@@ -2,6 +2,7 @@ package com.todoslave.feedme.controller;
 
 import com.todoslave.feedme.DTO.MemberSearchResponseDTO;
 import com.todoslave.feedme.DTO.MemberSignupRequestDTO;
+import com.todoslave.feedme.DTO.MypageResponseDTO;
 import com.todoslave.feedme.config.jwt.JwtProperties;
 
 import com.todoslave.feedme.domain.entity.membership.Member;
@@ -57,7 +58,6 @@ public class MemberController {
         return new ResponseEntity<List<MemberSearchResponseDTO>>(list, HttpStatus.OK);
     }
 
-
     @Operation(summary = "맴버 가입")
     @PostMapping
     public ResponseEntity<Member> SignupMember(@RequestBody MemberSignupRequestDTO memberSignupRequestDTO){
@@ -81,7 +81,13 @@ public class MemberController {
         return SecurityUtil.getCurrentMember();
     }
 
+    @Operation(summary = "내 정보 페이지")
+    @GetMapping("/mypage")
+    public ResponseEntity<MypageResponseDTO> mypage(@RequestHeader("Authorization") final String accessToken) {
+//        MypageResponseDTO dto = memberService.getMyPage();
 
+        return ResponseEntity.ok(memberService.getMyPage());
+    }
 
     @Operation(summary = "로그아웃")
     @GetMapping("/logout")

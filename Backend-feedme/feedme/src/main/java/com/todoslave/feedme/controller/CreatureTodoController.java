@@ -18,6 +18,7 @@ public class CreatureTodoController {
 
     final private CreatureTodoService creatureTodoService;
 
+    // 크리쳐 투두 생성
     @Operation(summary = "크리쳐 투두 생성 / 있으면 생성 X")
     @GetMapping("/{weather}")
     public ResponseEntity<List<CreatureTodoResponseDTO>> createTodo(@PathVariable String weather) {

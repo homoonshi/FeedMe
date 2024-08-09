@@ -32,7 +32,7 @@ public class Creature {
     private int level = 0 ; //레벨 1로 초기화 한다는 뜻
 
     // 경험치
-    @Column(name = "exp", nullable = false, updatable = false)
+    @Column(name = "exp", nullable = false)
     private int exp = 0 ;
 
     //크리쳐 이름

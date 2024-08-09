@@ -8,7 +8,7 @@ import java.time.LocalDate;
 @Builder
 @Data
 public class CreatureTodoResponseDTO {
-    private int id; //이거 왜 필요?
+    private int id;
     private String content;
     private LocalDate createdAt;
     private int isCompleted;

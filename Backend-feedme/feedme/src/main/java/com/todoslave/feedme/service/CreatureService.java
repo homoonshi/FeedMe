@@ -9,9 +9,8 @@ import javax.swing.*;
 
 public interface CreatureService {
 
+
     //크리쳐 만들기
-    Creature createCreature();
-    //크리쳐 만들기2
     Creature createFristCreature(String keyword, String photo, String creatureName);
     //크리쳐 정보 가져오기
     CreatureInfoResponseDTO CreatureInfo();
@@ -21,5 +20,6 @@ public interface CreatureService {
     void expUp(int toDoCnt);
     //크리쳐 레벨업
     void LevelUp();
+
 
 }

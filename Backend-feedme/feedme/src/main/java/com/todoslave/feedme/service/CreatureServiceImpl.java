@@ -7,6 +7,7 @@ import com.todoslave.feedme.domain.entity.membership.Member;
 import com.todoslave.feedme.login.util.SecurityUtil;
 import com.todoslave.feedme.repository.CreatureRepository;
 import com.todoslave.feedme.repository.MemberRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,29 +17,18 @@ import java.time.LocalDate;
 import java.time.Period;
 
 @Service
+@RequiredArgsConstructor
 public class CreatureServiceImpl implements CreatureService {
 
-    @Autowired
-    MemberRepository memberRepository;
+    final private MemberRepository memberRepository;
 
-    @Autowired
-    CreatureRepository creatureRepository;
-
-    @Override
-    public Creature createCreature() {
-        return null;
-    }
-
+    final private CreatureRepository creatureRepository;
 
     //크리쳐 만들기
     @Override
     public Creature createFristCreature(String keyword, String photo, String creatureName) {
         //멤버 가져오고
         Member member = SecurityUtil.getCurrentMember();
-
-        System.out.println("바봉 ㅎㅎ");
-        System.out.println(member.getId());
-
         //크리쳐 만들고
         Creature creature = new Creature();
         //이름 설정하고
@@ -47,7 +37,6 @@ public class CreatureServiceImpl implements CreatureService {
         creature.setMember(member);
         //경험치와 레벨은 자동 0으로 설정
 
-//        memberRepository.save(member); //저장
         creatureRepository.save(creature); //저장
 
         //여기서 사진 만들라고 명령 내리시고!!!!!!!!!!!!!!!!!!!!!!
@@ -94,6 +83,8 @@ public class CreatureServiceImpl implements CreatureService {
 
         Creature creature = SecurityUtil.getCurrentMember().getCreature();
 
+        System.out.println(creature.toString());
+
         // 하루 오를 수 있는 최대한의 경험치 제한
         if (toDoCnt > 7) {
             toDoCnt = 7;
@@ -109,7 +100,9 @@ public class CreatureServiceImpl implements CreatureService {
                     creature.setLevel(1);
                     creature.setExp(nowExp - 10);
                 } else {
+
                     System.out.println("여기 들어가야 하는데");
+                    System.out.println(nowExp);
                     creature.setExp(nowExp);
                 }
                 break;
@@ -134,7 +127,7 @@ public class CreatureServiceImpl implements CreatureService {
                 creature.setExp(nowExp);
                 break;
         }
-        //왜 안되는겨!!
+        creatureRepository.save(creature);
     }
 
     //크리쳐 레벨업
@@ -151,7 +144,4 @@ public class CreatureServiceImpl implements CreatureService {
         int creatureId = creature.getId();
         return "http://localhost:8080/image/creature/" + creatureId + "_" +creatureLevel;
     }
-
-
-
 }

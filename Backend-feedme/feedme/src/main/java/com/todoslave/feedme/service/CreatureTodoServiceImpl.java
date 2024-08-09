@@ -26,6 +26,7 @@ public class CreatureTodoServiceImpl implements CreatureTodoService{
     final private CreatureTodoReposito creatureTodoRepository;
     private Random random = new Random();
     // 로그인시에 없으면 생성
+
     @Override
     public List<CreatureTodoResponseDTO> insertTodo(String weather) {
 
@@ -154,6 +155,4 @@ public class CreatureTodoServiceImpl implements CreatureTodoService{
 
         return responseDTOList;
     }
-
-
 }

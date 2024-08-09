@@ -2,6 +2,7 @@ package com.todoslave.feedme.service;
 
 import com.todoslave.feedme.DTO.MemberSearchResponseDTO;
 import com.todoslave.feedme.DTO.MemberSignupRequestDTO;
+import com.todoslave.feedme.DTO.MypageResponseDTO;
 import com.todoslave.feedme.domain.entity.avatar.Creature;
 import com.todoslave.feedme.domain.entity.membership.Emotion;
 import com.todoslave.feedme.domain.entity.membership.Member;
@@ -13,6 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -136,6 +141,45 @@ public class MemberService {
             int creatureLevel = creature.getLevel();
             int creatureId = creature.getId();
             return "http://localhost:8080/image/creature/" + creatureId + "_" +creatureLevel;
+    }
+
+    public MypageResponseDTO getMyPage() {
+        Member member = SecurityUtil.getCurrentMember();
+        Creature creature = member.getCreature();
+
+        MypageResponseDTO myPage = new MypageResponseDTO();
+
+        myPage.setNickname(member.getNickname());
+        myPage.setEmail(member.getEmail());
+
+
+        //생일 바꾸기
+        Timestamp birthdayTimestamp = member.getBirthday();
+
+        // Timestamp를 LocalDate로 변환
+        LocalDate birthdayLocalDate = birthdayTimestamp.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
+
+        // 변환된 LocalDate를 myPage에 설정
+        myPage.setBrithday(birthdayLocalDate);
+
+        myPage.setCreatureName(creature.getCreatureName());
+        myPage.setExp(creature.getExp());
+        myPage.setLevel(creature.getLevel());
+        myPage.setImage(generateCreatureImgPath(member));
+
+
+        LocalDate currentDate = LocalDate.now();
+        // 가입 날짜 가져오기 (Timestamp를 LocalDate로 변환)
+        LocalDate joinDate = member.getJoinDate().toLocalDate();
+        // 가입한 날로부터 며칠째인지 계산
+        int daysSinceJoin = Period.between(joinDate, currentDate).getDays();
+
+        myPage.setTogetherDay(daysSinceJoin);
+
+
+        return myPage;
     }
 
 }
