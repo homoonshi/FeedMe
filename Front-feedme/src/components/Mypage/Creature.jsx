@@ -23,7 +23,7 @@ const Creature = ({ creature }) => {
     <div className="MCreature">
       <p className="MCreatureName">{creature.name}</p>
       <p className="MCreatureterm">🤍 {creature.daysTogether}일째 함께하는 중</p>
-      <img src={creature.name.img} alt="creature" />
+      <img src={creature.image} alt="creature" />
       <div className="MCreatureInfo">
         <p className="MCreatureLv">Lv. {creature.level}</p>
         <div className="MCreatureExp">
@@ -34,5 +34,5 @@ const Creature = ({ creature }) => {
     </div>
   );
 };
-
+ 
 export default Creature;

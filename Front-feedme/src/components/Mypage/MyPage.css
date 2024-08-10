@@ -7,7 +7,7 @@
     position: relative;
     overflow-x: hidden;
 }
-
+ 
 .MyPageBack::before {
     content: "";
     background: url('../../assets/images/img-main.png') no-repeat center;
@@ -183,14 +183,26 @@
     padding: 2%;
     border-radius: 40px;
     text-align: center;
-    font-family: 'PretendardSB';
+    font-family: 'PretendardB';
     font-size: 1.3rem;
+    width: 30%;
+    height: 30%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
   
+.MyPageLogoutModalButtons {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 3% 5%; 
+}
+
 .MyPageLogoutModalCancel{
     background-color: #808080;
     color: #FFFFFF;
-    margin: 5%;
     padding: 3% 7%;
     border: none;
     border-radius: 20px;
@@ -198,6 +210,7 @@
     font-family: 'PretendardR';
     font-size: 1rem;
     transition: background-color 0.3s ease, transform 0.2s ease;
+    margin: 0 5%
 }
 
 .MyPageLogoutModalCancel:hover {
@@ -208,7 +221,6 @@
 .MyPageLogoutModalLogout{
     background-color: #FF5F5F;
     color: #FFFFFF;
-    margin: 5%;
     padding: 3% 7%;
     border: none;
     border-radius: 20px;
@@ -216,6 +228,7 @@
     font-family: 'PretendardR';
     font-size: 1rem;
     transition: background-color 0.3s ease, transform 0.2s ease;
+    margin: 0 5%
 }
 
 .MyPageLogoutModalLogout:hover {
@@ -226,7 +239,6 @@
 .MyPageLogoutModalcorrection{
     background-color: #FF5F5F;
     color: #FFFFFF;
-    margin: 5%;
     padding: 3% 7%;
     border: none;
     border-radius: 20px;
@@ -234,6 +246,7 @@
     font-family: 'PretendardR';
     font-size: 1rem;
     transition: background-color 0.3s ease, transform 0.2s ease;
+    margin: 0 5%
 }
 
 .MyPageLogoutModalcorrection:hover {
@@ -258,3 +271,58 @@
     transform: scale(1.05);
 }
 
+
+.MyPageInfoModalContent {
+    background: white;
+    padding: 2%;
+    border-radius: 40px;
+    text-align: center;
+    font-family: 'PretendardB';
+    font-size: 1.3rem;
+    width: 35%;
+    height: 40%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.MyPageInfoModalContent label{
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+    color: #000000;
+    margin: 2% 0;
+    font-family: 'PretendardM';
+}
+
+.MyPageInfoModalContent input{
+    background-color: #33333300;
+    width: 70%;
+    height: auto;
+    padding: 0.5rem;
+    margin-left: 3%;
+    border-radius: 15px;
+    border: 1.5px solid #6D6D6D;
+    flex: 1;
+    font-family: 'PretendardM';
+}
+
+.MyPageInfoModalContent input[type="date"] {
+    width: 70%; /* 날짜 인풋의 너비도 동일하게 설정 */
+}
+
+.MyPageCreModalContent{
+    background: white;
+    padding: 2%;
+    border-radius: 40px;
+    text-align: center;
+    font-family: 'PretendardB';
+    font-size: 1.3rem;
+    width: 35%;
+    height: 30%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}

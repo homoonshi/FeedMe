@@ -81,6 +81,8 @@ public class MemberController {
         return SecurityUtil.getCurrentMember();
     }
 
+
+
     @Operation(summary = "내 정보 페이지")
     @GetMapping("/mypage")
     public ResponseEntity<MypageResponseDTO> mypage(@RequestHeader("Authorization") final String accessToken) {

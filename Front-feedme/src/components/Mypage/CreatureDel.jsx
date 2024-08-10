@@ -2,10 +2,10 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
 
-const CreatureDel = ({ onRelease }) => {
+const CreatureDel = ({ onRelease, creature }) => {
   const handleRelease = () => {
-    const creatureId = 1; 
-    onRelease(creatureId);  
+    // const creatureId = 1; 
+    onRelease(creature.id);  
   };
 
   return (
@@ -20,5 +20,5 @@ const CreatureDel = ({ onRelease }) => {
     </div>
   );
 };
-
+ 
 export default CreatureDel;
