@@ -1,47 +1,61 @@
 package com.todoslave.feedme.service;
 
+import com.todoslave.feedme.DTO.MemberSearchResponseDTO;
+import com.todoslave.feedme.DTO.MemberSignupRequestDTO;
+import com.todoslave.feedme.DTO.MypageResponseDTO;
 import com.todoslave.feedme.domain.entity.membership.Member;
-import com.todoslave.feedme.repository.MemberRepository;
-
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
-@Service
-@Transactional(readOnly = true) //조회에선
-@RequiredArgsConstructor // 생성자 만들어 주는 얘
-public class MemberService {
+// import java.util.stream.Collectors;
 
-    //    @Autowired
-    private final MemberRepository memberRepository;
+//@Service
+// @Transactional
+// public class MemberService {
 
-    // 회원가입
-    @Transactional //가입시에
-    public int Join(Member member) {
-//        sameNameCheck(member); // 중복 회원 검증
-        memberRepository.save(member);
-        return member.getId();
-    }
+//     @Autowired
+//     MemberRepository memberRepository;
+//     @Autowired
+//     FriendService friendService;
 
+
+public interface MemberService {
+
+
+    // 회원 가입
+    Member insertMember(Member member);
+  
     // 회원 전체 조회
-    public List<Member> findMembers() {
-        return memberRepository.findAll();
-    }
+    List<Member> findMembers();
 
-    // 단수 조회
-//    public Member findOne(int id) {
-//        return memberRepository.findById(id);
-//    }
+    // 아이디로 회원 찾기
+    Member findById(int userId);
 
-    // 중복 체크
-//    private void sameNameCheck(Member member) {
-//        List<Member> findMembers = memberRepository.findByName(member.getNickname());
-//        if(!findMembers.isEmpty()) {
-//            throw new IllegalStateException("중복 닉네임");
-//        }
-//    }
+    // 이메일로 회원 찾기
+    Optional<Member> findByEmail(String email);
 
+    // 닉네임으로 회원 찾기
+    Member findByNickname(String nickname);
 
+    // 이메일 인증 여부 확인
+    boolean authenticate(String email);
+
+    // 회원 가입 처리
+    Member registerMember(MemberSignupRequestDTO memberSignupRequestDTO);
+
+    // 회원 정보 수정
+    Member updateMember(MemberSignupRequestDTO memberSignupRequestDTO);
+
+    // 회원 탈퇴
+    boolean removeMember();
+
+    // 닉네임으로 회원 검색
+    List<MemberSearchResponseDTO> getMemberList(String searchvalue);
+
+    // 닉네임 중복 체크
+    boolean checkNickname(String nickname);
+
+    // 마이페이지 불러오기
+    MypageResponseDTO getMyPage();
 }

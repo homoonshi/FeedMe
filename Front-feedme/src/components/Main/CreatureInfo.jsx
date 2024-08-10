@@ -1,25 +1,22 @@
 import React from 'react';
 import ToDoList from '../Todo/TodoList';
-import Louvre from '../../assets/images/Louvre.JPG';
-import './CreatureInfo.css';
+import creature from '../../assets/images/img-cat.png';
+import '../Main/CreatureInfo.css';
+import { useNavigate } from 'react-router-dom';
 
 const CreatureInfo = () => {
-  
-  // 이미지 사이즈 조정 삭제해도 됨
-  const sample = {
-    width:"100px",
-    height:'100px',
-    objectFit:"cover"
+  const navigate = useNavigate();
+
+  const MoveTo = (path) => {
+    navigate(path)
   }
 
   return (
     <div className='CreatureInfo'>
-      <h2>NYAONG</h2>
-      <img src={Louvre} alt="creature" style={sample}/>
-      <p>❤️ 247 days</p>
-      <div>
-        <ToDoList />
-      </div>
+      <h2>냐옹이</h2>
+      <img className='CreatureInfoPhoto' src={creature} alt="creature" onClick={() => MoveTo('/MyPage')} />
+      <p>❤️ <span id='CreatureInfoDay'>247</span> 일째 함께하는 중</p>
+      <ToDoList onClick={() => MoveTo('/Todo')}/>
     </div>
   );
 };
