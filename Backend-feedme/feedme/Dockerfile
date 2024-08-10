@@ -20,11 +20,8 @@ RUN chmod +x ./gradlew
 # Build the application and skip tests
 RUN ./gradlew clean build -x test
 
-# Copy the built JAR file to the app directory
-# COPY build/libs/feedme-0.0.1-SNAPSHOT.jar /app/MailService.jar
-
-# Set the entry point to run the JAR file
-ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=prod", "/app/build/libs/feedme-0.0.1-SNAPSHOT.jar"]
+# Set the entry point to run the JAR file with the specified port
+ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=prod", "-Dserver.port=8085", "/app/build/libs/feedme-0.0.1-SNAPSHOT.jar"]
 
 # Expose port 8085
 EXPOSE 8085
