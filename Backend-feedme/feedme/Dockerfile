@@ -23,5 +23,5 @@ RUN ./gradlew clean build -x test
 # Set the entry point to run the JAR file with the specified port
 ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=prod", "-Dserver.port=8085", "/app/build/libs/feedme-0.0.1-SNAPSHOT.jar"]
 
-# Expose port 8085
+# Expose port 8085.
 EXPOSE 8085
