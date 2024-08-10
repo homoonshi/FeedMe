@@ -25,50 +25,54 @@ const ChatRoom = () => {
   const connect = () => {
     if (stompClient.current) return; // 이미 연결되어 있는지 확인
 
-    const socket = new SockJS('/ws/friendChat');
+    const socket = new SockJS('http://localhost:8080/ws/friendChat');
     stompClient.current = new Client({
-      webSocketFactory: () => socket,
-      debug: (str) => {
-        console.log(str);
-      },
-      onConnect: (frame) => {
-        console.log('Connected: ' + frame);
+        webSocketFactory: () => socket,
+        debug: (str) => {
+            console.log(str);
+        },
+        onConnect: (frame) => {
+            console.log('Connected: ' + frame);
 
-        // 현재 채팅방의 메시지 수신
-        if (!isSubscribed.current) {
-          stompClient.current.subscribe(`/chatRoom/messages/${roomId}`, (message) => {
-            const receivedMessage = JSON.parse(message.body);
-            showMessage(receivedMessage);
-          });
+            // 현재 채팅방의 메시지 수신
+            if (stompClient.current && !isSubscribed.current) {
+                stompClient.current.subscribe(`/chatRoom/messages/${roomId}`, (message) => {
+                    const receivedMessage = JSON.parse(message.body);
+                    showMessage(receivedMessage);
+                });
 
-          // 과거 메시지 로드
-          stompClient.current.subscribe(`/chatRoom/loadMessages/${roomId}`, (message) => {
-            const slice = JSON.parse(message.body);
-            const newMessages = slice.content || [];
-            if (newMessages.length === 0) {
-              setHasMore(false);
-            } else {
-              setMessages((prevMessages) => [...newMessages.reverse(), ...prevMessages]);
-              setSkip((prevSkip) => prevSkip + limit);
+                // 과거 메시지 로드
+                stompClient.current.subscribe(`/chatRoom/loadMessages/${roomId}`, (message) => {
+                    const slice = JSON.parse(message.body);
+                    const newMessages = slice.content || [];
+                    if (newMessages.length === 0) {
+                        setHasMore(false);
+                    } else {
+                        setMessages((prevMessages) => [...newMessages.reverse(), ...prevMessages]);
+                        setSkip((prevSkip) => prevSkip + limit);
+                    }
+                    setHasMore(!slice.last);
+                });
+
+                isSubscribed.current = true;
             }
-            setHasMore(!slice.last);
-          });
 
-          isSubscribed.current = true;
-        }
-
-        fetchMoreData(); // 초기 데이터 로드
-      },
-      onDisconnect: () => {
-        console.log("Disconnected");
-        isSubscribed.current = false;
-        stompClient.current = null;
-      },
-      reconnectDelay: 5000 // 재연결 시도 간격 설정
+            fetchMoreData(); // 초기 데이터 로드
+        },
+        onStompError: (frame) => {
+            console.error('Broker reported error: ' + frame.headers['message']);
+            console.error('Additional details: ' + frame.body);
+        },
+        onDisconnect: () => {
+            console.log("Disconnected");
+            isSubscribed.current = false;
+            stompClient.current = null;
+        },
+        reconnectDelay: 1000 // 재연결 시도 간격 설정
     });
 
     stompClient.current.activate();
-  };
+};
 
   const disconnect = () => {
     if (stompClient.current) {
@@ -110,11 +114,13 @@ const ChatRoom = () => {
   };
 
   const showMessage = (message) => {
+    console.log("Received message:", message);  // 메시지가 올바르게 도착하는지 확인
     setMessages((prevMessages) => [...prevMessages, message]);
     if (messageContainerRef.current) {
       messageContainerRef.current.scrollTop = messageContainerRef.current.scrollHeight;
     }
   };
+  
 
   return (
     <div>

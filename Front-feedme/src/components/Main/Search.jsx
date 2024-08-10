@@ -42,11 +42,11 @@ const Search = () => {
         setSuggestions(data); 
       } else {
         setSuggestions([]);
-        console.error('Search request failed');
+        console.error('실패');
       }
     } catch (error) {
       setSuggestions([]);
-      console.error('An error occurred while fetching search results:', error);
+      console.error('에러:', error);
     }
   };
 
@@ -76,6 +76,27 @@ const Search = () => {
     setSuggestions([]);
   };
 
+  const handleFriendRequest = async (nickname) => {
+    try {
+      const response = await fetch('http://localhost:8080/friends', {
+        method: 'POST',
+        headers: {
+          'Authorization': token,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ counterpartNickname: nickname }),
+      });
+
+      if (response.status === 204) {
+        console.log(`${nickname}에게 친구 요청을 보냈습니다.`);
+      } else {
+        console.error('친구 요청 실패');
+      }
+    } catch (error) {
+      console.error('친구 요청 중 에러 발생:', error);
+    }
+  };
+
   return (
     <div className="search-bar-container">
       <input
@@ -102,8 +123,13 @@ const Search = () => {
             {suggestions.map((suggestion, index) => (
               <li key={index} onClick={() => handleSuggestionClick(suggestion)}>
                 {suggestion.nickname} 
-                {!suggestion.friend && ( 
-                  <button className="suggestionsListButton">친구 신청</button>
+                {!suggestion.friend && (
+                  <button 
+                    className="suggestionsListButton" 
+                    onClick={() => handleFriendRequest(suggestion.nickname)} 
+                  >
+                    친구 신청
+                  </button>
                 )}
               </li>
             ))}
