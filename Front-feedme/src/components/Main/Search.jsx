@@ -1,31 +1,16 @@
 import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { setToken } from '../../store/slice';
 import { useNavigate } from 'react-router-dom';
 import NotificationModal from '../Notice/NotificationModal';
 import '../Main/Search.css';
 import noti from '../../assets/icons/icon-noti-gray.png';
 import search from '../../assets/icons/icon-search-gray-24.png';
 import mypage from '../../assets/icons/icon-account-gray-24.png';
-
-const mockUsernames = [
-  'Alice',
-  'Bob',
-  'Charlie',
-  'Dave',
-  'Eve',
-  'Frank',
-  'Grace',
-  'Heidi',
-  'Ivan',
-  'Judy',
-  'Mallory',
-  'Oscar',
-  'Peggy',
-  'Trent',
-  'Victor',
-  'Walter'
-];
+import '../../assets/font/Font.css' 
 
 const Search = () => {
+  const dispatch = useDispatch();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [suggestions, setSuggestions] = useState([]);
@@ -33,13 +18,43 @@ const Search = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (searchTerm) {
-      const filteredSuggestions = mockUsernames.filter(username =>
-        username.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-      setSuggestions(filteredSuggestions);
+    const sessionToken = sessionStorage.getItem('accessToken');
+    if (sessionToken) {
+      dispatch(setToken(sessionToken));
     } else {
+      navigate('/login'); 
+    }
+  }, [dispatch, navigate]);
+
+  const token = useSelector((state) => state.auth.token);
+
+  const fetchSearchResults = async (term) => {
+    try {
+      const response = await fetch(`http://localhost:8080/users/${term}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `${token}`,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setSuggestions(data); 
+      } else {
+        setSuggestions([]);
+        console.error('Search request failed');
+      }
+    } catch (error) {
       setSuggestions([]);
+      console.error('An error occurred while fetching search results:', error);
+    }
+  };
+
+  useEffect(() => {
+    if (searchTerm) {
+      fetchSearchResults(searchTerm);
+    } else {
+      setSuggestions([]); 
     }
   }, [searchTerm]);
 
@@ -56,7 +71,8 @@ const Search = () => {
   };
 
   const handleSuggestionClick = (suggestion) => {
-    setSearchTerm(suggestion);
+    setSearchTerm(suggestion.nickname);
+    console.log(suggestion)
     setSuggestions([]);
   };
 
@@ -85,7 +101,10 @@ const Search = () => {
           <ul className="suggestions-list">
             {suggestions.map((suggestion, index) => (
               <li key={index} onClick={() => handleSuggestionClick(suggestion)}>
-                {suggestion}
+                {suggestion.nickname} 
+                {!suggestion.friend && ( 
+                  <button className="suggestionsListButton">친구 신청</button>
+                )}
               </li>
             ))}
           </ul>
@@ -97,3 +116,4 @@ const Search = () => {
 };
 
 export default Search;
+

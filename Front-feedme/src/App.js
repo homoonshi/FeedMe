@@ -15,6 +15,7 @@ import MyPage from './components/Mypage/MyPage.jsx';
 import Feed from './components/Feed/Feed.jsx';
 import Weather from './components/Weather/Weather.jsx';
 import LoginLoding from './components/Login/LoginLoding.jsx';
+import WebSocketChat from './components/WebScoketChat/WebSocketChat.jsx';
 
 function App() {
   return (
@@ -44,6 +45,7 @@ function App() {
         <Route path="/Feed" element={<Feed />} />
         <Route path="/Weather" element={<Weather />} />
         <Route path="/LoginLoding" element={<LoginLoding />} />
+        <Route path="/WebSocketChat" element={<WebSocketChat />} />
       </Routes>
     </div>
   );
