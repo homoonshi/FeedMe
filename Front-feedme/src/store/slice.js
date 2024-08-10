@@ -1,5 +1,3 @@
-// src/redux/slice.js
-
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
@@ -55,7 +53,7 @@ const authSlice = createSlice({
       state.token = null;
       state.hasCreature = false;
     },
-  },
+  }
 });
 
 export const { 

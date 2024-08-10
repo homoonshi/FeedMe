@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './NotificationModal.css';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import ArrowBackIosNewOutlinedIcon from '@mui/icons-material/ArrowBackIosNewOutlined';
@@ -9,70 +9,115 @@ import customParseFormat from 'dayjs/plugin/customParseFormat';
 import CloseIcon from '@mui/icons-material/Close';
 import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
 import GroupAddOutlinedIcon from '@mui/icons-material/GroupAddOutlined';
+import { addNotifications, addRequests, removeRequests, setIsSettingsMode, setIsSwitchOn, setRequestMode, setAlarmTime } from '../../store/alarmSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
 
 dayjs.extend(customParseFormat);
 
 const label = { inputProps: { 'aria-label': 'Color switch demo' } };
-const format = 'HH:mm';
+const format = 'HH';
 
 const NotificationModal = ({ onClose }) => {
-  const [notifications, setNotifications] = useState([
-    "할 일을 작성하세요!",
-    "11시",
-    "공부하세요",
-    "할 일을 작성하세요!",
-    "11시",
-    "공부하세요",
-    "할 일을 작성하세요!",
-    "11시",
-    "공부하세요",
-    "할 일을 작성하세요!",
-    "11시",
-    "공부하세요", "할 일을 작성하세요!",
-    "11시",
-    "공부하세요", "할 일을 작성하세요!",
-    "11시",
-    "공부하세요"
-  ]);
+  const dispatch = useDispatch();
+  const { notifications, requests, isSettingsMode, isSwitchOn, isRequestMode, alarmTime } = useSelector((state) => state.alarm);
+  const [selectedTime, setSelectedTime] = useState(dayjs(alarmTime, format));
+  const {token} = useSelector((state) => state.auth);
 
-  const [requests, setRequests] = useState([
-    {
-      img: "./images/img-cat.png",
-      nickname: "지나"
-    },
-    {
-      img: "./images/img-cat.png",
-      nickname: "민우"
-    }, {
-      img: "./images/img-cat.png",
-      nickname: "제시카"
-    }, {
-      img: "./images/img-cat.png",
-      nickname: "시카고"
-    }, {
-      img: "./images/img-cat.png",
-      nickname: "바보"
-    },
-  ]);
-  const [isSettingsMode, setIsSettingsMode] = useState(false);
-  const [isSwitchOn, setIsSwitchOn] = useState(true); // Switch 상태 관리
-  const [isRequestMode, setRequestMode] = useState(false);
+  // SSE 연결 설정
+  useEffect(() => {
+    const eventSource = new EventSource('/notifications/subscribe');
+
+    eventSource.addEventListener('alarm', function (event) {
+      const newNotification = JSON.parse(event.data);
+      dispatch(addNotifications(newNotification));
+    });
+
+    eventSource.addEventListener('friend', function (event) {
+      const newRequest = JSON.parse(event.data);
+      dispatch(addRequests(newRequest));
+    });
+
+    eventSource.onerror = function (err) {
+      console.error('SSE error:', err);
+      eventSource.close();
+    };
+
+    return () => {
+      eventSource.close();
+    };
+  }, [dispatch]);
 
   const handleDelete = (index) => {
     const newNotifications = notifications.filter((_, i) => i !== index);
-    setNotifications(newNotifications);
+    dispatch(addNotifications(newNotifications));
   };
 
+  const handleReject = (index) => {
+    // 서버에서 요청을 거절하기 위한 API 호출
+    const requestId = requests[index].id;
+    axios.post(`http://localhost:8080/friends/reject/${requestId}`)
+      .then(() => {
+        dispatch(removeRequests(index));
+      })
+      .catch(error => {
+        console.error('Error rejecting friend request:', error);
+      });
+  }
+
+  const handleAccept = (index) => {
+    // 서버에서 요청을 수락하기 위한 API 호출
+    const requestId = requests[index].id;
+    axios.post(`http://localhost:8080/friends/accept/${requestId}`)
+      .then(() => {
+        dispatch(addRequests(index));
+      })
+      .catch(error => {
+        console.error('Error accepting friend request:', error);
+      });
+  }
+
+  const handleTimeChange = async (time) => {
+    if (time) {
+      const formattedTime = time.format('HH');
+      const intAlarmTime = parseInt(formattedTime, 10);
+  
+      setSelectedTime(time);
+      dispatch(setAlarmTime(formattedTime));
+
+      try {
+        await axios.post('http://localhost:8080/alarms/time', { 
+          alarmTime: intAlarmTime 
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `${token}`,
+          }
+        }
+      );
+        console.log('Time setting updated');
+      } catch (error) {
+        console.error('Error setting time:', error);
+      }
+    } else {
+      console.log('No alarm time');
+    }
+  };
+  
+
+
+
   const toggleSettingsMode = () => {
-    setIsSettingsMode(!isSettingsMode);
+    dispatch(setIsSettingsMode(!isSettingsMode));
   };
 
   const handleSwitchChange = () => {
-    setIsSwitchOn(!isSwitchOn);
+    dispatch(setIsSwitchOn(!isSwitchOn));
   };
 
   const toggleRequestMode = () => {
-    setRequestMode(!isRequestMode);
+    dispatch(setRequestMode(!isRequestMode));
   }
 
   return (
@@ -102,7 +147,15 @@ const NotificationModal = ({ onClose }) => {
               <p>알림 받기</p>
               <Switch {...label} checked={isSwitchOn} onChange={handleSwitchChange} color="secondary" />
             </div>
-            <TimePicker defaultValue={dayjs('12:08', format)} format={format} disabled={!isSwitchOn} />
+            <TimePicker
+              value={selectedTime} // 현재 선택된 시간
+              format={format}
+              disabled={!isSwitchOn}
+              showMinute={false}
+              showSecond={false}
+              onChange={handleTimeChange} // 시간 변경 시 호출
+              // inputReadOnly
+            />
           </div>
         ) : (
           <div>
@@ -132,7 +185,7 @@ const NotificationModal = ({ onClose }) => {
                             fontFamily: "PretendardSB",
                             color: "#696969"
                           }}
-                          className="NoticeButton" onClick={() => handleDelete(index)}>거절</span>
+                          className="NoticeButton" onClick={() => handleReject(index)}>거절</span>
                         <span
                           style={{
                             width: "35px",
@@ -140,7 +193,7 @@ const NotificationModal = ({ onClose }) => {
                             fontFamily: "PretendardSB",
                             color: "#007bff"
                           }}
-                          className="NoticeButton" onClick={() => handleDelete(index)}>수락</span>
+                          className="NoticeButton" onClick={() => handleAccept(index)}>수락</span>
                       </div>
                     </li>
                   ))}
