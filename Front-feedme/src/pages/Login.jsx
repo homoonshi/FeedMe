@@ -1,7 +1,9 @@
+// src/pages/Login.jsx
+
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './Login.css'
-import '../assets/font/Font.css'
+import './Login.css';
+import '../assets/font/Font.css';
 import MyNaverLoginButton from '../components/Buttons/NaverButton';
 import MyKakaoLoginButton from '../components/Buttons/KakaoButton';
 
@@ -14,22 +16,18 @@ const Login = () => {
           <h1>Login</h1>
           <p>Quickly sign in with your social network</p>
           <hr />
-          <div class="LoginButtons">
+          <div className="LoginButtons">
             <div className='LoginGoogleButton'>
-              <Link to='/Main'>
-                <MyKakaoLoginButton style={{
-                  height: "45px",
-                  fontSize: "17px"
-                }}/>
-              </Link>
+              <MyKakaoLoginButton style={{
+                height: "45px",
+                fontSize: "17px"
+              }}/>
             </div>
             <div className='LoginNaverButton'>
-              <Link to='/Main'>
-                <MyNaverLoginButton style={{
-                  height: "45px",
-                  fontSize: "17px"
-                }} />
-              </Link>
+              <MyNaverLoginButton style={{
+                height: "45px",
+                fontSize: "17px"
+              }} />
             </div>
           </div>
           <div>

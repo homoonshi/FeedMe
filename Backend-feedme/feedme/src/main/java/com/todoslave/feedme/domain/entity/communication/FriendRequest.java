@@ -11,7 +11,7 @@ import lombok.Data;
 public class FriendRequest {
 
     //친구요청 ID
-    @Id    @GeneratedValue
+    @Id    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     //본인 회원번호
