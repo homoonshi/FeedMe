@@ -16,7 +16,7 @@ public class FeedComment {
 
     //피드 댓글 ID
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     //피드 ID
@@ -39,7 +39,6 @@ public class FeedComment {
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
-
 
     // 대댓글과 매핑
     @OneToMany(mappedBy = "feedComment", cascade = CascadeType.ALL)

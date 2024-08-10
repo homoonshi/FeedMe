@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 @Data
 @Builder
@@ -19,11 +20,14 @@ public class MemberChatMessage {
 
     @Id
     private String id;
+    @Field("memberChatRoom_id")
     private String memberChatRoomId;
-    private String sendId;
+    @Field("send_id")
+    private int sendId;
     private String content;
 
     @CreatedDate
+    @Field("transmit_at")
     private LocalDateTime transmitAt;
 
     @Override
