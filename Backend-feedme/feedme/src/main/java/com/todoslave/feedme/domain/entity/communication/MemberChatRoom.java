@@ -2,6 +2,7 @@ package com.todoslave.feedme.domain.entity.communication;
 
 import com.todoslave.feedme.domain.entity.membership.Member;
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,19 +14,23 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
 @Document(collection = "memberchatroom")
 public class MemberChatRoom {
 
     @Id
     private String id;
-    private List<String> participantIds;
+    @Field("participant_ids")
+    private List<Integer> participantIds;
+    @Field("receive_time")
+    private LocalDateTime receiveTime;
 
-    @CreatedDate
-    private LocalDate createdAt;
+    public MemberChatRoom(){
+        receiveTime = LocalDateTime.MIN;
+    }
 
 }

@@ -1,4 +1,4 @@
-package com.todoslave.feedme.domain.entity.check;
+package com.todoslave.feedme.domain.entity.alarm;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -14,7 +14,7 @@ public class Alarm {
 
     // 알람 ID
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     // 회원 ID
@@ -23,7 +23,7 @@ public class Alarm {
     @JsonBackReference
     private Member member;
 
-    //컨텐츠
+    // 내용
     @Column(nullable = false)
     private String content;
 
@@ -32,13 +32,11 @@ public class Alarm {
     @Column(name = "receive_at", nullable = false, updatable = false)
     private LocalDateTime receiveAt;
 
-//    @Column()
-//    private boolean read;
 
-    //==연관관계 메서드==//
-    public void setMember(Member member) {
-        this.member = member;
-        member.getAlarms().add(this);
-    }
+//    //==연관관계 메서드==//
+//    public void setMember(Member member) {
+//        this.member = member;
+//        member.getAlarms().add(this);
+//    }
 
 }
