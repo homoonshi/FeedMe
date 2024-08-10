@@ -164,6 +164,7 @@ public class MemberService {
         // 변환된 LocalDate를 myPage에 설정
         myPage.setBrithday(birthdayLocalDate);
 
+        myPage.setCreatureId(creature.getId());
         myPage.setCreatureName(creature.getCreatureName());
         myPage.setExp(creature.getExp());
         myPage.setLevel(creature.getLevel());

@@ -22,7 +22,8 @@ const userSlice = createSlice({
   initialState: {
     nickname: '',
     email: '',
-    birthday: '',
+    brithday: '',
+    creatureId: null,
     creatureName: '',
     exp: 0,
     level: 0,
@@ -39,10 +40,21 @@ const userSlice = createSlice({
       })
       .addCase(fetchUserData.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        const { nickname, email, birthday, creatureName, exp, level, image, togetherDay } = action.payload;
+        const {
+          nickname,
+          email,
+          brithday,
+          creatureId,
+          creatureName,
+          exp,
+          level,
+          image,
+          togetherDay,
+        } = action.payload;
         state.nickname = nickname;
         state.email = email;
-        state.birthday = birthday;
+        state.brithday = brithday;
+        state.creatureId = creatureId;
         state.creatureName = creatureName;
         state.exp = exp;
         state.level = level;
