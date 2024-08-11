@@ -9,6 +9,7 @@ import com.todoslave.feedme.DTO.PaginationRequestDTO;
 import com.todoslave.feedme.domain.entity.alarm.Alarm;
 import com.todoslave.feedme.domain.entity.avatar.Creature;
 import com.todoslave.feedme.domain.entity.communication.MemberChatMessage;
+import com.todoslave.feedme.domain.entity.communication.MemberChatRoomChecked;
 import com.todoslave.feedme.domain.entity.membership.Member;
 import com.todoslave.feedme.domain.entity.membership.MemberAlarm;
 import com.todoslave.feedme.login.util.SecurityUserDto;
@@ -17,6 +18,7 @@ import com.todoslave.feedme.mapper.AlarmMapper;
 import com.todoslave.feedme.repository.AlarmRepository;
 import com.todoslave.feedme.repository.CreatureRepository;
 import com.todoslave.feedme.repository.MemberAlarmRepository;
+import com.todoslave.feedme.repository.MemberChatRoomCheckedRepository;
 import com.todoslave.feedme.repository.MemberRepository;
 import com.todoslave.feedme.repository.TodoRepository;
 import jakarta.transaction.Transactional;
@@ -47,6 +49,7 @@ public class AlarmServiceImpl implements AlarmService{
   private final TodoRepository todoRepository;
   private final MemberRepository memberRepository;
   private final CreatureRepository creatureRepository;
+  private final MemberChatRoomCheckedRepository memberChatRoomCheckedRepository;
 
   private final Map<Integer, SseEmitter> emitters = new ConcurrentHashMap<>();
   private final Map<Integer, SseEmitter> chatEmitters = new ConcurrentHashMap<>();
@@ -155,6 +158,7 @@ public class AlarmServiceImpl implements AlarmService{
 
   // 채팅방 갱신
   @Override
+  @Transactional
   public void renewChattingRoom(MemberChatListResponseDTO room, int memberId) throws IOException {
 
     SseEmitter emitter = chatEmitters.get(memberId);
@@ -166,7 +170,7 @@ public class AlarmServiceImpl implements AlarmService{
 
       emitter.send(event);
     }else{
-      System.out.println("Sse connect fail");
+      System.out.println("Sse Connection fail");
     }
 
   }
