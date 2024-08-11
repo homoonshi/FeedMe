@@ -123,6 +123,7 @@ public class FeedServiceImpl implements FeedService{
 
     private FeedDTO convertToFeedDTO(Feed feed) {
         FeedDTO feedDTO = new FeedDTO();
+        feedDTO.setMember_id(feed.getMember().getId());
         feedDTO.setFeedId(feed.getId());
         feedDTO.setNickname(feed.getNickname());
         feedDTO.setImg("http://localhost:8080/image/pictureDiary/"+SecurityUtil.getCurrentUserId()+"_"+feed.getDiaryDay()); // 이미지 처리 로직 필요
@@ -141,6 +142,7 @@ public class FeedServiceImpl implements FeedService{
         commentDTO.setNickname(comment.getMember().getNickname());
         commentDTO.setComment(comment.getContent());
         commentDTO.setTime(comment.getCreatedAt().toString());
+        commentDTO.setMember_id(comment.getMember().getId());
         return commentDTO;
     }
 
