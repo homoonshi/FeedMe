@@ -112,7 +112,7 @@ public class FeedServiceImpl implements FeedService{
     public List<FeedDTO> getRecentFeeds() {
         LocalDateTime thirtyDaysAgo = LocalDateTime.now().minusDays(30);
         List<Feed> recentFeeds = feedRepository.findRecentFeeds(thirtyDaysAgo);
-        // 친구껏만 가져오는 뭔가!!!
+        // 친구껏만 feed오는 뭔가!!!
 
        //
 
@@ -123,7 +123,7 @@ public class FeedServiceImpl implements FeedService{
 
     private FeedDTO convertToFeedDTO(Feed feed) {
         FeedDTO feedDTO = new FeedDTO();
-        feedDTO.setMember_id(feed.getMember().getId());
+        feedDTO.setEmail(feed.getMember().getEmail());
         feedDTO.setFeedId(feed.getId());
         feedDTO.setNickname(feed.getNickname());
         feedDTO.setImg("http://localhost:8080/image/pictureDiary/"+SecurityUtil.getCurrentUserId()+"_"+feed.getDiaryDay()); // 이미지 처리 로직 필요
@@ -142,7 +142,7 @@ public class FeedServiceImpl implements FeedService{
         commentDTO.setNickname(comment.getMember().getNickname());
         commentDTO.setComment(comment.getContent());
         commentDTO.setTime(comment.getCreatedAt().toString());
-        commentDTO.setMember_id(comment.getMember().getId());
+        commentDTO.setEmail(comment.getMember().getEmail());
         return commentDTO;
     }
 
