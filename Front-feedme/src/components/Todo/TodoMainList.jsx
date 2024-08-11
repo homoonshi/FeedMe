@@ -177,8 +177,8 @@ const TodoMainList = () => {
           className="TodoMainModalInput"
         />
         <div className="TodoMainModalButtons">
-          <button className="TodoMainModalButton" onClick={handleCategoryModalSubmit}>추가</button>
           <button className="TodoMainModalButton" onClick={() => setCategoryModalIsOpen(false)}>취소</button>
+          <button className="TodoMainModalButton" onClick={handleCategoryModalSubmit}>추가</button>
         </div>
       </Modal>
 
@@ -198,8 +198,8 @@ const TodoMainList = () => {
           className="TodoMainModalInput"
         />
         <div className="TodoMainModalButtons">
-          <button className="TodoMainModalButton" onClick={handleAddTodoSubmit}>추가</button>
           <button className="TodoMainModalButton" onClick={() => setAddTodoModalIsOpen(false)}>취소</button>
+          <button className="TodoMainModalButton" onClick={handleAddTodoSubmit}>추가</button>
         </div>
       </Modal>
 
@@ -219,8 +219,8 @@ const TodoMainList = () => {
           className="TodoMainModalInput"
         />
         <div className="TodoMainModalButtons">
-          <button className="TodoMainModalButton" onClick={() => handleEditTodo(selectedTodo.categoryIndex, selectedTodo.todoIndex)}>수정</button>
           <button className="TodoMainModalButton" onClick={() => handleDeleteTodo(selectedTodo.categoryIndex, selectedTodo.todoIndex)}>삭제</button>
+          <button className="TodoMainModalButton" onClick={() => handleEditTodo(selectedTodo.categoryIndex, selectedTodo.todoIndex)}>수정</button>
         </div>
       </Modal>
 
@@ -234,8 +234,8 @@ const TodoMainList = () => {
         <h2 className="TodoMainModalTitle">그림일기 생성</h2>
         <img src={diary} alt="그림일기 이미지" className="TodoMainModalDImage" /> 
         <div className="TodoMainModalButtons">
-          <button className="TodoMainModalButton">생성</button>
           <button className="TodoMainModalButton" onClick={() => setDrawingModalIsOpen(false)}>취소</button>
+          <button className="TodoMainModalButton">생성</button>
         </div>
       </Modal>
 

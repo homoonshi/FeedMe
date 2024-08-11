@@ -45,3 +45,29 @@
 .CreateFeedIcon {
     margin-right: 0.5rem;
 }
+
+.TodoMainModalButton {
+    background-color: #808080;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+  }
+  
+  .TodoMainModalButton:last-child {
+    background-color: #9E69FA; 
+  }
+
+  .DrawingModalDImage {
+    width: 80%;
+    height: 30%;
+    object-fit: cover;
+    margin: 0 auto;
+  }
+
+  .DrawingContent {
+    min-height: 200px;;
+  }
+

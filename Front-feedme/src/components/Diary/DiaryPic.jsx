@@ -3,11 +3,14 @@ import styled from "styled-components";
 import data from "./data.js";
 import './DiaryPic.css';
 import UploadOutlinedIcon from '@mui/icons-material/UploadOutlined';
+import Modal from 'react-modal';
+import diary from '../../assets/images/test2.png';
 
 function DiaryPic() {
   const [slideIndex, setSlideIndex] = useState(0);
   const [currentDate, setCurrentDate] = useState(data[0].date);
   const [currentContent, setCurrentContent] = useState(data[0].content);
+  const [drawingModalIsOpen, setDrawingModalIsOpen] = useState(false); 
 
   const moveToPrevSlide = () => {
     setSlideIndex((prev) => {
@@ -72,10 +75,26 @@ function DiaryPic() {
         ▶
       </Arrow>
       <div className="CreateFeedContainer">
-        <button className="CreateFeedButton">
+        <button className="CreateFeedButton" onClick={() => setDrawingModalIsOpen(true)}>
           <UploadOutlinedIcon className="CreateFeedIcon" /> 피드 올리기
         </button>
       </div>
+
+      <Modal
+        isOpen={drawingModalIsOpen}
+        onRequestClose={() => setDrawingModalIsOpen(false)}
+        contentLabel="피드 올리기"
+        className="TodoMainModalD"
+        overlayClassName="TodoMainOverlay"
+      >
+        <h2 className="TodoMainModalTitle">피드 올리기</h2>
+        <img src={diary} alt="그림일기 이미지" className="DrawingModalDImage" /> 
+        <textarea className="DrawingContent"></textarea>
+        <div className="TodoMainModalButtons">
+          <button className="TodoMainModalButton" onClick={() => setDrawingModalIsOpen(false)}>취소</button>
+          <button className="TodoMainModalButton">업로드</button>
+        </div>
+      </Modal>
     </div>
   );
 }

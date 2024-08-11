@@ -183,7 +183,7 @@
 }
 
 .TodoMainModalButton {
-  background-color: #4CAF50;
+  background-color: #808080;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -193,7 +193,7 @@
 }
 
 .TodoMainModalButton:last-child {
-  background-color: #f44336; 
+  background-color: #9E69FA; 
 }
 
 .TodoMainOverlay {
