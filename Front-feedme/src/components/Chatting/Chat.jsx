@@ -1,4 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { setToken } from '../../store/slice';
+import { fetchUserData } from '../../store/userSlice';
+import { fetchFriendsList } from '../../store/friendsSlice';
+import { fetchFriendInfo } from '../../store/friendInfoSlice';
 import Sidebar from '../Main/Sidebar';
 import Search from '../Main/Search';
 import ChattingFriendList from './ChattingFriendList';
@@ -7,22 +13,33 @@ import ChatWindow from './ChatWindow';
 import Creature from '../Mypage/Creature';
 import './Chat.css';
 import '../../assets/font/Font.css';
-import test1 from '../../assets/images/test1.png';
 
 const Chat = () => {
-  const [friends, setFriends] = useState([
-    { id: 1, name: 'pi', avatar: test1 },
-    { id: 2, name: '지나', avatar: test1 },
-    { id: 3, name: '지수', avatar: test1 },
-    { id: 4, name: '수보', avatar: test1 },
-    { id: 5, name: '차미', avatar: test1 },
-    { id: 6, name: '미푸', avatar: test1 },
-    { id: 7, name: '미푸', avatar: test1 },
-  ]);
-  const [creatures, setCreatures] = useState([
-    { id: 1, name: '불사조', daysTogether: 247, level: 1, exp: 50 }
-  ]);
-  const [selectedCreatureId, setSelectedCreatureId] = useState(null);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const sessionToken = sessionStorage.getItem('accessToken');
+    if (sessionToken) {
+      dispatch(setToken(sessionToken));
+    } else {
+      navigate('/login'); 
+    }
+  }, [dispatch, navigate]);
+
+  const token = useSelector((state) => state.auth.token);
+  const user = useSelector((state) => state.user);
+  const friendsList = useSelector((state) => state.friendsList.list);
+  const selectedFriendInfo = useSelector((state) => state.friendInfo);
+
+  const { creatureId, creatureName, exp, level, image, togetherDay, error } = user;
+
+  useEffect(() => {
+    if (token) {
+      dispatch(fetchUserData(token));
+      dispatch(fetchFriendsList(token));
+    }
+  }, [dispatch, token]);
 
   const [selectedFriend, setSelectedFriend] = useState(null);
   const [view, setView] = useState('profile');
@@ -32,6 +49,9 @@ const Chat = () => {
   const handleFriendClick = (friend) => {
     setSelectedFriend(friend);
     setView(friend.id === 'my-avatar' ? 'creature' : 'profile');
+    if (friend.id !== 'my-avatar') {
+      dispatch(fetchFriendInfo({ token, counterpartNickname: friend.counterpartNickname }));
+    }
   };
 
   const handleChatClick = (friend) => {
@@ -45,7 +65,6 @@ const Chat = () => {
   };
 
   const confirmDeleteFriend = () => {
-    setFriends(friends.filter(friend => friend.id !== friendToDelete.id));
     setSelectedFriend(null);
     setIsModalOpen(false);
   };
@@ -63,7 +82,7 @@ const Chat = () => {
           <div className="ChatRightContents">
             <div className="ChatFriendList">
               <ChattingFriendList
-                friends={friends}
+                friends={friendsList} 
                 onFriendClick={handleFriendClick}
                 onChatClick={handleChatClick}
               />
@@ -73,13 +92,13 @@ const Chat = () => {
               {selectedFriend ? (
                 <div className="ChatDetailInner">
                   {view === 'profile' ? (
-                    <ChattingFriendProfile friend={selectedFriend} onDelete={handleDeleteFriend} />
+                    <ChattingFriendProfile friend={selectedFriendInfo} onDelete={handleDeleteFriend} />
                   ) : view === 'chat' ? (
                     <ChatWindow friend={selectedFriend} />
                   ) : (
-                    creatures.map(creature => (
-                      <Creature key={creature.id} creature={creature} />
-                    ))
+                    <Creature 
+                      creature={{ id: creatureId, name: creatureName, daysTogether: togetherDay, level: level, exp: exp, image: image }} 
+                    />
                   )}
                 </div>
               ) : (
@@ -90,7 +109,7 @@ const Chat = () => {
           <Search />
         </div>
       </div>
-
+              
       {isModalOpen && (
         <div className="ChatModal">
           <div className="ChatModalContent">

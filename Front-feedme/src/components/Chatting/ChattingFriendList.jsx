@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMessage } from '@fortawesome/free-solid-svg-icons';
 import './ChattingFriendList.css';
 import '../../assets/font/Font.css';
-import myAvatar from '../../assets/images/test1.png';
 
 const ChattingFriendList = ({ friends, onFriendClick, onChatClick }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [activeFriendId, setActiveFriendId] = useState(null); 
+
+  const user = useSelector((state) => state.user);
 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
@@ -19,7 +21,7 @@ const ChattingFriendList = ({ friends, onFriendClick, onChatClick }) => {
   };
 
   const filteredFriends = friends.filter(friend =>
-    friend.name.toLowerCase().includes(searchTerm.toLowerCase())
+    friend.counterpartNickname.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -33,25 +35,30 @@ const ChattingFriendList = ({ friends, onFriendClick, onChatClick }) => {
       />
       <div className="ChatFriendList">
         <div key="my-avatar" className="ChatFriendItem">
-          <img src={myAvatar} alt="내 아바타" className="ChatFriendAvatar" />
+          <img src={user.image} alt="내 아바타" className="ChatFriendAvatar" />
           <div className="ChatFriendInfo">
-            <span onClick={() => onFriendClick({ id: 'my-avatar', name: '내 아바타', avatar: myAvatar })} className="ChatFriendName">내 아바타</span>
+            <span onClick={() => onFriendClick({ id: 'my-avatar', name: user.nickname, avatar: user.image })} className="ChatFriendName">
+              {user.nickname}
+            </span>
             <button
-              onClick={() => handleChatButtonClick({ id: 'my-avatar', name: '내 아바타', avatar: myAvatar })}
+              onClick={() => handleChatButtonClick({ id: 'my-avatar', name: user.nickname, avatar: user.image })}
               className={`ChatIconButton ${activeFriendId === 'my-avatar' ? 'active' : ''}`}
             >
               <FontAwesomeIcon icon={faMessage} style={{ fontSize: '1.5rem' }} />
             </button>
           </div>
         </div>
+    
         {filteredFriends.map(friend => (
-          <div key={friend.id} className="ChatFriendItem">
-            <img src={friend.avatar} alt={friend.name} className="ChatFriendAvatar" />
+          <div key={friend.friendId} className="ChatFriendItem">
+            <img src={friend.avatar} alt={friend.counterpartNickname} className="ChatFriendAvatar" />
             <div className="ChatFriendInfo">
-              <span onClick={() => onFriendClick(friend)} className="ChatFriendName">{friend.name}</span>
+              <span onClick={() => onFriendClick(friend)} className="ChatFriendName">
+                {friend.counterpartNickname}
+              </span>
               <button
                 onClick={() => handleChatButtonClick(friend)}
-                className={`ChatIconButton ${activeFriendId === friend.id ? 'active' : ''}`}
+                className={`ChatIconButton ${activeFriendId === friend.friendId ? 'active' : ''}`}
               >
                 <FontAwesomeIcon icon={faMessage} style={{ fontSize: '1.5rem' }} />
               </button>
