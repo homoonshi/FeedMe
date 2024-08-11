@@ -6,6 +6,7 @@ import java.util.List;
 
 @Data
 public class FeedCommentDTO {
+    private int member_id;
     private int feedComentId;
     private String nickname;
     private String comment;

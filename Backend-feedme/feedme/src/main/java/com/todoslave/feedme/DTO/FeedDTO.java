@@ -8,11 +8,14 @@ import java.util.List;
 @Data
 public class FeedDTO {
         private int feedId;
+        private int member_id;
         private String nickname;
         private String img;
         private String caption;
         private LocalDateTime lastCreateTime;
         private int likes;
+
+
         private List<FeedCommentDTO> comments;
     }
 
