@@ -51,8 +51,9 @@ spring:
 
   data:
     mongodb:
-      uri: mongodb://mongodb://i11b104.p.ssafy.io:27017/feedme  # MongoDB 컨테이너에 연결
-
+      uri: mongodb://i11b104.p.ssafy.io:27017/feedme  # MongoDB 컨테이너에 연결
+      database: feedme
+      
   jpa:
     hibernate:
       ddl-auto: update
