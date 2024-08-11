@@ -28,7 +28,7 @@ public class DiaryServiceImpl implements DiaryService {
 
     private DiaryResponseDTO convertToDTO(PictureDiary diary) {
         DiaryResponseDTO dto = new DiaryResponseDTO();
-        dto.setContent(diary.getContent());
+//        dto.setContent(diary.getContent());
         dto.setCreatedAt(diary.getCreatedAt());
         dto.setDiaryImg("http://localhost:8080/image/pictureDiary/"+ SecurityUtil.getCurrentUserId() +"_"+diary.getCreatedAt());
         return dto;
