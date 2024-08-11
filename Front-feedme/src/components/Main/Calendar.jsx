@@ -55,7 +55,7 @@ function ReactCalendar() {
   useEffect(() => {
     const showTodosInCalendar = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/todos/calendar`, {
+        const response = await axios.get(`https://i11b104.p.ssafy.io/api/todos/calendar`, {
           params: {
             date: currentMonth
           }

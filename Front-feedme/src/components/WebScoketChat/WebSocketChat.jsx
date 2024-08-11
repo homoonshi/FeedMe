@@ -25,7 +25,7 @@ const ChatRoom = () => {
   const connect = () => {
     if (stompClient.current) return; // 이미 연결되어 있는지 확인
 
-    const socket = new SockJS('http://localhost:8080/ws/friendChat');
+    const socket = new SockJS('https://i11b104.p.ssafy.io/api/ws/friendChat');
     stompClient.current = new Client({
         webSocketFactory: () => socket,
         debug: (str) => {
