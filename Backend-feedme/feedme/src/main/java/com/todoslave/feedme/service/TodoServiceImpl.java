@@ -229,20 +229,18 @@ public class TodoServiceImpl implements TodoService {
   @Override
   public boolean AllcompleteTodo(TodoRequestDTO todoRequestDTO) {
     LocalDate date = todoRequestDTO.getDate();
-    System.out.println("일");
 
     //만약에 완료를 이미 했다면
     if(!dayOffService.isActionAllowed(SecurityUtil.getCurrentUserId(),date)){
       return false;
     }
 
-    System.out.println("이");
     //완료처리
     DayOff dayOff = new DayOff();
     dayOff.setEndDay(date);
     dayOff.setMember(SecurityUtil.getCurrentMember());
     dayOffService.saveDayOff(dayOff);
-    System.out.println("삼");
+
     //일정 끝내기
     List<Todo> todoList = todoRepository.findByMemberIdAndCreatedAt(SecurityUtil.getCurrentUserId(),date);
     //크리쳐 일정 끝내기
@@ -250,6 +248,7 @@ public class TodoServiceImpl implements TodoService {
 
 
     //일기 써달라고 하기
+    //요청할때 날자랑 내 id 줘야함
     // AI 요청!!!!!!!!!!!!!!!!!!!!!
 
 
