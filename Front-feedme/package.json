@@ -20,6 +20,7 @@
     "axios": "^1.7.3",
     "date-fns": "^3.6.0",
     "dayjs": "^1.11.12",
+    "event-source-polyfill": "^1.0.31",
     "framer-motion": "^11.3.12",
     "http-proxy-middleware": "^3.0.0",
     "qs": "^6.12.3",

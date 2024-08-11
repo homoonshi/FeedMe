@@ -1,4 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
+import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+dayjs.extend(customParseFormat);
 
 const initialState = {
   notifications : [],
@@ -6,7 +9,7 @@ const initialState = {
   isSettingsMode: false,
   isSwitchOn: true,
   isRequestMode: false,
-  alarmTime: '00', // 초기 알림 시간 설정
+  alarmTime: dayjs('00', 'HH'), // 초기 알림 시간 설정
 
 
 }

@@ -21,12 +21,11 @@ const format = 'HH';
 const NotificationModal = ({ onClose }) => {
   const dispatch = useDispatch();
   const { notifications, requests, isSettingsMode, isSwitchOn, isRequestMode, alarmTime } = useSelector((state) => state.alarm);
-  const [selectedTime, setSelectedTime] = useState(dayjs(alarmTime, format));
   const {token} = useSelector((state) => state.auth);
 
   // SSE 연결 설정
   useEffect(() => {
-    const eventSource = new EventSource('/notifications/subscribe');
+    const eventSource = new EventSource('http://localhost:8080/subscribe/alarm');
 
     eventSource.addEventListener('alarm', function (event) {
       const newNotification = JSON.parse(event.data);
@@ -46,7 +45,7 @@ const NotificationModal = ({ onClose }) => {
     return () => {
       eventSource.close();
     };
-  }, [dispatch]);
+  }, []);
 
   const handleDelete = (index) => {
     const newNotifications = notifications.filter((_, i) => i !== index);
@@ -82,8 +81,7 @@ const NotificationModal = ({ onClose }) => {
       const formattedTime = time.format('HH');
       const intAlarmTime = parseInt(formattedTime, 10);
   
-      setSelectedTime(time);
-      dispatch(setAlarmTime(formattedTime));
+      dispatch(setAlarmTime(time));
 
       try {
         await axios.post('http://localhost:8080/alarms/time', { 
@@ -148,7 +146,7 @@ const NotificationModal = ({ onClose }) => {
               <Switch {...label} checked={isSwitchOn} onChange={handleSwitchChange} color="secondary" />
             </div>
             <TimePicker
-              value={selectedTime} // 현재 선택된 시간
+              value={alarmTime} // 현재 선택된 시간
               format={format}
               disabled={!isSwitchOn}
               showMinute={false}
