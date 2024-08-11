@@ -51,8 +51,10 @@ spring:
 
   data:
     mongodb:
-      uri: mongodb://i11b104.p.ssafy.io:27017/feedme  # MongoDB 컨테이너에 연결
+      host: localhost
+      port: 27017
       database: feedme
+      uri: mongodb://localhost:27017/feedme
       
   jpa:
     hibernate:
