@@ -125,7 +125,7 @@ public class FeedServiceImpl implements FeedService{
         FeedDTO feedDTO = new FeedDTO();
         feedDTO.setFeedId(feed.getId());
         feedDTO.setNickname(feed.getNickname());
-        feedDTO.setImg("http://localhost:8080/image/pictureDiary/"+SecurityUtil.getCurrentUserId()+"_"+feed.getDiaryDay()); // 이미지 처리 로직 필요
+        feedDTO.setImg("https://i11b104.p.ssafy.io/api/image/pictureDiary/"+SecurityUtil.getCurrentUserId()+"_"+feed.getDiaryDay()); // 이미지 처리 로직 필요
         feedDTO.setCaption(feed.getContent());
         feedDTO.setLastCreateTime(feed.getUpdatedAt());
         feedDTO.setLikes(feed.getLikeCount());
