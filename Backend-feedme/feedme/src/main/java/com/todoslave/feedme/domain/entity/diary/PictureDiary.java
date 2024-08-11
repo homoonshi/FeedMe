@@ -26,6 +26,11 @@ public class PictureDiary {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
+    //일기 내용
+    @Lob
+    @Column(name = "content", nullable = false, columnDefinition = "TEXT")
+    private String content;
+
     //==연관관계 메서드==//
     public void setMember(Member member) {
         this.member = member;
