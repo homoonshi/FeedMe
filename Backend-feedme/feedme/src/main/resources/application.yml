@@ -44,17 +44,18 @@ spring:
             userNameAttribute: id
 
   datasource:
-    url: jdbc:mysql://localhost:3306/feedme
+    url: jdbc:mysql://mysql:3306/feedme  # MySQL 컨테이너 이름 사용
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   data:
     mongodb:
-      host: localhost
+      host: mongodb  # MongoDB 컨테이너 이름 사용
       port: 27017
       database: feedme
-      uri: mongodb://localhost:27017/feedme
+      uri: mongodb://mongodb:27017/feedme
+
 
   jpa:
     hibernate:
@@ -73,7 +74,7 @@ logging:
         type: trace
 
 redis:
-  host: localhost
+  host: redis
   port: 6379
 
 jwt:
