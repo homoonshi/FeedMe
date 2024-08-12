@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FaAngleLeft, FaAngleRight, FaEllipsisH, FaHeart } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchFeedList, postComment, deleteComment, editComment, deleteFeed  } from '../../store/feedListSlice';
+import { fetchFeedList, postComment, deleteComment, editComment, deleteFeed, editFeed } from '../../store/feedListSlice';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { fetchUserData } from '../../store/userSlice';
 import './FeedList.css';
@@ -24,6 +24,8 @@ const FeedList = () => {
   const [editingComment, setEditingComment] = useState(null);
   const [editedComment, setEditedComment] = useState('');
   const [showOptions, setShowOptions] = useState(null);
+  const [isEditingFeed, setIsEditingFeed] = useState(false);
+  const [editedFeedContent, setEditedFeedContent] = useState('');
 
   useEffect(() => {
     if (feedListStatus === 'idle' && token) {
@@ -121,8 +123,26 @@ const FeedList = () => {
   };
 
   const handleContEdit = () => {
+    setIsEditingFeed(true);
+    setEditedFeedContent(feedList[currentIndex].caption);
+  };
 
-  }
+  const handleFeedCancel = () => {
+    setIsEditingFeed(false);
+    setEditedFeedContent('');
+    setShowOptions(null);
+  };
+
+  const handleFeedSave = () => {
+    const feedId = feedList[currentIndex].feedId;
+    dispatch(editFeed({ token, feedId, content: editedFeedContent }))
+      .then(() => {
+        setIsEditingFeed(false);
+        setShowOptions(null);
+        navigate(`?post=${currentIndex}`);
+        window.location.reload();
+      });
+  };
 
   const handleContDel = () => {
     const feedId = feedList[currentIndex].feedId;
@@ -148,8 +168,20 @@ const FeedList = () => {
             <span className="FeedListPhotoauthor">{feedList[currentIndex].nickname}</span>
             <span className="FeedListPhototime">{new Date(feedList[currentIndex].lastCreateTime).toLocaleString()}</span>
           </div>
-          <img src={feedList[currentIndex].img} alt="feed" className="FeedListImg" />
-          <p className="FeedListCaption">{feedList[currentIndex].caption}</p>
+          
+          {isEditingFeed ? (
+            <textarea
+              className="FeedEditTextarea"
+              value={editedFeedContent}
+              onChange={(e) => setEditedFeedContent(e.target.value)}
+            />
+          ) : (
+            <>
+              <img src={feedList[currentIndex].img} alt="feed" className="FeedListImg" />
+              <p className="FeedListCaption">{feedList[currentIndex].caption}</p>
+            </>
+          )}
+          
           <div className="FeedListPhotolikeSection">
             <FaHeart onClick={handleLikeClick} className="FeedListPhotolikeButton" />
             <span>{feedList[currentIndex].likes}</span>
@@ -159,14 +191,23 @@ const FeedList = () => {
                 <FaEllipsisH className="FeedListMyContent" onClick={() => handleShowOptions(currentIndex)} />
                 {showOptions === currentIndex && (
                   <div className="FeedListOptionsDropdown">
-                    <button onClick={() => handleContEdit}>수정</button>
-                    <button onClick={handleContDel}>삭제</button>
+                    {isEditingFeed ? (
+                      <>
+                        <button onClick={handleFeedSave}>저장</button>  
+                        <button onClick={handleFeedCancel}>취소</button>
+                      </>
+                    ) : (
+                      <>
+                        <button onClick={handleContEdit}>수정</button>
+                        <button onClick={handleContDel}>삭제</button>
+                      </>
+                    )}
                   </div>
                 )}
               </div>
             )}
+          </div>
         </div>
-      </div>
       )}
 
       <div className="FeedListCom">
