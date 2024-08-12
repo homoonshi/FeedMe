@@ -14,7 +14,7 @@ export const fetchFriendInfo = createAsyncThunk(
           Authorization: `${token}`,
         },
         params: {
-          counterpartNickname: "yebon",
+          counterpartNickname: counterpartNickname,
         }
       });
 
@@ -35,6 +35,7 @@ const friendInfoSlice = createSlice({
   initialState: {
     friendId: null,
     nickname: '',
+    creatureNickname: '',
     creatureImg: '',
     level: 0,
     exp: 0,
@@ -50,9 +51,10 @@ const friendInfoSlice = createSlice({
       })
       .addCase(fetchFriendInfo.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        const { friendId, nickname, creatureImg, level, exp, join } = action.payload;
+        const { friendId, nickname, creatureNickname, creatureImg, level, exp, join } = action.payload;
         state.friendId = friendId;
         state.nickname = nickname;
+        state.creatureNickname = creatureNickname;
         state.creatureImg = creatureImg;
         state.level = level;
         state.exp = exp;

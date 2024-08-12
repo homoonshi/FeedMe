@@ -18,7 +18,7 @@ const ChattingFriendProfile = ({ friend, onDelete }) => {
         onClick={() => onDelete(friend)}
       />
       
-      <p className="CFProfileName">{friend.nickname}</p>
+      <p className="CFProfileName">{friend.creatureNickname}</p>
       <p className="CFProfileterm">🤍 {friend.join}일째 함께하는 중</p>
       <img src={friend.creatureImg} alt={friend.nickname} className="CFProfileImage" /> 
       <div className="CFProfileInfo">
