@@ -43,6 +43,8 @@ public class FriendServiceImpl implements FriendService{
     FriendRepository friendRepository;
     @Autowired
     FriendRequestRepository friendRequestRepository;
+    @Autowired
+    private com.todoslave.feedme.imageUtil imageUtil;
 
 
     // 친구 요청
