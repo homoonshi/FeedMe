@@ -22,12 +22,6 @@ public class UserViewController {
         return "test";
     }
 
-    @GetMapping("/go")
-    public String go() {
-        return "https://i11b104.p.ssafy.io/api/oauth2/authorization/naver";
-    }
-
-
     @GetMapping("/testsite")
     public String testsite() {
         return "testsite";

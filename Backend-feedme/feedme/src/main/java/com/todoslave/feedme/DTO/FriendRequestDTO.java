@@ -1,8 +1,9 @@
 package com.todoslave.feedme.DTO;
 
+import lombok.Data;
 import lombok.Getter;
 
-@Getter
+@Data
 public class FriendRequestDTO {
 
   // 상대방 닉네임
