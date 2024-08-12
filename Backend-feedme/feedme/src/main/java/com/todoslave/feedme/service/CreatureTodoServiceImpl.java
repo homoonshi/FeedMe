@@ -8,7 +8,9 @@ import com.todoslave.feedme.domain.entity.mission.Mission;
 import com.todoslave.feedme.domain.entity.task.CreatureTodo;
 import com.todoslave.feedme.login.util.SecurityUtil;
 import com.todoslave.feedme.repository.CreatureTodoReposito;
+import com.todoslave.feedme.repository.DayOffRepository;
 import com.todoslave.feedme.repository.MissionRepository;
+import com.todoslave.feedme.repository.TodoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,9 @@ import java.util.Random;
 @Service
 @RequiredArgsConstructor
 public class CreatureTodoServiceImpl implements CreatureTodoService{
+
+    final private DayOffRepository dayOffRepository;
+
 
     @Autowired
     final private MissionRepository missionRepository;
@@ -73,13 +78,21 @@ public class CreatureTodoServiceImpl implements CreatureTodoService{
         return responseDTOList;
     }
 
+    //일정을 완료 했는지 안했는지 체크
+    public boolean isActionAllowed(int memberId, LocalDate date) {
+        return dayOffRepository.countByMemberIdAndEndDay(memberId, date) == 0;
+    }
+
     //DTO 변환
     private CreatureTodoResponseDTO toResponseDTO(CreatureTodo creatureTodo) {
+
+
         return CreatureTodoResponseDTO.builder()
                 .id(creatureTodo.getId())
                 .content(creatureTodo.getContent())
                 .createdAt(creatureTodo.getCreatedAt())
                 .isCompleted(creatureTodo.getIsCompleted())
+//                .diaryIsCompleted(!checked)  //그래서 역전
                 .build();
     }
 
@@ -139,6 +152,7 @@ public class CreatureTodoServiceImpl implements CreatureTodoService{
         LocalDate date = creatureTodoDailyRequestDTO.getDate();
         //멤버
         int memberId = SecurityUtil.getCurrentUserId();
+
         //누른 버튼
         if(creatureTodoDailyRequestDTO.getNext() < 0 ){ //-1 일때
             date.minusDays(1);
