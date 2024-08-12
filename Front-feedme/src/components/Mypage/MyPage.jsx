@@ -86,10 +86,10 @@ const MyPage = () => {
   const { nickname, email, brithday, creatureId, creatureName, exp, level, image, togetherDay, status, error } = user;
 
   useEffect(() => {
-    if (status === 'idle' && token) {
+    if (token) {
       dispatch(fetchUserData(token));
     }
-  }, [status, dispatch, token]);
+  }, [dispatch, token]);
 
   const [isLogoutModalOpen, setLogoutModalOpen] = useState(false);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
