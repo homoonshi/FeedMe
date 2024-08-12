@@ -41,6 +41,7 @@ public class SecurityConfig {
 //                .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 세션관리 정책을 STATELESS(세션이 있으면 쓰지도 않고, 없으면 만들지도 않는다)
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/token/**").permitAll()
+                        .requestMatchers("/api/**").permitAll()
                         .requestMatchers("/", "/css/**","/images/**","/js/**","/favicon.ico","/h2-console/**").permitAll()
                         .requestMatchers("/login/oauth2/code/**","/login/**","/testsite" ,"/signup", "/user", "/v3/api-docs/**", "/swagger-ui/**","/creature", "/swagger-ui.html", "/users/**").permitAll() // 유저 설정
                         .requestMatchers("/ws/**").permitAll()
@@ -70,6 +71,7 @@ public class SecurityConfig {
         configuration.addAllowedMethod("*"); // 모든 HTTP 메서드 허용
         configuration.addAllowedHeader("*"); // 모든 헤더 허용
         configuration.setAllowCredentials(true); // 자격 증명 허용 설정
+        configuration.addAllowedOrigin("https://i11b104.p.ssafy.io"); // 특정 도메인 허용
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration); // 모든 경로에 대해 CORS 구성 적용
