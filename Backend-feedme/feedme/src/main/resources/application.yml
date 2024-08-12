@@ -79,3 +79,6 @@ redis:
 jwt:
   issuer: todoslave@ssafy.com
   secret_key: ${JWT_SECRET_KEY}
+
+server:
+  port: 8085
