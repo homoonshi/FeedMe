@@ -72,6 +72,23 @@ export const editComment = createAsyncThunk(
   }
 );
 
+// 게시글 삭제
+export const deleteFeed = createAsyncThunk(
+  'feedList/deleteFeed',
+  async ({ token, feedId }, { rejectWithValue }) => {
+    try {
+      await axios.delete(`http://localhost:8080/feed/${feedId}`, {
+        headers: {
+          Authorization: `${token}`,
+        },
+      });
+      return feedId;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 const feedListSlice = createSlice({
   name: 'feedList',
   initialState: {
@@ -117,6 +134,10 @@ const feedListSlice = createSlice({
             feed.comments[commentIndex] = updatedComment;
           }
         });
+      })
+      .addCase(deleteFeed.fulfilled, (state, action) => {
+        const feedId = action.payload;
+        state.feeds = state.feeds.filter(feed => feed.feedId !== feedId);
       });
     },
   });

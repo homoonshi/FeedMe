@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FaAngleLeft, FaAngleRight, FaEllipsisH, FaHeart } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchFeedList, postComment, deleteComment, editComment } from '../../store/feedListSlice';
+import { fetchFeedList, postComment, deleteComment, editComment, deleteFeed  } from '../../store/feedListSlice';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { fetchUserData } from '../../store/userSlice';
 import './FeedList.css';
@@ -125,9 +125,16 @@ const FeedList = () => {
   }
 
   const handleContDel = () => {
+    const feedId = feedList[currentIndex].feedId;
+    dispatch(deleteFeed({ token, feedId }))
+      .then(() => {
+        setCurrentIndex(0);
+        setShowOptions(null);
+        // console.log("삭제성공")
+      });
+  };
 
-  }
-
+  // console.log(feedList)
 
   return (
     <div className="FeedList">
@@ -139,21 +146,21 @@ const FeedList = () => {
         <div className="FeedListPhoto">
           <div className="FeedListPhotoHeader">
             <span className="FeedListPhotoauthor">{feedList[currentIndex].nickname}</span>
-            <span className="FeedListPhototime">{new Date(feedList[currentIndex].time).toLocaleString()}</span>
+            <span className="FeedListPhototime">{new Date(feedList[currentIndex].lastCreateTime).toLocaleString()}</span>
           </div>
           <img src={feedList[currentIndex].img} alt="feed" className="FeedListImg" />
           <p className="FeedListCaption">{feedList[currentIndex].caption}</p>
           <div className="FeedListPhotolikeSection">
             <FaHeart onClick={handleLikeClick} className="FeedListPhotolikeButton" />
             <span>{feedList[currentIndex].likes}</span>
-            
+    
             {feedList[currentIndex].email === email && (
               <div className="FeedListMyContentWrapper">
                 <FaEllipsisH className="FeedListMyContent" onClick={() => handleShowOptions(currentIndex)} />
                 {showOptions === currentIndex && (
                   <div className="FeedListOptionsDropdown">
-                    <button onClick={() => handleContEdit(currentIndex)}>수정</button>
-                    <button onClick={() => handleContDel(currentIndex)}>삭제</button>
+                    <button onClick={() => handleContEdit}>수정</button>
+                    <button onClick={handleContDel}>삭제</button>
                   </div>
                 )}
               </div>
