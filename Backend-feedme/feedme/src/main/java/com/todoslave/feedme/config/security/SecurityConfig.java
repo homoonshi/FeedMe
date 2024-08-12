@@ -42,7 +42,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/token/**").permitAll()
                         .requestMatchers("/", "/css/**","/images/**","/js/**","/favicon.ico","/h2-console/**").permitAll()
-                        .requestMatchers("/login/oauth2/code/**","/login/**","/testsite" ,"/signup", "/user", "/v3/api-docs/**", "/swagger-ui/**","/creature", "/swagger-ui.html", "/users/**").permitAll() // 유저 설정
+                        .requestMatchers("/go","/api/login/oauth2/code/**","/login/**","/testsite" ,"/signup", "/user", "/v3/api-docs/**", "/swagger-ui/**","/creature", "/swagger-ui.html", "/users/**").permitAll() // 유저 설정
+
                         .requestMatchers("/ws/**").permitAll()
                         .anyRequest().authenticated()
                 )
@@ -65,7 +66,9 @@ public class SecurityConfig {
     @Bean
         // CORS 설정
     CorsConfigurationSource corsConfigurationSource() {
+
         CorsConfiguration configuration = new CorsConfiguration();
+//        configuration.addAllowedOrigin("https://yourdomain.com");
         configuration.addAllowedOriginPattern("*");
         configuration.addAllowedMethod("*"); // 모든 HTTP 메서드 허용
         configuration.addAllowedHeader("*"); // 모든 헤더 허용

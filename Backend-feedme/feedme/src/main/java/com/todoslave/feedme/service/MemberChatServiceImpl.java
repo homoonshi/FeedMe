@@ -75,7 +75,7 @@ public class MemberChatServiceImpl implements MemberChatService{
       Creature creature = creatureRepository.findByMemberId(counterPartId);
 
       chatResponse.setCreatureImage(
-          "http://localhost:8080/image/creature/"+creature.getMember().getId()+"_"+creature.getLevel());
+          "https://i11b104.p.ssafy.io/api/image/creature/"+creature.getMember().getId()+"_"+creature.getLevel());
       MemberChatRoomChecked checked = memberChatRoomCheckedRepository.findByMemberChatRoomIdAndMemberId(room.getId(),memberId);
       chatResponse.setIsChecked(checked.getIsChecked());
 
