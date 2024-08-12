@@ -12,7 +12,7 @@ const ChatRoom = () => {
   const stompClient = useRef(null);
   const isSubscribed = useRef(false);
 
-  const roomId = "66a6df5265d8bc6290ec22ba";
+  const roomId = "66b991fae6c36f4633786c63";
   const limit = 10;
 
   useEffect(() => {
@@ -25,7 +25,7 @@ const ChatRoom = () => {
   const connect = () => {
     if (stompClient.current) return; // 이미 연결되어 있는지 확인
 
-    const socket = new SockJS('http://localhost:8080/ws/friendChat');
+    const socket = new SockJS('https://i11b104.p.ssafy.io/api/ws/friendChat');
     stompClient.current = new Client({
         webSocketFactory: () => socket,
         debug: (str) => {
@@ -115,12 +115,17 @@ const ChatRoom = () => {
 
   const showMessage = (message) => {
     console.log("Received message:", message);  // 메시지가 올바르게 도착하는지 확인
-    setMessages((prevMessages) => [...prevMessages, message]);
+    
+    // message의 내용이 이중으로 직렬화된 JSON이므로 다시 파싱
+    const parsedMessage = JSON.parse(message.message);
+    
+    setMessages((prevMessages) => [...prevMessages, parsedMessage]);
+    
     if (messageContainerRef.current) {
       messageContainerRef.current.scrollTop = messageContainerRef.current.scrollHeight;
     }
-  };
-  
+};
+
 
   return (
     <div>

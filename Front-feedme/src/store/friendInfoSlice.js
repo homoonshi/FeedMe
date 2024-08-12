@@ -9,7 +9,7 @@ export const fetchFriendInfo = createAsyncThunk(
 
       const response = await axios({
         method: 'get',
-        url: `http://localhost:8080/friends/info`, 
+        url: `https://i11b104.p.ssafy.io/api/friends/info`, 
         headers: {
           Authorization: `${token}`,
         },

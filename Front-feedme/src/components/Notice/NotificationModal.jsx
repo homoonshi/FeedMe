@@ -25,7 +25,7 @@ const NotificationModal = ({ onClose }) => {
 
   // SSE 연결 설정
   useEffect(() => {
-    const eventSource = new EventSource('http://localhost:8080/subscribe/alarm');
+    const eventSource = new EventSource('https://i11b104.p.ssafy.io/api/subscribe/alarm');
 
     eventSource.addEventListener('alarm', function (event) {
       const newNotification = JSON.parse(event.data);
@@ -55,7 +55,7 @@ const NotificationModal = ({ onClose }) => {
   const handleReject = (index) => {
     // 서버에서 요청을 거절하기 위한 API 호출
     const requestId = requests[index].id;
-    axios.post(`http://localhost:8080/friends/reject/${requestId}`)
+    axios.post(`https://i11b104.p.ssafy.io/api/friends/reject/${requestId}`)
       .then(() => {
         dispatch(removeRequests(index));
       })
@@ -67,7 +67,7 @@ const NotificationModal = ({ onClose }) => {
   const handleAccept = (index) => {
     // 서버에서 요청을 수락하기 위한 API 호출
     const requestId = requests[index].id;
-    axios.post(`http://localhost:8080/friends/accept/${requestId}`)
+    axios.post(`https://i11b104.p.ssafy.io/api/friends/accept/${requestId}`)
       .then(() => {
         dispatch(addRequests(index));
       })
@@ -84,7 +84,7 @@ const NotificationModal = ({ onClose }) => {
       dispatch(setAlarmTime(time));
 
       try {
-        await axios.post('http://localhost:8080/alarms/time', { 
+        await axios.post('https://i11b104.p.ssafy.io/api/alarms/time', { 
           alarmTime: intAlarmTime 
         },
         {
