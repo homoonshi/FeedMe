@@ -123,6 +123,15 @@ public class FeedServiceImpl implements FeedService{
 
     private FeedDTO convertToFeedDTO(Feed feed) {
         FeedDTO feedDTO = new FeedDTO();
+
+        FeedLike existingFeedLike = feedLikeRepository.findByMemberAndFeed(SecurityUtil.getCurrentMember(), feed);
+
+        if (existingFeedLike != null) {
+            feedDTO.setMyLike(false);
+        }else {
+            feedDTO.setMyLike(true);
+        }
+
         feedDTO.setEmail(feed.getMember().getEmail());
         feedDTO.setFeedId(feed.getId());
         feedDTO.setNickname(feed.getNickname());
@@ -130,6 +139,7 @@ public class FeedServiceImpl implements FeedService{
         feedDTO.setCaption(feed.getContent());
         feedDTO.setLastCreateTime(feed.getUpdatedAt());
         feedDTO.setLikes(feed.getLikeCount());
+
         feedDTO.setComments(feed.getFeedComments().stream()
                 .map(this::convertToCommentDTO)
                 .collect(Collectors.toList()));

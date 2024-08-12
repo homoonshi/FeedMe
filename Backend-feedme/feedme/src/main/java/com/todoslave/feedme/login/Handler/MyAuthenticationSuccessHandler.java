@@ -59,7 +59,7 @@ public class MyAuthenticationSuccessHandler extends SimpleUrlAuthenticationSucce
 //            response.setHeader("Authorization", "Bearer " + token.getAccessToken());
 
             // 크리쳐 존재 여부를 쿼리스트링에 담는 url을 만들어준다.
-            String targetUrl = UriComponentsBuilder.fromUriString("http://localhost:3000/LoginLoding")
+            String targetUrl = UriComponentsBuilder.fromUriString("https://i11b104.p.ssafy.io/LoginLoding")
                     .queryParam("hasCreature", hasCreature)
                     .queryParam("accessToken", token.getAccessToken())
                     .build()
@@ -72,7 +72,7 @@ public class MyAuthenticationSuccessHandler extends SimpleUrlAuthenticationSucce
         } else {
 
             // 회원이 존재하지 않을경우, 서비스 제공자와 email을 쿼리스트링으로 전달하는 url을 만들어준다.
-            String targetUrl = UriComponentsBuilder.fromUriString("http://localhost:3000/Signup")
+            String targetUrl = UriComponentsBuilder.fromUriString("https://i11b104.p.ssafy.io/Signup")
                     .queryParam("email", (String) oAuth2User.getAttribute("email"))
                     .queryParam("provider", provider)
                     .build()

@@ -14,7 +14,7 @@ public class FeedDTO {
         private String caption;
         private LocalDateTime lastCreateTime;
         private int likes;
-
+        private boolean myLike;
 
         private List<FeedCommentDTO> comments;
     }
