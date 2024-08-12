@@ -80,6 +80,11 @@ jwt:
   issuer: todoslave@ssafy.com
   secret_key: ${JWT_SECRET_KEY}
 
+openai:
+  model: "gpt-3.5-turbo"
+  api:
+    key: "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"
+    url: "https://api.openai.com/v1/chat/completions"
 
 #spring:
 #  application:

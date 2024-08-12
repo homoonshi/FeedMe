@@ -126,6 +126,8 @@ public class MemberServiceImpl implements MemberService {
                 continue;
             }
 
+
+
             if (friendService.isFriend(member.getId(), SecurityUtil.getCurrentUserId())) {
                 mem.setFriend(true);
             } else {
