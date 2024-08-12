@@ -136,13 +136,15 @@ public class TodoServiceImpl implements TodoService {
     YearMonth yearMonth = YearMonth.of(year, month);
     LocalDate firstDay = yearMonth.atDay(1);
     LocalDate lastDay = yearMonth.atEndOfMonth();
-
+    //리스트 만들고
     List<TodoCalendarResponseDTO> todoCounts = new ArrayList<>();
 
+    //1~31일까지 쭉 불러와
     for (LocalDate date = firstDay; !date.isAfter(lastDay); date = date.plusDays(1)) {
 
       TodoCalendarResponseDTO todoCalendarResponseDTO = new TodoCalendarResponseDTO();
 
+      //안한거 갯수 더라기
       long inCompleted = todoRepository.countTodoByDateAndIsCompleted(date, 0)+creatureTodoReposito.countByCreatedAtAndIsCompleted(date,0);
 
       todoCalendarResponseDTO.setInCompleted((int)inCompleted);
