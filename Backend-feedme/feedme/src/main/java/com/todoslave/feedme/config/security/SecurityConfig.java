@@ -42,7 +42,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/token/**").permitAll()
                         .requestMatchers("/", "/css/**","/images/**","/js/**","/favicon.ico","/h2-console/**").permitAll()
-                        .requestMatchers("/api/login/oauth2/code/**","/api/login/**","/api/testsite" ,"/api/signup", "/api/user", "/api/v3/api-docs/**", "/api/swagger-ui/**","/api/creature", "/api/swagger-ui.html", "/api/users/**").permitAll() // 유저 설정
+                        .requestMatchers("/login/oauth2/code/**","/login/**","/testsite" ,"/signup", "/user", "/v3/api-docs/**", "/swagger-ui/**","/creature", "/swagger-ui.html", "/users/**").permitAll() // 유저 설정
                         .requestMatchers("/ws/**").permitAll()
                         .anyRequest().authenticated()
                 )
