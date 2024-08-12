@@ -33,7 +33,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        http    .httpBasic(HttpBasicConfigurer::disable)
+        http.httpBasic(HttpBasicConfigurer::disable)
                 .csrf(CsrfConfigurer::disable)
                 .cors(Customizer.withDefaults())
 
@@ -41,8 +41,9 @@ public class SecurityConfig {
 //                .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 세션관리 정책을 STATELESS(세션이 있으면 쓰지도 않고, 없으면 만들지도 않는다)
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/token/**").permitAll()
-                        .requestMatchers("/", "/css/**","/images/**","/js/**","/favicon.ico","/h2-console/**").permitAll()
-                        .requestMatchers("/login/oauth2/code/**","/login/**","/testsite" ,"/signup", "/user", "/v3/api-docs/**", "/swagger-ui/**","/creature", "/swagger-ui.html", "/users/**").permitAll() // 유저 설정
+                        .requestMatchers("/", "/css/**", "/images/**", "/js/**", "/favicon.ico", "/h2-console/**").permitAll()
+                        .requestMatchers("/login/oauth2/code/**", "/login/**", "/testsite", "/signup", "/user", "/v3/api-docs/**",
+                                "/swagger-ui/**", "/creature", "/swagger-ui.html", "/users/**").permitAll() // 유저 설정
                         .requestMatchers("/ws/**").permitAll()
                         .anyRequest().authenticated()
                 )
@@ -54,10 +55,9 @@ public class SecurityConfig {
                 );
 
 
-
         // JWT 인증 필터를 UsernamePasswordAuthenticationFilter 앞에 추가한다.
         return http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-                   .addFilterBefore(jwtExceptionFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtExceptionFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
@@ -75,4 +75,4 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", configuration); // 모든 경로에 대해 CORS 구성 적용
         return source;
     }
-    }
+}

@@ -136,13 +136,15 @@ public class TodoServiceImpl implements TodoService {
     YearMonth yearMonth = YearMonth.of(year, month);
     LocalDate firstDay = yearMonth.atDay(1);
     LocalDate lastDay = yearMonth.atEndOfMonth();
-
+    //리스트 만들고
     List<TodoCalendarResponseDTO> todoCounts = new ArrayList<>();
 
+    //1~31일까지 쭉 불러와
     for (LocalDate date = firstDay; !date.isAfter(lastDay); date = date.plusDays(1)) {
 
       TodoCalendarResponseDTO todoCalendarResponseDTO = new TodoCalendarResponseDTO();
 
+      //안한거 갯수 더라기
       long inCompleted = todoRepository.countTodoByDateAndIsCompleted(date, 0)+creatureTodoReposito.countByCreatedAtAndIsCompleted(date,0);
 
       todoCalendarResponseDTO.setInCompleted((int)inCompleted);
@@ -229,20 +231,18 @@ public class TodoServiceImpl implements TodoService {
   @Override
   public boolean AllcompleteTodo(TodoRequestDTO todoRequestDTO) {
     LocalDate date = todoRequestDTO.getDate();
-    System.out.println("일");
 
     //만약에 완료를 이미 했다면
     if(!dayOffService.isActionAllowed(SecurityUtil.getCurrentUserId(),date)){
       return false;
     }
 
-    System.out.println("이");
     //완료처리
     DayOff dayOff = new DayOff();
     dayOff.setEndDay(date);
     dayOff.setMember(SecurityUtil.getCurrentMember());
     dayOffService.saveDayOff(dayOff);
-    System.out.println("삼");
+
     //일정 끝내기
     List<Todo> todoList = todoRepository.findByMemberIdAndCreatedAt(SecurityUtil.getCurrentUserId(),date);
     //크리쳐 일정 끝내기
@@ -250,6 +250,7 @@ public class TodoServiceImpl implements TodoService {
 
 
     //일기 써달라고 하기
+    //요청할때 날자랑 내 id 줘야함
     // AI 요청!!!!!!!!!!!!!!!!!!!!!
 
 
