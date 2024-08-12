@@ -44,17 +44,22 @@ spring:
             userNameAttribute: id
 
   datasource:
-    url: jdbc:mysql://localhost:3306/feedme
+    url: jdbc:mysql://mysql:3306/feedme  # MySQL 컨테이너 이름 사용
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   data:
     mongodb:
-      host: localhost
+      host: mongodb  # MongoDB 컨테이너 이름 사용
       port: 27017
       database: feedme
-      uri: mongodb://localhost:27017/feedme
+      uri: mongodb://mongodb:27017/feedme
+
+  redis:
+    host: redis
+    port: 6379
+
 
   jpa:
     hibernate:
@@ -72,10 +77,6 @@ logging:
         SQL: debug
         type: trace
 
-redis:
-  host: localhost
-  port: 6379
-
 jwt:
   issuer: todoslave@ssafy.com
   secret_key: ${JWT_SECRET_KEY}
@@ -86,6 +87,8 @@ openai:
     key: "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"
     url: "https://api.openai.com/v1/chat/completions"
 
+server:
+  port: 8085
 #spring:
 #  application:
 #    name: feedme
