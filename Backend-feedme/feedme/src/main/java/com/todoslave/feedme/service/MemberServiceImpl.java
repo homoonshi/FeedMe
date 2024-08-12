@@ -126,16 +126,16 @@ public class MemberServiceImpl implements MemberService {
                 continue;
             }
 
+
+
             if (friendService.isFriend(member.getId(), SecurityUtil.getCurrentUserId())) {
                 mem.setFriend(true);
             } else {
                 mem.setFriend(false);
             }
-//            //친구신청을 보냈는지 체크
-//            if(requestRepository.)
 
             // 친구 신청을 보냈는지 체크
-            Optional<FriendRequest> friendRequest = friendRequestRepository.findByMemberIdAndCounterpartId(SecurityUtil.getCurrentMember(), member);
+            Optional<FriendRequest> friendRequest = friendRequestRepository.findByMember_IdAndCounterpartId_Id(SecurityUtil.getCurrentUserId(), member.getId());
             mem.setRequested(friendRequest.isPresent());
 
             memberSearchResponse.add(mem);
@@ -185,7 +185,7 @@ public class MemberServiceImpl implements MemberService {
         Creature creature = member.getCreature();
         int creatureLevel = creature.getLevel();
         int creatureId = creature.getId();
-        return "https://i11b104.p.ssafy.io/api/image/creature/" + creatureId + "_" + creatureLevel;
+        return "https://i11b104.p.ssafy.io/image/creature/" + creatureId + "_" + creatureLevel;
     }
 }
 

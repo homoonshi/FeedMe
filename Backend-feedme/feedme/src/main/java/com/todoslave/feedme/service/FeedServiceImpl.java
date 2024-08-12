@@ -112,7 +112,7 @@ public class FeedServiceImpl implements FeedService{
     public List<FeedDTO> getRecentFeeds() {
         LocalDateTime thirtyDaysAgo = LocalDateTime.now().minusDays(30);
         List<Feed> recentFeeds = feedRepository.findRecentFeeds(thirtyDaysAgo);
-        // 친구껏만 가져오는 뭔가!!!
+        // 친구껏만 feed오는 뭔가!!!
 
        //
 
@@ -123,12 +123,23 @@ public class FeedServiceImpl implements FeedService{
 
     private FeedDTO convertToFeedDTO(Feed feed) {
         FeedDTO feedDTO = new FeedDTO();
+
+        FeedLike existingFeedLike = feedLikeRepository.findByMemberAndFeed(SecurityUtil.getCurrentMember(), feed);
+
+        if (existingFeedLike != null) {
+            feedDTO.setMyLike(false);
+        }else {
+            feedDTO.setMyLike(true);
+        }
+
+        feedDTO.setEmail(feed.getMember().getEmail());
         feedDTO.setFeedId(feed.getId());
         feedDTO.setNickname(feed.getNickname());
-        feedDTO.setImg("https://i11b104.p.ssafy.io/api/image/pictureDiary/"+SecurityUtil.getCurrentUserId()+"_"+feed.getDiaryDay()); // 이미지 처리 로직 필요
+        feedDTO.setImg("https://i11b104.p.ssafy.io/image/pictureDiary/"+SecurityUtil.getCurrentUserId()+"_"+feed.getDiaryDay()); // 이미지 처리 로직 필요
         feedDTO.setCaption(feed.getContent());
         feedDTO.setLastCreateTime(feed.getUpdatedAt());
         feedDTO.setLikes(feed.getLikeCount());
+
         feedDTO.setComments(feed.getFeedComments().stream()
                 .map(this::convertToCommentDTO)
                 .collect(Collectors.toList()));
@@ -141,6 +152,7 @@ public class FeedServiceImpl implements FeedService{
         commentDTO.setNickname(comment.getMember().getNickname());
         commentDTO.setComment(comment.getContent());
         commentDTO.setTime(comment.getCreatedAt().toString());
+        commentDTO.setEmail(comment.getMember().getEmail());
         return commentDTO;
     }
 
@@ -148,7 +160,7 @@ public class FeedServiceImpl implements FeedService{
     public FeedResponseDTO convertToDTO(Feed feed) {
         FeedResponseDTO dto = new FeedResponseDTO();
         dto.setId(feed.getId());
-        dto.setImg("http://localhost:8080/image/pictureDiary/"+SecurityUtil.getCurrentUserId()+"_"+feed.getDiaryDay()); // 이미지 URL이 엔티티에 없다면 필요에 따라 설정
+        dto.setImg("https://i11b104.p.ssafy.io/image/pictureDiary/"+SecurityUtil.getCurrentUserId()+"_"+feed.getDiaryDay()); // 이미지 URL이 엔티티에 없다면 필요에 따라 설정
         dto.setContent(feed.getContent());
         dto.setAuthor(feed.getNickname());
         dto.setLikeCnt(String.valueOf(feed.getLikeCount()));

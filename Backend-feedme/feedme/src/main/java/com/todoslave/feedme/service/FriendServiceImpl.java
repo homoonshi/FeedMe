@@ -44,6 +44,7 @@ public class FriendServiceImpl implements FriendService{
     @Autowired
     FriendRequestRepository friendRequestRepository;
 
+
     // 친구 요청
     @Override
     public void requestFriend(FriendRequestDTO friendRequestDTO) {
@@ -83,6 +84,7 @@ public class FriendServiceImpl implements FriendService{
         response.setNickname(member.getNickname());
 
         CreatureInfoResponseDTO creatureInfoResponseDTO = creatureService.creatureInfo(member);
+        response.setCreatureNickname(creatureInfoResponseDTO.getName());
         response.setCreatureImg(creatureInfoResponseDTO.getImg());
         response.setLevel(creatureInfoResponseDTO.getLevel());
         response.setExp(creatureInfoResponseDTO.getExp());
@@ -106,11 +108,20 @@ public class FriendServiceImpl implements FriendService{
             FriendResponseDTO friendResponseDTO = new FriendResponseDTO();
             friendResponseDTO.setFriendId(friend.getId());
             friendResponseDTO.setCounterpartNickname(counterpart.getNickname());
+//            friendResponseDTO.setCreatureimg(imageUtill.);
             friends.add(friendResponseDTO);
 
         }
 
         return friends;
+    }
+
+    //크리쳐 이미지 주소
+    private String generateCreatureImgPath(Member member) {
+        Creature creature = member.getCreature();
+        int creatureLevel = creature.getLevel();
+        int creatureId = creature.getId();
+        return "https://i11b104.p.ssafy.io/image/creature/" + creatureId + "_" +creatureLevel;
     }
 
     // 친구 요청 불러오기
