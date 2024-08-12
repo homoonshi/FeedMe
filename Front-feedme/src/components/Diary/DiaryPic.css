@@ -17,6 +17,11 @@
     font-family: 'PretendardSB';
 }
 
+.DiaryPicContents {
+  text-align: center;
+  padding: 10px;
+}
+
 .DiaryArrows:hover {
     transform: translateY(-4px);
 }
@@ -68,6 +73,6 @@
   }
 
   .DrawingContent {
-    min-height: 200px;;
+    min-height: 200px;
   }
 

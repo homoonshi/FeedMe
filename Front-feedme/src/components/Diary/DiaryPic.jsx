@@ -1,54 +1,104 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import data from "./data.js";
 import './DiaryPic.css';
 import UploadOutlinedIcon from '@mui/icons-material/UploadOutlined';
 import Modal from 'react-modal';
 import diary from '../../assets/images/test2.png';
+import axios from 'axios';
 
 function DiaryPic() {
   const [slideIndex, setSlideIndex] = useState(0);
-  const [currentDate, setCurrentDate] = useState(data[0].date);
-  const [currentContent, setCurrentContent] = useState(data[0].content);
-  const [drawingModalIsOpen, setDrawingModalIsOpen] = useState(false); 
+  const [currentDate, setCurrentDate] = useState("");
+  const [currentContent, setCurrentContent] = useState("");
+  const [drawingModalIsOpen, setDrawingModalIsOpen] = useState(false);
 
-  const moveToPrevSlide = () => {
+  const [diaries, setDiaries] = useState([]);  // 다이어리 데이터를 저장할 상태
+  const [page, setPage] = useState(0);         // 현재 페이지 상태
+  const [limit, setLimit] = useState(10);      // 페이지 당 항목 수
+  const [totalPages, setTotalPages] = useState(1); // 전체 페이지 수
+
+  useEffect(() => {
+    fetchDiaries(page, limit);
+  }, [page, limit]);
+
+  const fetchDiaries = async (page, limit) => {
+    try {
+      const response = await axios.post('http://localhost:8080/diary/list', {
+        skip: page * limit,
+        limit: limit,
+      },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': sessionStorage.getItem('accessToken'),
+          }
+        });
+
+      console.log('pages:', response.data.content);
+
+      const sortedDiaries = response.data.content;
+      const date = sortedDiaries[0]?.createdAt.split('T')[0];
+
+      setDiaries(sortedDiaries);
+      setTotalPages(response.data.totalPages);
+      setCurrentDate(date || "");
+      setCurrentContent(sortedDiaries[0]?.content || "");
+      setSlideIndex(0);
+    } catch (error) {
+      console.error('Error fetching diaries:', error);
+    }
+  };
+
+  const moveToPrevSlide = async () => {
     setSlideIndex((prev) => {
-      const newIndex = prev === 0 ? data.length - 1 : prev - 1;
-      setCurrentDate(data[newIndex].date);
-      setCurrentContent(data[newIndex].content);
+      const newIndex = prev === 0 ? diaries.length - 1 : prev - 1;
+
+      // 현재 페이지의 첫 슬라이드에서 왼쪽으로 이동할 때, 이전 페이지를 요청
+      if (newIndex === diaries.length - 1 && page > 0) {
+        setPage((prevPage) => prevPage - 1);
+        return 0; // 이전 페이지의 마지막 슬라이드로 이동
+      }
+
+      setCurrentDate(diaries[newIndex].createdAt.split('T')[0]);
+      setCurrentContent(diaries[newIndex].content);
       return newIndex;
     });
   };
 
-  const moveToNextSlide = () => {
+  const moveToNextSlide = async () => {
     setSlideIndex((prev) => {
-      const newIndex = prev === data.length - 1 ? 0 : prev + 1;
-      setCurrentDate(data[newIndex].date);
-      setCurrentContent(data[newIndex].content);
+      const newIndex = prev === diaries.length - 1 ? 0 : prev + 1;
+
+      // 현재 페이지의 마지막 슬라이드에서 오른쪽으로 이동할 때, 다음 페이지를 요청
+      if (newIndex === 0 && page < totalPages - 1) {
+        setPage((prevPage) => prevPage + 1);
+        return 0; // 다음 페이지의 첫 슬라이드로 이동
+      }
+
+      setCurrentDate(diaries[newIndex].createdAt.split('T')[0]);
+      setCurrentContent(diaries[newIndex].content);
       return newIndex;
     });
   };
 
   const moveDot = (index) => {
     setSlideIndex(index);
-    setCurrentDate(data[index].date);
-    setCurrentContent(data[index].content);
+    setCurrentDate(diaries[index].createdAt.split('T')[0]);
+    setCurrentContent(diaries[index].content);
   };
 
   return (
     <div className='DiaryPic'>
       <p className='DiaryPicDay'>{currentDate}</p>
       <ThumbnailContainer>
-        {data.map((character, index) => (
+        {diaries.map((diary, index) => (
           <ThumbnailWrapper
-            key={character.id}
+            key={diary.id}
             className={index === slideIndex ? "active" : ""}
             onClick={() => moveDot(index)}
           >
             <Thumbnail
-              src={`/images/${character.thumbnail}`}
-              alt={character.content}
+              src={diary.diaryImg}
             />
           </ThumbnailWrapper>
         ))}
@@ -56,14 +106,13 @@ function DiaryPic() {
       <Arrow className="DiaryArrows" direction="prev" onClick={moveToPrevSlide}>
         ◀
       </Arrow>
-      <Container>
-        <Wrapper slideIndex={slideIndex}>
-          {data.map((character) => (
-            <Slide key={character.id}>
+      <Container slideIndex={slideIndex}>
+        <Wrapper>
+          {diaries.map((diary) => (
+            <Slide key={diary.id}>
               <PhotoWrapper>
                 <Photo
-                  src={`/images/${character.img}`}
-                  alt={character.content}
+                  src={diary.diaryImg}
                 />
               </PhotoWrapper>
             </Slide>
@@ -88,7 +137,7 @@ function DiaryPic() {
         overlayClassName="TodoMainOverlay"
       >
         <h2 className="TodoMainModalTitle">피드 올리기</h2>
-        <img src={diary} alt="그림일기 이미지" className="DrawingModalDImage" /> 
+        <img src={diary} alt="그림일기 이미지" className="DrawingModalDImage" />
         <textarea className="DrawingContent"></textarea>
         <div className="TodoMainModalButtons">
           <button className="TodoMainModalButton" onClick={() => setDrawingModalIsOpen(false)}>취소</button>
