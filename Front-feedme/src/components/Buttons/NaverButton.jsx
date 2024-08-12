@@ -1,4 +1,4 @@
-// src/components/Buttons/NaverButton.jsx
+// .src/components/Buttons/NaverButton.jsx
 
 import React from "react";
 import { createButton } from "react-social-login-buttons";
