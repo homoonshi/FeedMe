@@ -3,7 +3,6 @@ import styled from "styled-components";
 import './DiaryPic.css';
 import UploadOutlinedIcon from '@mui/icons-material/UploadOutlined';
 import Modal from 'react-modal';
-import diary from '../../assets/images/test2.png';
 import axios from 'axios';
 
 function DiaryPic() {
@@ -11,11 +10,12 @@ function DiaryPic() {
   const [currentDate, setCurrentDate] = useState("");
   const [currentContent, setCurrentContent] = useState("");
   const [drawingModalIsOpen, setDrawingModalIsOpen] = useState(false);
-
+  const [selectedImage, setSelectedImage] = useState(""); // 선택된 이미지를 저장하는 상태
   const [diaries, setDiaries] = useState([]);  // 다이어리 데이터를 저장할 상태
   const [page, setPage] = useState(0);         // 현재 페이지 상태
   const [limit, setLimit] = useState(10);      // 페이지 당 항목 수
   const [totalPages, setTotalPages] = useState(1); // 전체 페이지 수
+  const [feedContent, setFeedContent] = useState(""); // 피드 텍스트 내용을 저장하는 상태
 
   useEffect(() => {
     fetchDiaries(page, limit);
@@ -51,14 +51,15 @@ function DiaryPic() {
 
   const moveToPrevSlide = async () => {
     setSlideIndex((prev) => {
-      const newIndex = prev === 0 ? diaries.length - 1 : prev - 1;
-
       // 현재 페이지의 첫 슬라이드에서 왼쪽으로 이동할 때, 이전 페이지를 요청
-      if (newIndex === diaries.length - 1 && page > 0) {
-        setPage((prevPage) => prevPage - 1);
-        return 0; // 이전 페이지의 마지막 슬라이드로 이동
+      if (prev === 0 && page > 0) {
+        const prevPage = page - 1;
+        fetchDiaries(prevPage, limit); // 이전 페이지의 데이터를 가져옴
+        setPage(prevPage);
+        return limit - 1; // 이전 페이지의 마지막 슬라이드로 이동
       }
 
+      const newIndex = prev === 0 ? diaries.length - 1 : prev - 1;
       setCurrentDate(diaries[newIndex].createdAt.split('T')[0]);
       setCurrentContent(diaries[newIndex].content);
       return newIndex;
@@ -72,7 +73,8 @@ function DiaryPic() {
       // 현재 페이지의 마지막 슬라이드에서 오른쪽으로 이동할 때, 다음 페이지를 요청
       if (newIndex === 0 && page < totalPages - 1) {
         setPage((prevPage) => prevPage + 1);
-        return 0; // 다음 페이지의 첫 슬라이드로 이동
+        fetchDiaries(page + 1, limit); // 다음 페이지의 데이터를 가져옴
+        return 0; // 다음 페이지의 첫 번째 슬라이드로 이동
       }
 
       setCurrentDate(diaries[newIndex].createdAt.split('T')[0]);
@@ -85,6 +87,41 @@ function DiaryPic() {
     setSlideIndex(index);
     setCurrentDate(diaries[index].createdAt.split('T')[0]);
     setCurrentContent(diaries[index].content);
+  };
+
+  const openModalWithImage = () => {
+    setSelectedImage(diaries[slideIndex].diaryImg); // 현재 슬라이드의 이미지를 선택
+    setDrawingModalIsOpen(true);
+  };
+
+  const handleUpload = async () => {
+    if (!selectedImage || !feedContent) {
+      alert("이미지와 내용을 모두 입력해주세요.");
+      return;
+    }
+
+    try {
+      const response = await axios.post('http://localhost:8080/feed', {
+        diaryDate: currentDate,
+        content: feedContent,
+      }, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': sessionStorage.getItem('accessToken'),
+        }
+      });
+
+      if (response.status === 200) {
+        alert("피드가 성공적으로 업로드되었습니다.");
+        setDrawingModalIsOpen(false);
+        setFeedContent("");
+      } else {
+        alert("피드 업로드에 실패했습니다.");
+      }
+    } catch (error) {
+      console.error('Error uploading feed:', error);
+      alert("피드 업로드 중 오류가 발생했습니다.");
+    }
   };
 
   return (
@@ -124,7 +161,7 @@ function DiaryPic() {
         ▶
       </Arrow>
       <div className="CreateFeedContainer">
-        <button className="CreateFeedButton" onClick={() => setDrawingModalIsOpen(true)}>
+        <button className="CreateFeedButton" onClick={openModalWithImage}>
           <UploadOutlinedIcon className="CreateFeedIcon" /> 피드 올리기
         </button>
       </div>
@@ -137,11 +174,18 @@ function DiaryPic() {
         overlayClassName="TodoMainOverlay"
       >
         <h2 className="TodoMainModalTitle">피드 올리기</h2>
-        <img src={diary} alt="그림일기 이미지" className="DrawingModalDImage" />
-        <textarea className="DrawingContent"></textarea>
+        {selectedImage && (
+          <img src={selectedImage} alt="선택된 그림일기 이미지" className="DrawingModalDImage" />
+        )}
+        <textarea
+          className="DrawingContent"
+          value={feedContent}
+          onChange={(e) => setFeedContent(e.target.value)}
+          placeholder="내용을 입력하세요"
+        ></textarea>
         <div className="TodoMainModalButtons">
           <button className="TodoMainModalButton" onClick={() => setDrawingModalIsOpen(false)}>취소</button>
-          <button className="TodoMainModalButton">업로드</button>
+          <button className="TodoMainModalButton" onClick={handleUpload}>업로드</button>
         </div>
       </Modal>
     </div>
@@ -149,6 +193,7 @@ function DiaryPic() {
 }
 
 export default DiaryPic;
+
 
 const Container = styled.div`
   width: 500px;
