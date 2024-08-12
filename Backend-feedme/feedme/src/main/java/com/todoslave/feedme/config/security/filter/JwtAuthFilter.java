@@ -50,7 +50,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         String atc = request.getHeader("Authorization");
 
 
-
         // 토큰 검사 생략(모두 허용 URL의 경우 토큰 검사 통과)
         if (!StringUtils.hasText(atc)) {
             doFilter(request, response, filterChain);

@@ -59,7 +59,7 @@ public class MyAuthenticationSuccessHandler extends SimpleUrlAuthenticationSucce
 //            response.setHeader("Authorization", "Bearer " + token.getAccessToken());
 
             // 크리쳐 존재 여부를 쿼리스트링에 담는 url을 만들어준다.
-            String targetUrl = UriComponentsBuilder.fromUriString("http://localhost:3000/LoginLoding")
+            String targetUrl = UriComponentsBuilder.fromUriString("https://i11b104.p.ssafy.io/LoginLoding")
                     .queryParam("hasCreature", hasCreature)
                     .queryParam("accessToken", token.getAccessToken())
                     .build()
