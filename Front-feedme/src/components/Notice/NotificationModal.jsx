@@ -12,6 +12,7 @@ import GroupAddOutlinedIcon from '@mui/icons-material/GroupAddOutlined';
 import { addNotifications, addRequests, removeRequests, setIsSettingsMode, setIsSwitchOn, setRequestMode, setAlarmTime } from '../../store/alarmSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
+import { EventSourcePolyfill } from 'event-source-polyfill';
 
 dayjs.extend(customParseFormat);
 
@@ -21,27 +22,37 @@ const format = 'HH';
 const NotificationModal = ({ onClose }) => {
   const dispatch = useDispatch();
   const { notifications, requests, isSettingsMode, isSwitchOn, isRequestMode, alarmTime } = useSelector((state) => state.alarm);
-  const {token} = useSelector((state) => state.auth);
+  const { token } = useSelector((state) => state.auth);
 
-  // SSE 연결 설정
   useEffect(() => {
-    const eventSource = new EventSource('http://localhost:8080/subscribe/alarm');
+  
+    const eventSource = new EventSourcePolyfill('http://i11b104.p.ssafy.io/api/alarms/subscribe/alarm', {
+      headers: {
+        'Authorization': sessionStorage.getItem('accessToken')
+      }
+    });
 
-    eventSource.addEventListener('alarm', function (event) {
+    eventSource.addEventListener('alarm', (event) => { // 서버에서 설정한 이름과 같아야 함.
+      // 서버에서 데이터가 전송될 때 호출되는 이벤트 핸들러
+      console.log(event.data);
+      console.log('Success!');
       const newNotification = JSON.parse(event.data);
       dispatch(addNotifications(newNotification));
     });
 
-    eventSource.addEventListener('friend', function (event) {
-      const newRequest = JSON.parse(event.data);
-      dispatch(addRequests(newRequest));
+    // eventSource.onmessage = (event) => {
+    //   // 이벤트 데이터 처리
+    //   console.log('event data', event.data);
+    
+    // };
+  
+    eventSource.addEventListener('error', (error) => {
+      // SSE 연결 오류 처리
+      console.error('SSE Error:', error);
+      eventSource.close(); // 연결을 닫기
     });
-
-    eventSource.onerror = function (err) {
-      console.error('SSE error:', err);
-      eventSource.close();
-    };
-
+  
+    // 컴포넌트가 언마운트되면 SSE 연결을 닫기
     return () => {
       eventSource.close();
     };
@@ -55,7 +66,7 @@ const NotificationModal = ({ onClose }) => {
   const handleReject = (index) => {
     // 서버에서 요청을 거절하기 위한 API 호출
     const requestId = requests[index].id;
-    axios.post(`http://localhost:8080/friends/reject/${requestId}`)
+    axios.post(`https://i11b104.p.ssafy.io/api/friends/reject/${requestId}`)
       .then(() => {
         dispatch(removeRequests(index));
       })
@@ -67,7 +78,7 @@ const NotificationModal = ({ onClose }) => {
   const handleAccept = (index) => {
     // 서버에서 요청을 수락하기 위한 API 호출
     const requestId = requests[index].id;
-    axios.post(`http://localhost:8080/friends/accept/${requestId}`)
+    axios.post(`https://i11b104.p.ssafy.io/api/friends/accept/${requestId}`)
       .then(() => {
         dispatch(addRequests(index));
       })
@@ -80,20 +91,20 @@ const NotificationModal = ({ onClose }) => {
     if (time) {
       const formattedTime = time.format('HH');
       const intAlarmTime = parseInt(formattedTime, 10);
-  
+
       dispatch(setAlarmTime(time));
 
       try {
-        await axios.post('http://localhost:8080/alarms/time', { 
-          alarmTime: intAlarmTime 
+        await axios.post('http://i11b104.p.ssafy.io/api/alarms/time', {
+          alarmTime: intAlarmTime
         },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `${token}`,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `${token}`,
+            }
           }
-        }
-      );
+        );
         console.log('Time setting updated');
       } catch (error) {
         console.error('Error setting time:', error);
@@ -102,7 +113,7 @@ const NotificationModal = ({ onClose }) => {
       console.log('No alarm time');
     }
   };
-  
+
 
 
 
@@ -115,7 +126,26 @@ const NotificationModal = ({ onClose }) => {
   };
 
   const toggleRequestMode = () => {
+    const eventSource2 = new EventSourcePolyfill('http://i11b104.p.ssafy.io/api/alarms/subscribe/chat', {
+      headers: {
+        'Authorization': sessionStorage.getItem('accessToken')
+      }
+    });
+
+    eventSource2.addEventListener('friend', (event) => { // 서버에서 설정한 이름과 같아야 함.
+      // 서버에서 데이터가 전송될 때 호출되는 이벤트 핸들러
+      console.log(event.data);
+      console.log('Success!');
+      const newRequest = JSON.parse(event.data);
+      dispatch(addRequests(newRequest));
+    });
+
     dispatch(setRequestMode(!isRequestMode));
+
+    // 컴포넌트가 언마운트되면 SSE 연결을 닫기
+    return () => {
+      eventSource2.close();
+    };
   }
 
   return (
@@ -152,7 +182,7 @@ const NotificationModal = ({ onClose }) => {
               showMinute={false}
               showSecond={false}
               onChange={handleTimeChange} // 시간 변경 시 호출
-              // inputReadOnly
+            // inputReadOnly
             />
           </div>
         ) : (
