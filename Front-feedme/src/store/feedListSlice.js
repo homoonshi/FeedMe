@@ -89,6 +89,25 @@ export const deleteFeed = createAsyncThunk(
   }
 );
 
+// 게시글 수정
+export const editFeed = createAsyncThunk(
+  'feedList/editFeed',
+  async ({ token, feedId, content }, { rejectWithValue }) => {
+    try {
+      const response = await axios.patch(`http://localhost:8080/feed/${feedId}`, 
+      { content },
+      {
+        headers: {
+          Authorization: `${token}`, 
+        },
+      });
+      return { feedId, updatedFeed: response.data }; 
+    } catch (error) {
+      return rejectWithValue(error.response.data); 
+    }
+  }
+);
+
 const feedListSlice = createSlice({
   name: 'feedList',
   initialState: {
@@ -138,7 +157,14 @@ const feedListSlice = createSlice({
       .addCase(deleteFeed.fulfilled, (state, action) => {
         const feedId = action.payload;
         state.feeds = state.feeds.filter(feed => feed.feedId !== feedId);
-      });
+      })
+      .addCase(editFeed.fulfilled, (state, action) => {
+        const { feedId, updatedFeed } = action.payload;
+        const index = state.feeds.findIndex(feed => feed.id === feedId); 
+        if (index !== -1) {
+          state.feeds[index] = updatedFeed; 
+        }
+      })
     },
   });
 

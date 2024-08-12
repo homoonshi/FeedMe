@@ -329,3 +329,28 @@
     background-color: #9E69FA;
     color: #000;
 }
+
+.FeedEditTextarea {
+    width: 70%; 
+    height: 10%;
+    padding: 1%;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-family: 'Pretendard';
+    resize: none;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.FeedEditTextarea:focus {
+    border-color: #9E69FA;
+    box-shadow: 0 2px 8px rgba(158, 105, 250, 0.2);
+    outline: none;
+}
+
+.FeedEditTextarea::placeholder {
+    color: #aaa; 
+    font-style: italic;
+}
