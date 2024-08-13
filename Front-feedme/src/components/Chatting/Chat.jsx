@@ -73,7 +73,7 @@ const Chat = () => {
     setIsModalOpen(false);
     setFriendToDelete(null);
   };
-
+  console.log(selectedFriend)
   return (
     <div className="ChatBack">
       <div className="ChatBox">
@@ -94,7 +94,7 @@ const Chat = () => {
                   {view === 'profile' ? (
                     <ChattingFriendProfile friend={selectedFriendInfo} onDelete={handleDeleteFriend} />
                   ) : view === 'chat' ? (
-                    <ChatWindow friend={selectedFriend} />
+                    <ChatWindow roomId={selectedFriend.friendId} />
                   ) : (
                     <Creature 
                       creature={{ id: creatureId, name: creatureName, daysTogether: togetherDay, level: level, exp: exp, image: image }} 

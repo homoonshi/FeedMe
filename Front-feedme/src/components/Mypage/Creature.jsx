@@ -28,6 +28,7 @@ const Creature = ({ creature }) => {
         <p className="MCreatureLv">Lv. {creature.level}</p>
         <div className="MCreatureExp">
           <p>EXP</p>
+          +
           <progress value={creature.exp} max={maxExp}></progress>
         </div>
       </div>

@@ -3,11 +3,19 @@ import './ChattingFriendProfile.css';
 import '../../assets/font/Font.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteFriend } from '../../store/friendInfoSlice';
 
 const ChattingFriendProfile = ({ friend, onDelete }) => {
-  useEffect(() => {
-    // console.log('Selected Friend Info:', friend); // 친구 정보를 콘솔에 출력
-  }, [friend]);
+  const dispatch = useDispatch();
+  const token = useSelector((state) => state.auth.token);
+
+  const handleDeleteClick = () => {
+    dispatch(deleteFriend({ token, counterpartNickname: friend.nickname }))
+      .then(() => {
+        onDelete(friend); // 성공 시 onDelete 콜백 호출
+      });
+  };
 
   return (
     <div className="CFProfile">
@@ -15,7 +23,7 @@ const ChattingFriendProfile = ({ friend, onDelete }) => {
         icon={faTrashCan} 
         style={{ color: "#8c8c8c" }} 
         className="CFProfileDeleteIcon" 
-        onClick={() => onDelete(friend)}
+        onClick={handleDeleteClick}
       />
       
       <p className="CFProfileName">{friend.creatureNickname}</p>

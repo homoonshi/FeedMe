@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import SockJS from 'sockjs-client';
 import { Client } from '@stomp/stompjs';
 
-const ChatRoom = () => {
+const ChatRoom = ({ roomId }) => { // roomId를 props로 받도록 수정
   const [username, setUsername] = useState('');
   const [messageContent, setMessageContent] = useState('');
   const [messages, setMessages] = useState([]);
@@ -12,7 +12,6 @@ const ChatRoom = () => {
   const stompClient = useRef(null);
   const isSubscribed = useRef(false);
 
-  const roomId = "66a6df5265d8bc6290ec22ba";
   const limit = 10;
 
   useEffect(() => {
@@ -20,7 +19,7 @@ const ChatRoom = () => {
     return () => {
       disconnect();
     };
-  }, []);
+  }, [roomId]); // roomId가 변경될 때마다 새로 연결되도록 설정
 
   const connect = () => {
     if (stompClient.current) return; // 이미 연결되어 있는지 확인
@@ -115,12 +114,17 @@ const ChatRoom = () => {
 
   const showMessage = (message) => {
     console.log("Received message:", message);  // 메시지가 올바르게 도착하는지 확인
-    setMessages((prevMessages) => [...prevMessages, message]);
+    
+    // message의 내용이 이중으로 직렬화된 JSON이므로 다시 파싱
+    const parsedMessage = JSON.parse(message.message);
+    
+    setMessages((prevMessages) => [...prevMessages, parsedMessage]);
+    
     if (messageContainerRef.current) {
       messageContainerRef.current.scrollTop = messageContainerRef.current.scrollHeight;
     }
-  };
-  
+};
+
 
   return (
     <div>

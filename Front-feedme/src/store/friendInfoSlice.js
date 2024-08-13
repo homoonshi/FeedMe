@@ -5,7 +5,7 @@ export const fetchFriendInfo = createAsyncThunk(
   'friendInfo/fetchFriendInfo',
   async ({ token, counterpartNickname }, { rejectWithValue }) => {
     try {
-      console.log({ token, counterpartNickname });
+      // console.log({ token, counterpartNickname });
 
       const response = await axios({
         method: 'get',
@@ -18,7 +18,7 @@ export const fetchFriendInfo = createAsyncThunk(
         }
       });
 
-      console.log(response.data);
+      // console.log(response.data);
 
       return response.data;
     } catch (error) {
@@ -28,12 +28,32 @@ export const fetchFriendInfo = createAsyncThunk(
   }
 );
 
+// 친구 삭제
+export const deleteFriend = createAsyncThunk(
+  'friendInfo/deleteFriend',
+  async ({ token, counterpartNickname }, { rejectWithValue }) => {
+    try {
+      const response = await axios.delete(`http://localhost:8080/friends`, {
+        headers: {
+          Authorization: `${token}`,
+        },
+        params: {
+          counterpartNickname: counterpartNickname,
+        },
+      });
+      return response.status;
+    } catch (error) {
+      return rejectWithValue(error.response ? error.response.data : error.message);
+    }
+  }
+);
 
 
 const friendInfoSlice = createSlice({
   name: 'friendInfo',
   initialState: {
     friendId: null,
+    roomId: '',
     nickname: '',
     creatureNickname: '',
     creatureImg: '',
@@ -51,8 +71,9 @@ const friendInfoSlice = createSlice({
       })
       .addCase(fetchFriendInfo.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        const { friendId, nickname, creatureNickname, creatureImg, level, exp, join } = action.payload;
+        const { friendId, roomId, nickname, creatureNickname, creatureImg, level, exp, join } = action.payload;
         state.friendId = friendId;
+        state.roomId = roomId;
         state.nickname = nickname;
         state.creatureNickname = creatureNickname;
         state.creatureImg = creatureImg;
@@ -61,6 +82,16 @@ const friendInfoSlice = createSlice({
         state.join = join;
       })
       .addCase(fetchFriendInfo.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.payload;
+      })
+      .addCase(deleteFriend.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(deleteFriend.fulfilled, (state) => {
+        state.status = 'succeeded';
+      })
+      .addCase(deleteFriend.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.payload;
       });
