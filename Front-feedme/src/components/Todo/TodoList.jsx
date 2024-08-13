@@ -51,7 +51,7 @@ const ToDoList = ({onClick}) => {
             </li>
           ))
         ) : (
-          <li>Loading...</li> // 로딩 중일 때 표시할 내용
+          <li>할 일이 없습니다...</li> // 로딩 중일 때 표시할 내용
         )}
       </ul>
     </div>
