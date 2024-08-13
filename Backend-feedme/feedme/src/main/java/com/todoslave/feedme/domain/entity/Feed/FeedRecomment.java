@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 public class FeedRecomment {
     // 피드 대댓글 ID
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     //피드 ID
