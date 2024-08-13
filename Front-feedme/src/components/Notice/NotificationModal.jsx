@@ -26,11 +26,13 @@ const NotificationModal = ({ onClose }) => {
 
   useEffect(() => {
   
-    const eventSource = new EventSourcePolyfill('http://i11b104.p.ssafy.io/api/alarms/subscribe/alarm', {
+    const eventSource = new EventSourcePolyfill('https://i11b104.p.ssafy.io/api/alarms/subscribe/alarm', {
       headers: {
         'Authorization': sessionStorage.getItem('accessToken')
       }
     });
+
+    console.log('요청 완료!');
 
     eventSource.addEventListener('alarm', (event) => { // 서버에서 설정한 이름과 같아야 함.
       // 서버에서 데이터가 전송될 때 호출되는 이벤트 핸들러
@@ -95,7 +97,7 @@ const NotificationModal = ({ onClose }) => {
       dispatch(setAlarmTime(time));
 
       try {
-        await axios.post('http://i11b104.p.ssafy.io/api/alarms/time', {
+        await axios.post('https://i11b104.p.ssafy.io/api/alarms/time', {
           alarmTime: intAlarmTime
         },
           {
@@ -126,7 +128,7 @@ const NotificationModal = ({ onClose }) => {
   };
 
   const toggleRequestMode = () => {
-    const eventSource2 = new EventSourcePolyfill('http://i11b104.p.ssafy.io/api/alarms/subscribe/chat', {
+    const eventSource2 = new EventSourcePolyfill('https://i11b104.p.ssafy.io/api/alarms/subscribe/chat', {
       headers: {
         'Authorization': sessionStorage.getItem('accessToken')
       }

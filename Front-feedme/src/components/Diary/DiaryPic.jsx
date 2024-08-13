@@ -50,6 +50,10 @@ function DiaryPic() {
   };
 
   const moveToPrevSlide = async () => {
+    if (diaries.length === 0) {
+      return;
+    }
+
     setSlideIndex((prev) => {
       // 현재 페이지의 첫 슬라이드에서 왼쪽으로 이동할 때, 이전 페이지를 요청
       if (prev === 0 && page > 0) {
@@ -67,6 +71,10 @@ function DiaryPic() {
   };
 
   const moveToNextSlide = async () => {
+    if (diaries.length === 0) {
+      return;
+    }
+
     setSlideIndex((prev) => {
       const newIndex = prev === diaries.length - 1 ? 0 : prev + 1;
 
@@ -160,11 +168,14 @@ function DiaryPic() {
       <Arrow className="DiaryArrows" direction="next" onClick={moveToNextSlide}>
         ▶
       </Arrow>
-      <div className="CreateFeedContainer">
-        <button className="CreateFeedButton" onClick={openModalWithImage}>
-          <UploadOutlinedIcon className="CreateFeedIcon" /> 피드 올리기
-        </button>
-      </div>
+      {diaries.length === 0 ? (<></>) : (
+        <div className="CreateFeedContainer">
+          <button className="CreateFeedButton" onClick={openModalWithImage}>
+            <UploadOutlinedIcon className="CreateFeedIcon" /> 피드 올리기
+          </button>
+        </div>
+      )}
+
 
       <Modal
         isOpen={drawingModalIsOpen}
