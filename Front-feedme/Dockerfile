@@ -29,7 +29,7 @@ COPY ./default.conf /etc/nginx/conf.d
 # Copy the built application from the build stage to the Nginx HTML directory
 COPY --from=build /app/build /usr/share/nginx/html
 
-# Ensure logging statements go to the standard output (for easier debugging and logging)
+# Ensure logging statements go to the standard output (for easier debugging and. logging)
 RUN ln -sf /dev/stdout /var/log/nginx/access.log \
     && ln -sf /dev/stderr /var/log/nginx/error.log
 
