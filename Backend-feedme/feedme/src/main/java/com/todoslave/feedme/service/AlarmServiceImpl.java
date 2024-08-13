@@ -191,13 +191,29 @@ public class AlarmServiceImpl implements AlarmService{
             .name("alarm")
             .data(dto);
 
-        emitter.send(event);
+        try {
+          emitter.send(event);
+        }catch (IOException e){
+          emitter.completeWithError(e);
+          throw e;
+        }catch (Exception e){
+          emitter.completeWithError(e);
+          throw new RuntimeException("알람전송중 문제 발생",e);
+        }
       }else if(type==1){
         SseEmitter.SseEventBuilder event = SseEmitter.event()
             .name("friend")
             .data(alarm);
 
-        emitter.send(event);
+        try {
+          emitter.send(event);
+        }catch (IOException e){
+          emitter.completeWithError(e);
+          throw e;
+        }catch (Exception e){
+          emitter.completeWithError(e);
+          throw new RuntimeException("알람전송중 문제 발생",e);
+        }
       }
 
     }else{
