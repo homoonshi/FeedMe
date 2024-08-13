@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaAngleLeft, FaAngleRight, FaEllipsisH, FaPlus, FaPen } from 'react-icons/fa';
 import Modal from 'react-modal';
 import './TodoMainList.css';
 import '../../assets/font/Font.css';
 import diary from '../../assets/images/test2.png';
+import axios from 'axios';
 
 const TodoMainList = () => {
   const [categories, setCategories] = useState({
@@ -28,6 +29,81 @@ const TodoMainList = () => {
   const [newTodo, setNewTodo] = useState('');
   const [editedTodo, setEditedTodo] = useState('');
   const [currentCategoryIndex, setCurrentCategoryIndex] = useState(null);
+
+  useEffect(() => {
+    const todoRequest = async () => {
+      try {
+        const response = await axios.get('https://i11b104.p.ssafy.io/api/todos/main/daily', {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': sessionStorage.getItem('accessToken'),
+          },
+          params: {
+            date: '2024-08-13',
+            memberId: 1
+          }
+        });        
+  
+        if (response.status === 200) {
+          console.log(response.data); // 실제 데이터에 접근
+        } else {
+          console.log('불러오기 실패', response);
+        }
+      } catch (error) {
+        console.error('서버 요청 중 오류 발생', error);
+      }
+    };
+
+    const dailyTodoRequest = async () => {
+      try {
+        const response = await axios.get('https://i11b104.p.ssafy.io/api/todos/main/daily', {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': sessionStorage.getItem('accessToken'),
+          },
+          params: {
+            date: '2024-08-13',
+            memberId: 1
+          }
+        });        
+  
+        if (response.status === 200) {
+          console.log(response.data); // 실제 데이터에 접근
+        } else {
+          console.log('불러오기 실패', response);
+        }
+      } catch (error) {
+        console.error('서버 요청 중 오류 발생', error);
+      }
+    };
+
+    const diaryButtonRequest = async () => {
+      try {
+        const response = await axios.get('https://i11b104.p.ssafy.io/api/todos/main/daily', {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': sessionStorage.getItem('accessToken'),
+          },
+          params: {
+            date: '2024-08-13',
+            memberId: 1
+          }
+        });        
+  
+        if (response.status === 200) {
+          console.log(response.data); // 실제 데이터에 접근
+        } else {
+          console.log('불러오기 실패', response);
+        }
+      } catch (error) {
+        console.error('서버 요청 중 오류 발생', error);
+      }
+    };
+  
+    todoRequest();
+    dailyTodoRequest();
+    dailyTodoRequest();
+  }, []);
 
   const formatDate = (date) => {
     return date.toISOString().split('T')[0];

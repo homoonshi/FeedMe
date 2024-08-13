@@ -82,7 +82,7 @@ const CreatureCreate = () => {
       }, {
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `${token}`,
+          'Authorization': sessionStorage.getItem('accessToken'),
         }
       });
 

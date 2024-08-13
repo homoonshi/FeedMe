@@ -69,7 +69,7 @@ const Signup = () => {
               className="LoginInfoEmailInput"
               type="email"
               value={email}
-              onChange={(e) => dispatch(setEmail(e.target.value))}
+              readonly
             />
           </div>
 

@@ -134,6 +134,8 @@ const NotificationModal = ({ onClose }) => {
       }
     });
 
+    console.log('요청 완료!2');
+
     eventSource2.addEventListener('friend', (event) => { // 서버에서 설정한 이름과 같아야 함.
       // 서버에서 데이터가 전송될 때 호출되는 이벤트 핸들러
       console.log(event.data);
@@ -207,7 +209,7 @@ const NotificationModal = ({ onClose }) => {
                         }} alt='creatureImg' />
                       <span style={{
                         fontFamily: "PretendardM"
-                      }}>{request.nickname}</span>
+                      }}>{request.counterpartNickname}</span>
                       <div className='RequestButtons'>
                         <span
                           style={{
