@@ -8,6 +8,10 @@ spring:
   main:
     application-class: com.todoslave.FeedmeApplication
     allow-circular-references: true
+    
+  redis:
+    host: redis
+    port: 6379
 
   security:
     oauth2:
@@ -72,10 +76,6 @@ logging:
       hibernate:
         SQL: debug
         type: trace
-
-redis:
-  host: redis
-  port: 6379
 
 jwt:
   issuer: todoslave@ssafy.com
