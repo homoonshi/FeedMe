@@ -23,7 +23,8 @@ const ChattingFriendList = ({ friends, onFriendClick, onChatClick }) => {
   const filteredFriends = friends.filter(friend =>
     friend.counterpartNickname.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
+  
+  console.log(friends)
   return (
     <div className="ChatFriendListContainer">
       <input
@@ -35,17 +36,21 @@ const ChattingFriendList = ({ friends, onFriendClick, onChatClick }) => {
       />
       <div className="ChatFriendList">
         <div key="my-avatar" className="ChatFriendItem">
+
           <img src={user.image} alt="내 아바타" className="ChatFriendAvatar" />
           <div className="ChatFriendInfo">
+            
             <span onClick={() => onFriendClick({ id: 'my-avatar', name: user.nickname, avatar: user.image })} className="ChatFriendName">
-              {user.nickname}
+              {user.creatureName}
             </span>
+
             <button
               onClick={() => handleChatButtonClick({ id: 'my-avatar', name: user.nickname, avatar: user.image })}
               className={`ChatIconButton ${activeFriendId === 'my-avatar' ? 'active' : ''}`}
             >
               <FontAwesomeIcon icon={faMessage} style={{ fontSize: '1.5rem' }} />
             </button>
+            
           </div>
         </div>
     

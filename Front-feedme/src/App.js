@@ -17,6 +17,7 @@ import Weather from './components/Weather/Weather.jsx';
 import LoginLoding from './components/Login/LoginLoding.jsx';
 import WebSocketChat from './components/WebScoketChat/WebSocketChat.jsx';
 
+
 function App() {
   return (
     <div>
@@ -46,6 +47,7 @@ function App() {
         <Route path="/Weather" element={<Weather />} />
         <Route path="/LoginLoding" element={<LoginLoding />} />
         <Route path="/WebSocketChat" element={<WebSocketChat />} />
+        
       </Routes>
     </div>
   );

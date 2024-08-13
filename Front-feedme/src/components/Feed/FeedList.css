@@ -290,6 +290,13 @@
     margin-right: 5%;
 }
 
+.FeedListPhotolikeButtonX {
+    font-size: 1.5rem;
+    color: black;
+    cursor: pointer;
+    margin-right: 5%;
+}
+
 .FeedListMyContentWrapper {
     position: relative; 
     margin-left: 7%;

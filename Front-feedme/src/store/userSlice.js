@@ -20,6 +20,7 @@ export const fetchUserData = createAsyncThunk(
 const userSlice = createSlice({
   name: 'user',
   initialState: {
+    sendId:'',
     nickname: '',
     email: '',
     brithday: '',
@@ -41,6 +42,7 @@ const userSlice = createSlice({
       .addCase(fetchUserData.fulfilled, (state, action) => {
         state.status = 'succeeded';
         const {
+          sendId,
           nickname,
           email,
           brithday,
@@ -51,6 +53,7 @@ const userSlice = createSlice({
           image,
           togetherDay,
         } = action.payload;
+        state.sendId = sendId;
         state.nickname = nickname;
         state.email = email;
         state.brithday = brithday;

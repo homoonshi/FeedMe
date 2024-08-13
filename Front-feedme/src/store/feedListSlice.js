@@ -108,6 +108,32 @@ export const editFeed = createAsyncThunk(
   }
 );
 
+// 좋아요
+export const likePost = createAsyncThunk(
+  'feedList/likePost',
+  async ({ token, feedId }, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(
+        `https://i11b104.p.ssafy.io/api/feed/${feedId}/like`,
+        {},
+        {
+          headers: {
+            Authorization: `${token}`,
+          },
+        }
+      );
+      
+      if (response.status === 200) {
+        return feedId; 
+      } else {
+        throw new Error('Failed to like/unlike the post');
+      }
+    } catch (error) {
+      return rejectWithValue(error.response?.data || 'Server Error');
+    }
+  }
+);
+
 const feedListSlice = createSlice({
   name: 'feedList',
   initialState: {
@@ -163,6 +189,14 @@ const feedListSlice = createSlice({
         const index = state.feeds.findIndex(feed => feed.id === feedId); 
         if (index !== -1) {
           state.feeds[index] = updatedFeed; 
+        }
+      })
+      .addCase(likePost.fulfilled, (state, action) => {
+        const feedId = action.payload;
+        const feed = state.feeds.find(feed => feed.feedId === feedId);
+        if (feed) {
+          feed.myLike = !feed.myLike; 
+          feed.likes += feed.myLike ? -1 : 1;
         }
       })
     },

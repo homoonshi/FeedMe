@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import SockJS from 'sockjs-client';
 import { Client } from '@stomp/stompjs';
 
-const ChatRoom = () => {
+const ChatRoom = ({ roomId }) => { // roomId를 props로 받도록 수정
   const [username, setUsername] = useState('');
   const [messageContent, setMessageContent] = useState('');
   const [messages, setMessages] = useState([]);
@@ -12,7 +12,6 @@ const ChatRoom = () => {
   const stompClient = useRef(null);
   const isSubscribed = useRef(false);
 
-  const roomId = "66b991fae6c36f4633786c63";
   const limit = 10;
 
   useEffect(() => {
@@ -20,7 +19,7 @@ const ChatRoom = () => {
     return () => {
       disconnect();
     };
-  }, []);
+  }, [roomId]); // roomId가 변경될 때마다 새로 연결되도록 설정
 
   const connect = () => {
     if (stompClient.current) return; // 이미 연결되어 있는지 확인

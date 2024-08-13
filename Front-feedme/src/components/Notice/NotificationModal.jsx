@@ -73,7 +73,7 @@ const NotificationModal = ({ onClose }) => {
         dispatch(removeRequests(index));
       })
       .catch(error => {
-        console.error('Error rejecting friend request:', error);
+        // console.error('Error rejecting friend request:', error);
       });
   }
 
@@ -85,7 +85,7 @@ const NotificationModal = ({ onClose }) => {
         dispatch(addRequests(index));
       })
       .catch(error => {
-        console.error('Error accepting friend request:', error);
+        // console.error('Error accepting friend request:', error);
       });
   }
 
@@ -109,10 +109,10 @@ const NotificationModal = ({ onClose }) => {
         );
         console.log('Time setting updated');
       } catch (error) {
-        console.error('Error setting time:', error);
+        // console.error('Error setting time:', error);
       }
     } else {
-      console.log('No alarm time');
+      // console.log('No alarm time');
     }
   };
 
