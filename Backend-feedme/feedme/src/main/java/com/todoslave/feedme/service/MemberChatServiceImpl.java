@@ -67,7 +67,7 @@ public class MemberChatServiceImpl implements MemberChatService{
     for(MemberChatRoom room : rooms){
 
       MemberChatListResponseDTO chatResponse = new MemberChatListResponseDTO();
-      chatResponse.setId(room.getId());
+      chatResponse.setFriendId(room.getId());
 
       members = room.getParticipantIds();
       int counterPartId = 0;
@@ -79,13 +79,13 @@ public class MemberChatServiceImpl implements MemberChatService{
       }
 
       String nickname = memberRepository.findById(counterPartId).orElseThrow().getNickname();
-      chatResponse.setNickname(nickname);
-//      Creature creature = creatureRepository.findByMemberId(counterPartId);
-//
-//      chatResponse.setCreatureImage(
-//          "http://localhost:8080/image/creature/"+creature.getMember().getId()+"_"+creature.getLevel());
+      chatResponse.setCounterpartNickname(nickname);
+      Creature creature = creatureRepository.findByMemberId(counterPartId);
+      chatResponse.setAvatar(
+          "http://localhost:8080/image/creature/"+creature.getMember().getId()+"_"+creature.getLevel());
       MemberChatRoomChecked checked = memberChatRoomCheckedRepository.findByMemberChatRoomIdAndMemberId(room.getId(),memberId);
       chatResponse.setIsChecked(checked.getIsChecked());
+      chatResponse.setReceiveTime(room.getReceiveTime());
       chatListResponse.add(chatResponse);
 
     }
@@ -125,11 +125,14 @@ public class MemberChatServiceImpl implements MemberChatService{
     Creature creature = creatureRepository.findByMemberId(countpart.getId());
 
     MemberChatListResponseDTO memberChatListResponseDTO = new MemberChatListResponseDTO();
+
     memberChatListResponseDTO.setId(room.getId());
     memberChatListResponseDTO.setNickname(countpart.getNickname());
     memberChatListResponseDTO.setCreatureImage(
         "https://i11b104.p.ssafy.io/image/creature/image/creature/"+creature.getMember().getId()+"_"+creature.getLevel());
+
     memberChatListResponseDTO.setIsChecked(1);
+    memberChatListResponseDTO.setReceiveTime(room.getReceiveTime());
 
     return memberChatListResponseDTO;
   }
@@ -185,6 +188,9 @@ public class MemberChatServiceImpl implements MemberChatService{
     // 메세지 저장
     memberChatMessage = messageRepository.save(memberChatMessage);
 
+    memberChatRoom.setReceiveTime(memberChatMessage.getTransmitAt());
+    roomRepository.save(memberChatRoom);
+
     int[] members = rooms.get(roomId);
 
     int connect = 0;
@@ -201,20 +207,24 @@ public class MemberChatServiceImpl implements MemberChatService{
       checked.setIsChecked(0);
     }
 
+
     MemberChatListResponseDTO memberChatListResponseDTO = new MemberChatListResponseDTO();
-    memberChatListResponseDTO.setId(roomId);
-    memberChatListResponseDTO.setNickname(counterpartNickname);
+    memberChatListResponseDTO.setReceiveTime(memberChatRoom.getReceiveTime());
+
+    memberChatListResponseDTO.setFriendId(roomId);
+    memberChatListResponseDTO.setCounterpartNickname(counterpartNickname);
     Creature creature = creatureRepository.findByMemberId(counterPartId);
 
-    memberChatListResponseDTO.setCreatureImage("https://i11b104.p.ssafy.io/image/creature/image/creature/"+creature.getMember().getId()+"_"+creature.getLevel());
+    memberChatListResponseDTO.setAvatar("https://i11b104.p.ssafy.io/image/creature/image/creature/"+creature.getMember().getId()+"_"+creature.getLevel());
+
 
     // 채팅방 갱신 (나)
     alarmService.renewChattingRoom(memberChatListResponseDTO, memberId,1);
 
-    memberChatListResponseDTO.setNickname(member.getNickname());
+    memberChatListResponseDTO.setCounterpartNickname(member.getNickname());
     creature = creatureRepository.findByMemberId(memberId);
 
-    memberChatListResponseDTO.setCreatureImage("https://i11b104.p.ssafy.io/image/creature/image/creature/"+creature.getMember().getId()+"_"+creature.getLevel());
+    memberChatListResponseDTO.setAvatar("https://i11b104.p.ssafy.io/image/creature/image/creature/"+creature.getMember().getId()+"_"+creature.getLevel());
 
     // 채팅방 갱신 (상대)
     alarmService.renewChattingRoom(memberChatListResponseDTO, counterPartId, 0);
@@ -224,7 +234,7 @@ public class MemberChatServiceImpl implements MemberChatService{
 
     response.setMessage(memberChatMessage.getContent());
     response.setTransmitAt(memberChatMessage.getTransmitAt());
-//    response.setSendNickname(SecurityUtil.getCurrentMember().getNickname());
+    response.setSendNickname(member.getNickname());
 
     return response;
   }

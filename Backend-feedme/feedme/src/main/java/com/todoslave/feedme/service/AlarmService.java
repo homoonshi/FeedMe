@@ -27,5 +27,7 @@ public interface AlarmService {
     public <T> void sendAlarm(T alarm, int type, SseEmitter emitter) throws IOException;
     List<AlarmResponseDTO> loadAlarms();
 
+    void deleteAlarm(int alarmId);
+
 
 }
