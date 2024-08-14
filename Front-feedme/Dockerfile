@@ -17,7 +17,7 @@ RUN npm run build
 # Stage 2: Serve the application using Nginx
 FROM nginx:stable-alpine as production-stage
 
-# Create a directory for Jenkins logs
+# Create a directory for Jenkins logs.
 RUN mkdir -p /var/log/nginx/jenkins
 
 # Set permissions if necessary (This step may not be necessary depending on your usage)
