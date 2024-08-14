@@ -104,6 +104,7 @@ const NotificationModal = ({ onClose }) => {
         }
       });
       dispatch(removeNotifications(alarmId));
+      console.log(notifications);
       console.log('알람 삭제 !');
       // window.location.reload();
     } catch (error) {
