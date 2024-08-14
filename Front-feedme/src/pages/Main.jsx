@@ -31,7 +31,6 @@ const Main = () => {
             const lat = position.coords.latitude;
             const lon = position.coords.longitude;
             const apiKey = process.env.REACT_APP_API_KEY;
-
             const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}`);
             const data = await response.json();
 
