@@ -7,7 +7,7 @@ import '../Main/Search.css';
 import noti from '../../assets/icons/icon-noti-gray.png';
 import search from '../../assets/icons/icon-search-gray-24.png';
 import mypage from '../../assets/icons/icon-account-gray-24.png';
-import '../../assets/font/Font.css' 
+import '../../assets/font/Font.css';
 
 const Search = () => {
   const dispatch = useDispatch();
@@ -22,7 +22,7 @@ const Search = () => {
     if (sessionToken) {
       dispatch(setToken(sessionToken));
     } else {
-      navigate('/login'); 
+      navigate('/login');
     }
   }, [dispatch, navigate]);
 
@@ -39,7 +39,8 @@ const Search = () => {
 
       if (response.ok) {
         const data = await response.json();
-        setSuggestions(data); 
+        setSuggestions(data);
+        // console.log(data);
       } else {
         setSuggestions([]);
         console.error('실패');
@@ -54,7 +55,7 @@ const Search = () => {
     if (searchTerm) {
       fetchSearchResults(searchTerm);
     } else {
-      setSuggestions([]); 
+      setSuggestions([]);
     }
   }, [searchTerm]);
 
@@ -72,7 +73,6 @@ const Search = () => {
 
   const handleSuggestionClick = (suggestion) => {
     setSearchTerm(suggestion.nickname);
-    console.log(suggestion)
     setSuggestions([]);
   };
 
@@ -81,14 +81,20 @@ const Search = () => {
       const response = await fetch('http://localhost:8080/friends', {
         method: 'POST',
         headers: {
-          'Authorization': token,
+          Authorization: token,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ counterpartNickname: nickname }),
       });
 
       if (response.status === 204) {
-        console.log(`${nickname}에게 친구 요청을 보냈습니다.`);
+        setSuggestions((prevSuggestions) =>
+          prevSuggestions.map((suggestion) =>
+            suggestion.nickname === nickname
+              ? { ...suggestion, requested: true }
+              : suggestion
+          )
+        );
       } else {
         console.error('친구 요청 실패');
       }
@@ -122,13 +128,19 @@ const Search = () => {
           <ul className="suggestions-list">
             {suggestions.map((suggestion, index) => (
               <li key={index} onClick={() => handleSuggestionClick(suggestion)}>
-                {suggestion.nickname} 
+                {suggestion.nickname}
                 {!suggestion.friend && (
-                  <button 
-                    className="suggestionsListButton" 
-                    onClick={() => handleFriendRequest(suggestion.nickname)} 
+                  <button
+                    className="suggestionsListButton"
+                    onClick={(e) => {
+                      e.stopPropagation(); 
+                      if (!suggestion.requested) {
+                        handleFriendRequest(suggestion.nickname);
+                      }
+                    }}
+                    disabled={suggestion.requested} 
                   >
-                    친구 신청
+                    {suggestion.requested ? '친구 신청 중' : '친구 신청'}
                   </button>
                 )}
               </li>
@@ -142,4 +154,3 @@ const Search = () => {
 };
 
 export default Search;
-
