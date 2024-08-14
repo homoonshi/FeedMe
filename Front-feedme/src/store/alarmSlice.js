@@ -26,6 +26,9 @@ const alarmSlice = createSlice({
         (notification) => notification.id !== action.payload
       );
     },
+    setRequests: (state, action) => {
+      state.requests = action.payload;
+    },
     addRequests: (state, action) => {
       state.requests.push(action.payload);
     },
@@ -53,6 +56,7 @@ const alarmSlice = createSlice({
 export const { 
   addNotifications,
   removeNotifications,
+  setRequests,
   addRequests,
   removeRequests,
   setIsSettingsMode,

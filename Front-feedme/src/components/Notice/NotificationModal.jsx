@@ -9,7 +9,7 @@ import customParseFormat from 'dayjs/plugin/customParseFormat';
 import CloseIcon from '@mui/icons-material/Close';
 import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
 import GroupAddOutlinedIcon from '@mui/icons-material/GroupAddOutlined';
-import { addNotifications, addRequests, removeRequests, setIsSettingsMode, setIsSwitchOn, setRequestMode, setAlarmTime } from '../../store/alarmSlice';
+import { addNotifications, setRequests, addRequests, removeRequests, setIsSettingsMode, setIsSwitchOn, setRequestMode, setAlarmTime } from '../../store/alarmSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { EventSourcePolyfill } from 'event-source-polyfill';
@@ -24,70 +24,92 @@ const NotificationModal = ({ onClose }) => {
   const { notifications, requests, isSettingsMode, isSwitchOn, isRequestMode, alarmTime } = useSelector((state) => state.alarm);
   const { token } = useSelector((state) => state.auth);
 
-  useEffect(() => {
+  // useEffect(() => {
   
-    const eventSource = new EventSourcePolyfill('https://i11b104.p.ssafy.io/api/alarms/subscribe/alarm', {
-      headers: {
-        'Authorization': sessionStorage.getItem('accessToken')
-      }
-    });
+  //   const eventSource = new EventSourcePolyfill('https://i11b104.p.ssafy.io/api/alarms/subscribe/alarm', {
+  //     headers: {
+  //       'Authorization': sessionStorage.getItem('accessToken')
+  //     }
+  //   });
 
-    console.log('요청 완료!');
+  //   console.log('요청 완료!');
 
-    eventSource.addEventListener('alarm', (event) => { // 서버에서 설정한 이름과 같아야 함.
-      // 서버에서 데이터가 전송될 때 호출되는 이벤트 핸들러
-      console.log(event.data);
-      console.log('Success!');
-      const newNotification = JSON.parse(event.data);
-      dispatch(addNotifications(newNotification));
-    });
+  //   eventSource.addEventListener('alarm', (event) => { // 서버에서 설정한 이름과 같아야 함.
+  //     // 서버에서 데이터가 전송될 때 호출되는 이벤트 핸들러
+  //     console.log(event.data);
+  //     console.log('Success!');
+  //     const newNotification = JSON.parse(event.data);
+  //     dispatch(addNotifications(newNotification));
+  //   });
 
-    // eventSource.onmessage = (event) => {
-    //   // 이벤트 데이터 처리
-    //   console.log('event data', event.data);
+  //   // eventSource.onmessage = (event) => {
+  //   //   // 이벤트 데이터 처리
+  //   //   console.log('event data', event.data);
     
-    // };
+  //   // };
   
-    eventSource.addEventListener('error', (error) => {
-      // SSE 연결 오류 처리
-      console.error('SSE Error:', error);
-      eventSource.close(); // 연결을 닫기
-    });
+  //   eventSource.addEventListener('error', (error) => {
+  //     // SSE 연결 오류 처리
+  //     console.error('SSE Error:', error);
+  //     eventSource.close(); // 연결을 닫기
+  //   });
   
-    // 컴포넌트가 언마운트되면 SSE 연결을 닫기
-    return () => {
-      eventSource.close();
+  //   // 컴포넌트가 언마운트되면 SSE 연결을 닫기
+  //   return () => {
+  //     eventSource.close();
+  //   };
+  // }, []);
+
+  useEffect(() => {
+    const requestList = async () => {
+      try {
+        const res = await axios.get('http://localhost:8080/friends/request', {
+          headers: {
+            'Authorization': sessionStorage.getItem('accessToken')
+          }
+        });
+        console.log('requests', res.data);
+        dispatch(setRequests(res.data));
+      } catch (err) {
+        console.log('Error : ', err);
+      }
     };
-  }, []);
+
+    requestList();
+  }, [dispatch]);
 
   const handleDelete = (index) => {
     const newNotifications = notifications.filter((_, i) => i !== index);
     dispatch(addNotifications(newNotifications));
   };
 
-  const handleReject = (index) => {
-    // 서버에서 요청을 거절하기 위한 API 호출
-    const requestId = requests[index].id;
-    axios.post(`https://i11b104.p.ssafy.io/api/friends/reject/${requestId}`)
-      .then(() => {
-        dispatch(removeRequests(index));
-      })
-      .catch(error => {
-        // console.error('Error rejecting friend request:', error);
+  const handleReject = async (index, requestId) => {
+    try {
+      await axios.post(`http://localhost:8080/friends/reject/${requestId}`, {}, {
+        headers: {
+          'Authorization': token,
+          'Content-Type': 'application/json',
+        }
       });
-  }
+      dispatch(removeRequests(index));
+    } catch (error) {
+      console.error('Error rejecting friend request:', error);
+    }
+  };
 
-  const handleAccept = (index) => {
-    // 서버에서 요청을 수락하기 위한 API 호출
-    const requestId = requests[index].id;
-    axios.post(`https://i11b104.p.ssafy.io/api/friends/accept/${requestId}`)
-      .then(() => {
-        dispatch(addRequests(index));
-      })
-      .catch(error => {
-        // console.error('Error accepting friend request:', error);
+  const handleAccept = async (index, requestId) => {
+    try {
+      await axios.post(`http://localhost:8080/friends/accept/${requestId}`, {}, {
+        headers: {
+          'Authorization': token,
+          'Content-Type': 'application/json',
+        }
       });
-  }
+      dispatch(removeRequests(index));
+    } catch (error) {
+      console.error('Error accepting friend request:', error);
+    }
+  };
 
   const handleTimeChange = async (time) => {
     if (time) {
