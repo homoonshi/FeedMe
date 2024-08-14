@@ -94,10 +94,10 @@ const NotificationModal = ({ onClose }) => {
   }
 
   const handleDelete = async (alarmId) => {
-    console.log('index : ', alarmId);
+    console.log('alarmId : ', alarmId);
 
     try {
-      await axios.delete(`https://i11b104.p.ssafy.io/api/friends/reject/${alarmId}`, {}, {
+      await axios.delete(`https://i11b104.p.ssafy.io/api/alarms/${alarmId}`, {}, {
         headers: {
           'Authorization': sessionStorage.getItem('accessToken'),
           'Content-Type': 'application/json',
