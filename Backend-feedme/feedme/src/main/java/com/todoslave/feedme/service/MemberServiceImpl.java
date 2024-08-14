@@ -126,7 +126,7 @@ public class MemberServiceImpl implements MemberService {
             }
 
             // 친구 신청을 보냈는지 체크
-            Optional<FriendRequest> friendRequest = friendRequestRepository.findByMember_IdAndCounterpartId_Id(SecurityUtil.getCurrentUserId(), member.getId());
+            Optional<FriendRequest> friendRequest = friendRequestRepository.findByMember_IdAndCounterpartId_Id(member.getId(),SecurityUtil.getCurrentUserId());
             mem.setRequested(friendRequest.isPresent());
 
             memberSearchResponse.add(mem);

@@ -59,8 +59,7 @@ public class FriendServiceImpl implements FriendService{
      FriendRepository friendRepository;
      @Autowired
      FriendRequestRepository friendRequestRepository;
-     @Autowired
-     private com.todoslave.feedme.imageUtil imageUtil;
+
 
     private final FriendRequestMapper friendRequestMapper;
     private final MemberChatRoomRepository memberChatRoomRepository;
@@ -75,8 +74,8 @@ public class FriendServiceImpl implements FriendService{
 
         FriendRequest friendRequest = new FriendRequest();
 
-        friendRequest.setMember(member);
-        friendRequest.setCounterpartId(counterpart);
+        friendRequest.setMember(counterpart);
+        friendRequest.setCounterpartId(member);
 
         FriendRequest request = friendRequestRepository.save(friendRequest);
 
