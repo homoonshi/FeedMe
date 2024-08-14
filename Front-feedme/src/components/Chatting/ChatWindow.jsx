@@ -3,6 +3,7 @@ import SockJS from 'sockjs-client';
 import { Client } from '@stomp/stompjs';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUserData } from '../../store/userSlice';
+import axios from 'axios';
 
 const ChatWindow = ({ roomId }) => {
   const dispatch = useDispatch();
@@ -38,12 +39,54 @@ const ChatWindow = ({ roomId }) => {
     }
   }, [dispatch, token]);
 
+  const renewConnect = async (id) => {
+    try {
+      const response = await axios.post('http://localhost:8080/friends/chats/connect', 
+      {}, // 본문 데이터가 필요 없을 경우 빈 객체 전달
+      {
+        params: {
+          room: id // URL에 추가될 요청 파라미터
+        },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': sessionStorage.getItem('accessToken'),
+        }
+      });
+      console.log(response.data);
+    } catch (error) {
+      console.error('Error fetching connect:', error);
+    }
+  };
+  
+
+  const renewDisconnect = async (id) => {
+    try {
+      const response = await axios.post('http://localhost:8080/friends/chats/disconnect',
+      {}, // 본문 데이터가 필요 없을 경우 빈 객체 전달
+        {
+          params: {
+            room: id // URL에 추가될 요청 파라미터
+          },
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': sessionStorage.getItem('accessToken'),
+          }
+        });
+        console.log(response.data);
+      } catch (error) {
+        console.error('Error fetching connect:', error);
+      }
+  };
+
   const connect = () => {
+
     if (stompClient.current) {
       disconnect(); // 기존 연결이 있을 경우 해제
     }
 
-    const socket = new SockJS('https://i11b104.p.ssafy.io/api/ws/friendChat');
+    renewConnect(roomId);
+
+    const socket = new SockJS('http://localhost:8080/ws/friendChat');
     const newClient = new Client({
         webSocketFactory: () => socket,
         debug: (str) => {
@@ -102,6 +145,7 @@ const ChatWindow = ({ roomId }) => {
       setSkip(0); // 스킵 초기화
       setHasMore(true); // 페이징 관련 상태 초기화
       console.log("Disconnected from the WebSocket");
+      renewDisconnect(roomId);
     }
   };
 
@@ -161,13 +205,6 @@ const ChatWindow = ({ roomId }) => {
   return (
     <div>
       <div>
-        <input
-          type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          placeholder="Enter your username"
-        />
-        <br />
         <input
           type="text"
           value={messageContent}
