@@ -11,7 +11,7 @@ public interface FeedCommentService {
     FeedCommentResponseDTO modifyComment(FeedCommentRequestDTO feedCommentRequestDTO, int feedcommantId);
 
     //댓글 삭제
-    boolean delectFeedComment(int feedId);
+    boolean deleteFeedComment(int feedId);
 
 
 

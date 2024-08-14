@@ -7,6 +7,7 @@ public class AlarmMapper {
 
   public static AlarmResponseDTO toDto(Alarm alarm){
     AlarmResponseDTO dto = new AlarmResponseDTO();
+    dto.setAlarmId(alarm.getId());
     dto.setContent(alarm.getContent());
     return dto;
   }

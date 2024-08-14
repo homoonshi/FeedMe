@@ -1,10 +1,8 @@
 package com.todoslave.feedme.controller;
 
 import com.todoslave.feedme.DTO.*;
-import com.todoslave.feedme.domain.entity.Feed.FeedComment;
 import com.todoslave.feedme.service.FeedCommentService;
 import io.swagger.v3.oas.annotations.Operation;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,7 +38,7 @@ public class FeedCommentController {
     @Operation(summary = "댓글 삭제")
     @DeleteMapping("/{feedComment_Id}")
     public ResponseEntity<?> delectFeedComment(@PathVariable int feedComment_Id) {
-        boolean succes = feedCommentService.delectFeedComment(feedComment_Id);
+        boolean succes = feedCommentService.deleteFeedComment(feedComment_Id);
         if (succes) {
             String msg = "삭제되었습니다";
             return new ResponseEntity<String>(msg, HttpStatus.OK);

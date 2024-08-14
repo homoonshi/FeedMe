@@ -64,7 +64,7 @@ public class FeedCommentServiceImpl implements FeedCommentService {
 
     //댓글 삭제
     @Override
-    public boolean delectFeedComment(int feedId) {
+    public boolean deleteFeedComment(int feedId) {
         FeedComment feedComment = feedCommentRepository.findById(feedId).orElse(null);
         if (feedComment == null|| SecurityUtil.getCurrentMember().getId() != feedComment.getMember().getId()) {
             return false;

@@ -48,6 +48,12 @@ public class AlarmController {
         return ResponseEntity.noContent().build();
     }
 
+    @DeleteMapping("/{alarmId}")
+    public ResponseEntity<Void> removeAlarm(@PathVariable int alarmId){
+        alarmService.deleteAlarm(alarmId);
+        return ResponseEntity.noContent().build();
+    }
+
     // 생일, 투두
     @GetMapping()
     private ResponseEntity<List<AlarmResponseDTO>> loadAlarms() {

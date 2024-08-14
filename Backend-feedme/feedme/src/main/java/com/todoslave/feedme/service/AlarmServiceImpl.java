@@ -5,14 +5,10 @@ import com.todoslave.feedme.DTO.AlarmResponseDTO;
 import com.todoslave.feedme.DTO.AlarmSetRequestDTO;
 import com.todoslave.feedme.DTO.FriendReqResponseDTO;
 import com.todoslave.feedme.DTO.MemberChatListResponseDTO;
-import com.todoslave.feedme.DTO.PaginationRequestDTO;
 import com.todoslave.feedme.domain.entity.alarm.Alarm;
 import com.todoslave.feedme.domain.entity.avatar.Creature;
-import com.todoslave.feedme.domain.entity.communication.MemberChatMessage;
-import com.todoslave.feedme.domain.entity.communication.MemberChatRoomChecked;
 import com.todoslave.feedme.domain.entity.membership.Member;
 import com.todoslave.feedme.domain.entity.membership.MemberAlarm;
-import com.todoslave.feedme.login.util.SecurityUserDto;
 import com.todoslave.feedme.login.util.SecurityUtil;
 import com.todoslave.feedme.mapper.AlarmMapper;
 import com.todoslave.feedme.repository.AlarmRepository;
@@ -24,19 +20,12 @@ import com.todoslave.feedme.repository.TodoRepository;
 import jakarta.transaction.Transactional;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import javax.swing.text.html.parser.Entity;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -169,12 +158,14 @@ public class AlarmServiceImpl implements AlarmService{
   public SseEmitter renewCreateEmitter() {
     int memberId = SecurityUtil.getCurrentUserId();
 
+    System.out.println("Chatting renew channel is!!!!!!!!!!!!!! "+memberId);
+
     SseEmitter emitter = new SseEmitter();
     chatEmitters.put(memberId, emitter);
 
     emitter.onCompletion(() -> chatEmitters.remove(memberId));
     emitter.onTimeout(() -> chatEmitters.remove(memberId));
-    emitter.onError((e) -> emitters.remove(memberId));
+    emitter.onError((e) -> chatEmitters.remove(memberId));
 
     return emitter;
   }
@@ -186,7 +177,11 @@ public class AlarmServiceImpl implements AlarmService{
 
     SseEmitter emitter = chatEmitters.get(memberId);
 
+    System.out.println("enter the renew chat !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
     if(emitter!=null) {
+
+      System.out.println(memberId+ "  renew chat SSE success!!!!!");
 
       room.setIsChecked(checked);
 
@@ -257,13 +252,20 @@ public class AlarmServiceImpl implements AlarmService{
 
     for(Alarm a : alarm){
 
-      AlarmResponseDTO alarmResponseDTO = new AlarmResponseDTO();
-      alarmResponseDTO.setContent(a.getContent());
+      AlarmResponseDTO alarmResponseDTO = AlarmMapper.toDto(a);
       response.add(alarmResponseDTO);
 
     }
 
     return response;
+  }
+
+  @Override
+  @Transactional
+  public void deleteAlarm(int alarmId) {
+
+    alarmRepository.deleteById(alarmId);
+
   }
 
 
