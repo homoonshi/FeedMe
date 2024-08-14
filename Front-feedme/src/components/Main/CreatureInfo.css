@@ -2,4 +2,51 @@
     border-radius: 20px;
     background-color: rgba(255, 255, 255, 0.3);
     backdrop-filter: blur(12px);
+    width: 35%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.CreatureInfo h2 {
+    font-family: 'PretendardSM';
+    font-size: 23px;
+    margin: 10px 0 0 0;
+}
+
+.CreatureInfo p {
+    font-family: 'PretendardR';
+    font-size: 18px;
+    margin: 5px 0;
+}
+
+#CreatureInfoDay {
+    font-family: 'PretendardM';
+    color: #9E69FA;
+}
+
+.CreatureInfoPhoto {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 50%;
+    transition: transform 0.3s ease-in-out;
+    cursor: pointer;
+}
+
+.CreatureInfoPhoto:hover {
+    transform: translateY(-6px);
+}
+
+.CreatureInfoTodo {
+    width: 90%;
+    transition: transform 0.3s ease-in-out;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+}
+
+.CreatureInfoTodo:hover {
+    transform: translateY(-6px);
 }

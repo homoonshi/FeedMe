@@ -1,0 +1,120 @@
+*{
+    box-sizing: border-box;
+}
+
+.TodoListMainContainer{
+    display: flex;
+    flex-direction: column;
+    /* position: relative; */
+    overflow: hidden;
+    width: 90%;
+    /* height: 100%; */
+    max-height: 80vh;
+
+    /* border: 1px saddlebrown solid; */
+}
+
+.TodoListMainHeader{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 10%;
+
+    /* border: 1px solid red; */
+}
+
+.TodoListMainHeaderDate {
+    font-size: 1rem;
+    font-family: 'PretendardM';
+    margin-top: 5%;
+    margin-bottom: 5%;
+}
+
+.TodoArrows {
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+
+
+
+.TodoListMainContent {
+    /* flex-grow: 1; */
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    /* border: 1px solid blue; */
+}
+
+.TodoListMainSections{
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 3% 10%;
+
+    /* border: 1px solid blue; */
+
+    /* height: calc(80% - 20%); */
+    /* flex-shrink: 0; */
+    /* display: flex;
+    flex-direction: column;
+    max-height: 80%;
+    overflow-y: scroll;
+    padding-top: 4%;
+    padding-left: 3%;
+    padding-right: 3%; */
+}
+
+.TodoListMainSections::-webkit-scrollbar {
+    display: none;
+  }
+
+.TodoListMainSection{
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 2;
+
+    /* border: 1px solid greenyellow; */
+}
+
+.TodoListMainSectionHeader{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+
+
+.TodoListMainActions{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10%;
+
+    height: 10%;
+    border: 1px solid pink;
+}
+
+.TodoListMainActionsDrawing{
+    border: none;
+    background-color: white;
+    color: black;
+    border-radius: 30px;
+    font-family: 'PretendardR';
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    height: 2rem;
+}
+
+.TodoListMainActionsDrawingIcon{
+    margin-right: 0.5rem;
+}
+
+.TodoListMainActionsOption{
+    font-size: 1.3em;
+    cursor: pointer;
+    background-color: white;
+    border: none;
+    border-radius: 50%;
+}

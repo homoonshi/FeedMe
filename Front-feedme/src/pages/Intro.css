@@ -3,7 +3,7 @@
     height: 100vh;
     overflow: hidden;
     /* overflow-y: scroll; */
-    background: url('../assets/images/test2.png') no-repeat center;
+    background: url('../assets/images/img-main.png') no-repeat center;
     background-size: cover;
     display: flex;
     justify-content: center;
@@ -20,11 +20,38 @@
     justify-content: space-between;
 }
 
+/* @keyframes waveAnimation {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px); 
+    }
+  } */
+
+  @keyframes waveRise {
+    0% {
+      transform: translateY(0);
+      opacity: 0;
+    }
+    50% {
+      transform: translateY(-20px); /* 글자를 위로 20px 이동 */
+      opacity: 1; /* 투명도 증가 */
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 0; /* 투명도로 물결이 차오르는 느낌을 연출 */
+    }
+  }
+
 .IntroLogo {
     color: white;
     text-shadow: 0 2px 3px rgba(0, 0, 0, 0.17), 0 0 4px rgba(0, 0, 0, 0.08);
-    margin: 150px 0px;
+    margin: 152px 0px;
     font-family: 'PretendardB';
+    display: inline-block;
+    /* animation: waveAnimation 2s ease-in-out infinite; */
+    animation: waveRise 3s ease-in-out infinite;
 }
 
 
@@ -33,7 +60,7 @@
 /* @import url("https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900&display=swap"); */
 
 .IntroClickWrapper {
-    margin: 80px 0px;
+    margin: 65px 0px;
 }
 
 .w-btn {
@@ -48,6 +75,7 @@
     font-weight: 600;
     font-size: 18px;
     transition: 0.25s;
+    cursor: pointer;
 }
 
 .w-btn-gra1 {

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './Intro.css'
+import '../pages/Intro.css'
 import '../assets/font/Font.css'
 
 const Intro = () => {

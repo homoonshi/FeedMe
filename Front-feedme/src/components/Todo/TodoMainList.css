@@ -1,45 +1,61 @@
 .TodoMainListContainer {
-  padding: 20px;
   display: flex;
   flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  width: 100%; 
   height: 100%;
-  position: relative; /* 자식 요소를 고정하기 위해 위치 설정 */
-  overflow: hidden; /* 부모 요소를 넘어가지 않도록 설정 */
 }
 
 .TodoHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  position: sticky; /* 스크롤 시 고정 */
-  top: 0; /* 상단에 고정 */
-  z-index: 1; /* 다른 요소 위에 표시되도록 설정 */
-  padding: 10px 0;
+  padding: 0% 10%;
+  margin-top: 5%;
+  height: 10%;
 }
 
 .TodoHeader h3 {
   font-size: 1.5em;
   margin: 0 10px;
+  font-family: 'PretendardM';
 }
 
 .TodoArrow {
-  font-size: 1.5em;
+  font-size: 1.3rem;
   cursor: pointer;
 }
 
 .TodoSections {
-  flex: 1; /* 남은 공간을 차지하도록 설정 */
+  height: 380px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  overflow-y: auto; /* 스크롤 가능하게 설정 */
-  padding: 5% 10%; /* 패딩 추가 */
+  gap: 0.5%; 
+  overflow: hidden;
+  overflow-y: auto;
+  padding: 3% 10%;
+}
+
+/* Webkit 기반 브라우저 (Chrome, Safari) */
+.TodoSections::-webkit-scrollbar {
+  width: 10px;
+  /* 스크롤바의 너비 */
+}
+
+.TodoSections::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 20px;
+}
+
+.TodoSections::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
 
 .TodoSection {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 1%; 
 }
 
 .TodoSectionHeader {
@@ -50,64 +66,166 @@
 
 .TodoSection h4 {
   font-size: 1.2em;
+  margin-top: 5%;
+  margin-bottom: 5%;
 }
 
 .TodoSection ul {
   list-style-type: none;
   padding: 0;
+  margin-top: 0;
+  font-family: 'PretendardR';
+  margin-bottom: 1%;
 }
 
 .TodoSection ul li {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 1%;
 }
 
 .TodoItemContent {
   display: flex;
   align-items: center;
-  justify-content: space-between; /* 옵션 버튼 정렬 */
-  gap: 10px;
-  text-align: left; /* 왼쪽 정렬 추가 */
+  justify-content: flex-start;
+  margin-bottom: 1%; 
+  text-align: left;
+  position: relative;
 }
 
 .TodoOptionsButton {
   font-size: 1.2em;
   cursor: pointer;
+  font-family: 'PretendardR';
+  position: absolute;
+  right: 0;
 }
 
 .TodoOptions {
   display: flex;
-  gap: 5px;
+  gap: 5%;
 }
 
 .TodoActions {
   display: flex;
   align-items: center;
-  gap: 10px;
-  position: sticky; /* 스크롤 시 고정 */
-  bottom: 0; /* 하단에 고정 */
-  /* background-color: rgba(255, 255, 255, 0.6); */
-  z-index: 1; /* 다른 요소 위에 표시되도록 설정 */
+  gap: 5%;
   padding: 10px 0;
-  justify-content: center; /* 가운데 정렬 */
+  justify-content: center;
+  position: sticky; 
+  bottom: 0;
+  z-index: 1;
 }
-  
+
 .CreateDrawingButton {
-  background-color: #87C908;
-  color: white;
+  background-color: white;
+  color: black;
   border: none;
   border-radius: 5px;
   padding: 10px;
   cursor: pointer;
+  display: flex; 
+  align-items: center; 
 }
 
 .MoreOptionsButton {
-  font-size: 1.5em;
+  font-size: 1.8rem;
   cursor: pointer;
+  background-color: white;
+  border: none;
+  border-radius: 50%;
 }
 
 .AddTodoButton {
   font-size: 1.2em;
   cursor: pointer;
+}
+
+.DrawingIcon {
+  margin-right: 5px; 
+}
+
+.TodoMainModal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  right: auto;
+  bottom: auto;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  outline: none;
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px; 
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); 
+}
+
+.TodoMainModalTitle {
+  font-size: 1.5em;
+  text-align: center;
+  margin: 0; 
+  font-family: 'PretendardM'; 
+}
+
+.TodoMainModalInput {
+  padding: 10px;
+  font-size: 1em;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.TodoMainModalButtons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.TodoMainModalButton {
+  background-color: #808080;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+}
+
+.TodoMainModalButton:last-child {
+  background-color: #9E69FA; 
+}
+
+.TodoMainOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.TodoMainModalD {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  right: auto;
+  bottom: auto;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 1%;
+  border-radius: 25px;
+  outline: none;
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px; 
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); 
+}
+
+.TodoMainModalDImage {
+  width: 100%;
+  height: auto;
+  margin-bottom: 1%;
 }

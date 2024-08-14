@@ -9,11 +9,12 @@
   justify-content: center;
   align-items: center;
   position: relative;
+  font-family: 'PretendardR';
 }
 
 .Login::before {
   content: "";
-  background: url('../assets/images/test2.png') no-repeat center;
+  background: url('../assets/images/img-main.png') no-repeat center;
   background-size: cover;
   opacity: 0.6;
   position: absolute;
@@ -42,7 +43,7 @@
 .LoginImage {
   width: 60%;
   height: 100%;
-  background: url('../assets/images/test2.png') no-repeat center;
+  background: url('../assets/images/img-main.png') no-repeat center;
   background-size: cover;
   position: relative;
   border-radius: 30px 0px 0px 30px;
@@ -82,10 +83,22 @@
 
 .LoginGoogleButton {
   margin-bottom: 35px;
+  transition: transform 0.3s ease-in-out;
+  cursor: pointer;
 }
 
 .LoginNaverButton {
   margin-bottom: 80px;
+  transition: transform 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+.LoginGoogleButton:hover {
+  transform: translateY(-6px); 
+}
+
+.LoginNaverButton:hover {
+  transform: translateY(-6px); 
 }
 
 .LoginButtons span {
@@ -95,6 +108,6 @@
 
 .LoginSignup {
   margin-left: 10px;
-  color: #9E69FA;
+  color: #9E69FA  ;
   font-family: 'PretendardM';
 }

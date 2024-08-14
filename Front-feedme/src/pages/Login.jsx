@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './Login.css'
+import '../pages/Login.css'
 import '../assets/font/Font.css'
 import MyNaverLoginButton from '../components/Buttons/NaverButton';
 import MyKakaoLoginButton from '../components/Buttons/KakaoButton';
@@ -16,25 +16,25 @@ const Login = () => {
           <hr />
           <div class="LoginButtons">
             <div className='LoginGoogleButton'>
-              <Link to='/Main'>
+              {/* <Link to='/Main'> */}
                 <MyKakaoLoginButton style={{
                   height: "45px",
                   fontSize: "17px"
                 }}/>
-              </Link>
+              {/* </Link> */}
             </div>
             <div className='LoginNaverButton'>
-              <Link to='/Main'>
+              {/* <Link to='/Main'> */}
                 <MyNaverLoginButton style={{
                   height: "45px",
                   fontSize: "17px"
                 }} />
-              </Link>
+              {/* </Link> */}
             </div>
           </div>
           <div>
-            <span>New User?</span>
-            <Link className='LoginSignup' to='/Signup'>Signup</Link>
+            <span>©Phoenix</span>
+            {/* <Link className='LoginSignup' to='/Signup'>Signup</Link> */}
           </div>
         </div>
       </div>

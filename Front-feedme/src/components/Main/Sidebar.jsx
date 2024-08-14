@@ -1,34 +1,68 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import './Sidebar.css';
-import main from '../../assets/icons/icon-main-green-50.png'
-import todolist from '../../assets/icons/icon-todo-gray-50.png'
-import diary from '../../assets/icons/icon-diary-gray-50.png'
-import chat from '../../assets/icons/icon-chat-gray-50.png'
+import React, { useState } from 'react';
+import { useNavigate, useLocation } from "react-router-dom";
+import '../Main/Sidebar.css';
+import Menu from './SidebarMenu';
+import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
+import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
+import AutoStoriesOutlinedIcon from '@mui/icons-material/AutoStoriesOutlined';
+import ChatBubbleOutlineOutlinedIcon from '@mui/icons-material/ChatBubbleOutlineOutlined';
+import CreateOutlinedIcon from '@mui/icons-material/CreateOutlined';
+
 
 const Sidebar = () => {
+  const [active, setActive] = useState(useLocation().pathname);
+  const navigate = useNavigate(); // 페이지 이동을 위해 useNavigate 훅 사용
+
+  const handleClick = (path) => {
+    setActive(path);
+    // navigate(path); // 지정된 경로로 페이지 이동
+  };
+
+  const clickLogo = () => {
+    navigate('/');
+  }
+
   return (
     <div className='SidebarBack'>
-      <div className='SidebarLogo'>
+      <div className='SidebarLogo' onClick={clickLogo}>
         <h2>Feed me</h2>
       </div>
       <div className='SidebarList'>
-        <div>
-          <img src={main} alt="main-icon" />
-          <Link to="/Main">메인</Link>
-        </div>
-        <div>
-          <img src={todolist} alt="main-icon" />
-          <Link to="/Todo">할 일 목록</Link>
-        </div>
-        <div>
-          <img src={diary} alt="main-icon" />
-          <Link to="/Diary">그림일기</Link>
-        </div>
-        <div>
-          <img src={chat} alt="main-icon" />
-          <Link to="/Chatting">채팅</Link>
-        </div>
+        <Menu
+          isActive={active === '/Main'}
+          onClick={() => handleClick('/Main')}
+          icon={GridViewOutlinedIcon}
+          des="/Main"
+          link="메인"
+        />
+        <Menu
+          isActive={active === '/Todo'}
+          onClick={() => handleClick('/Todo')}
+          icon={FormatListBulletedIcon}
+          des="/Todo"
+          link="할 일 목록"
+        />
+        <Menu
+          isActive={active === '/Diary'}
+          onClick={() => handleClick('/Diary')}
+          icon={AutoStoriesOutlinedIcon}
+          des="/Diary"
+          link="그림일기"
+        />
+        <Menu
+          isActive={active === '/Chatting'}
+          onClick={() => handleClick('/Chatting')}
+          icon={ChatBubbleOutlineOutlinedIcon}
+          des="/Chatting"
+          link="채팅"
+        />
+        <Menu
+          isActive={active === '/Feed'}
+          onClick={() => handleClick('/Feed')}
+          icon={CreateOutlinedIcon}
+          des="/Feed"
+          link="게시판"
+        />
       </div>
     </div>
   );

@@ -1,37 +1,25 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Sidebar from '../Main/Sidebar';
 import Search from '../Main/Search';
-import ToDoList from './TodoList';
+import TodoMainList from './TodoMainList';
 import TodoCreature from './TodoCreature';
 import './Todo.css'
-
-
+ 
 const Todo = () => {
-  const [drawing, setDrawing] = useState(false);
-
-  const handleDrawClick = () => {
-    alert('Drawing created!');
-    setDrawing(true);
-  };
-
   return (
     <div className="TodoBack">
       <div className="TodoContainer">
-        <Sidebar/>
+        <Sidebar />
         <div className="TodoMain">
-          <Search />
-            <div className="TodoDashboard">
-              <div className="TodoList">
-                <ToDoList />
-                <button onClick={handleDrawClick}>DRAW</button>
-                  {drawing && (
-                    <div/>
-                  )} 
-              </div>
-              <div className="TodoCreature">
-                <TodoCreature />
-              </div>
+          <div className="TodoDashboard">
+            <div className="TodoList">
+              <TodoMainList />
             </div>
+            <div className="TodoCreatures">
+              <TodoCreature />
+            </div>
+          </div>
+          <Search />
         </div>
       </div>
     </div>
