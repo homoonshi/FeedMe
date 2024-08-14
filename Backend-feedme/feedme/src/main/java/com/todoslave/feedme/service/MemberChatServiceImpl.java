@@ -81,8 +81,12 @@ public class MemberChatServiceImpl implements MemberChatService{
       String nickname = memberRepository.findById(counterPartId).orElseThrow().getNickname();
       chatResponse.setCounterpartNickname(nickname);
       Creature creature = creatureRepository.findByMemberId(counterPartId);
+
+
       chatResponse.setAvatar(
               "http://localhost:8080/image/creature/"+creature.getMember().getId()+"_"+creature.getLevel());
+
+
       MemberChatRoomChecked checked = memberChatRoomCheckedRepository.findByMemberChatRoomIdAndMemberId(room.getId(),memberId);
       chatResponse.setIsChecked(checked.getIsChecked());
       chatResponse.setReceiveTime(room.getReceiveTime());

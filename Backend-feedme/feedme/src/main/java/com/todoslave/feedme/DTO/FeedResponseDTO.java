@@ -10,7 +10,8 @@ import java.time.LocalDateTime;
 public class FeedResponseDTO {
 
     private int id;
-    private String img;
+//    private String img;
+    private byte[] img;
     private String content;
     private String author;
     private String likeCnt;

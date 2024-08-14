@@ -14,7 +14,7 @@ public interface CreatureService {
 
 
     //크리쳐 만들기
-    Creature createFristCreature(String keyword, String photo, String creatureName);
+    Creature createFristCreature(String keyword, MultipartFile photo, String creatureName);
     //크리쳐 정보 가져오기
     CreatureInfoResponseDTO creatureInfo(Member member);
     //크리쳐 삭제하기

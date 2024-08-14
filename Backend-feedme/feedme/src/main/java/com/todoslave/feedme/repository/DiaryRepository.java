@@ -3,5 +3,13 @@ package com.todoslave.feedme.repository;
 import com.todoslave.feedme.domain.entity.diary.PictureDiary;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface DiaryRepository extends JpaRepository<PictureDiary, Long> {
+import java.time.LocalDate;
+import java.util.List;
+
+public interface DiaryRepository extends JpaRepository<PictureDiary, Integer> {
+    // Example: Find all PictureDiaries by Member ID
+    List<PictureDiary> findByMemberId(Integer memberId);
+
+    // Example: Find all PictureDiaries created on a specific date
+    List<PictureDiary> findByCreatedAt(LocalDate createdAt);
 }

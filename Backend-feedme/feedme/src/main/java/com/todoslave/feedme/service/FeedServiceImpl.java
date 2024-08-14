@@ -8,6 +8,7 @@ import com.todoslave.feedme.domain.entity.membership.Member;
 import com.todoslave.feedme.login.util.SecurityUtil;
 import com.todoslave.feedme.repository.FeedLikeRepository;
 import com.todoslave.feedme.repository.FeedRepository;
+import com.todoslave.feedme.util.FlaskClientUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class FeedServiceImpl implements FeedService{
 
+    private final FlaskClientUtil flaskClientUtil;
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -135,7 +137,10 @@ public class FeedServiceImpl implements FeedService{
         feedDTO.setEmail(feed.getMember().getEmail());
         feedDTO.setFeedId(feed.getId());
         feedDTO.setNickname(feed.getNickname());
-        feedDTO.setImg("https://i11b104.p.ssafy.io/image/pictureDiary/"+SecurityUtil.getCurrentUserId()+"_"+feed.getDiaryDay()); // 이미지 처리 로직 필요
+
+        feedDTO.setImg(flaskClientUtil.getCreatureDiaryAsByteArray(feed.getMember().getNickname(),feed.getUpdatedAt().toLocalDate()));
+        feedDTO.setCreatureImg(flaskClientUtil.getCreatureImageAsByteArray(feed.getMember().getNickname(),feed.getMember().getCreature().getId(),feed.getMember().getCreature().getLevel()));
+
         feedDTO.setCaption(feed.getContent());
         feedDTO.setLastCreateTime(feed.getUpdatedAt());
         feedDTO.setLikes(feed.getLikeCount());
@@ -160,7 +165,7 @@ public class FeedServiceImpl implements FeedService{
     public FeedResponseDTO convertToDTO(Feed feed) {
         FeedResponseDTO dto = new FeedResponseDTO();
         dto.setId(feed.getId());
-        dto.setImg("https://i11b104.p.ssafy.io/image/pictureDiary/"+SecurityUtil.getCurrentUserId()+"_"+feed.getDiaryDay()); // 이미지 URL이 엔티티에 없다면 필요에 따라 설정
+        dto.setImg(flaskClientUtil.getCreatureImageAsByteArray(feed.getMember().getNickname(),feed.getMember().getCreature().getId(),feed.getMember().getCreature().getLevel())); // 이미지 URL이 엔티티에 없다면 필요에 따라 설정
         dto.setContent(feed.getContent());
         dto.setAuthor(feed.getNickname());
         dto.setLikeCnt(String.valueOf(feed.getLikeCount()));

@@ -7,6 +7,8 @@ import com.todoslave.feedme.DTO.TodoResponseDTO;
 import com.todoslave.feedme.DTO.TodoMainResponseDTO;
 import com.todoslave.feedme.DTO.TodoModifyRequestDTO;
 import com.todoslave.feedme.DTO.TodoRequestDTO;
+import com.todoslave.feedme.domain.entity.diary.PictureDiary;
+import com.todoslave.feedme.domain.entity.membership.Member;
 import com.todoslave.feedme.domain.entity.task.CreatureTodo;
 import com.todoslave.feedme.domain.entity.task.DayOff;
 import com.todoslave.feedme.domain.entity.task.Todo;
@@ -14,16 +16,21 @@ import com.todoslave.feedme.gpt.dto.ChatGPTRequest;
 import com.todoslave.feedme.gpt.dto.ChatGPTResponse;
 import com.todoslave.feedme.login.util.SecurityUtil;
 import com.todoslave.feedme.repository.CreatureTodoReposito;
+import com.todoslave.feedme.repository.DiaryRepository;
 import com.todoslave.feedme.repository.TodoCategoryRepository;
 import com.todoslave.feedme.repository.TodoRepository;
+import com.todoslave.feedme.util.FlaskClientUtil;
 import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -43,6 +50,10 @@ public class TodoServiceImpl implements TodoService {
   private final CreatureService creatureService;
   @Autowired
   private RestTemplate template;
+  @Autowired
+  private DiaryRepository diaryRepository;
+  @Autowired
+  private FlaskClientUtil flaskClientUtil;
 
   // 할일 목록에서 일정(일) 불러오기
   @Override
@@ -281,27 +292,51 @@ public class TodoServiceImpl implements TodoService {
 
     String generatedDiaryEntry = generateDiaryEntry(todoAll);// 여기서 AI가 했던일을 일기로 만들어줌
 
-//    System.out.println(todoAll);
-    System.out.println("이거야");
-    System.out.println(generatedDiaryEntry);
-//
-//
-//    //요청할때 날자랑 내 id 줘야함
-//    // AI 요청!!!!!!!!!!!!!!!!!!!!!
-//
-//
-////    int completedTodos = (int) todoList.stream().filter(todo -> todo.getIsCompleted() == 1).count();
-////    int completedCreatureTodos = (int) creatureTodoList.stream().filter(creatureTodo -> creatureTodo.getIsCompleted() == 1).count();
-//
-//    System.out.println(completedTodos+completedCreatureTodos);
+    PictureDiary Diary = new PictureDiary();
+    Diary.setContent(generatedDiaryEntry);
+    Diary.setCreatedAt(date);
+    Diary.setMember(SecurityUtil.getCurrentMember());
+    diaryRepository.save(Diary);
+
+
+    // 그림일기 요청 추가 (Flask 서버로 전송)
+    createPictureDiary(date);
 
     //경험치 올리기
     creatureService.expUp(completedTodos+completedCreatureTodos);
 
-
     //예본 해
       return true;
     }
+
+
+  private void createPictureDiary(LocalDate date) {
+
+    Member member = SecurityUtil.getCurrentMember();
+    String keyword = member.getCreature().getCreatureKeyword();
+    String nickname = member.getNickname();
+    // 날짜를 문자열 형식으로 변환 (yyyy-MM-dd)
+    String formattedDate = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+    // URL 생성 - 키워드와 날짜를 쿼리 파라미터로 추가
+    String url = String.format("http://localhost:3333/yolo?name=%s&keyword=%s&date=%s",
+            nickname, keyword, formattedDate);
+
+    // Flask 서버에 GET 요청 보내기
+    ResponseEntity<ByteArrayResource> response = template.getForEntity(url, ByteArrayResource.class);
+
+    // 요청이 성공했는지 확인하고, 성공하지 않았으면 예외를 던짐
+    if (!response.getStatusCode().is2xxSuccessful()) {
+      throw new RuntimeException("Failed to create picture diary on Flask server.");
+    }
+
+    // Flask 서버로부터 받은 그림일기 데이터를 활용할 수 있습니다.
+  }
+
+
+
+
+
 
 
   // GPT API 호출을 통해 일기를 생성하는 메서드

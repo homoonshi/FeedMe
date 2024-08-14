@@ -7,5 +7,7 @@ public class MemberSearchResponseDTO {
     String nickname;
     boolean isFriend;
     boolean isRequested;
-    String creatureImg;
+//    String creatureImg;
+    byte[] creatureImg;
+
 }

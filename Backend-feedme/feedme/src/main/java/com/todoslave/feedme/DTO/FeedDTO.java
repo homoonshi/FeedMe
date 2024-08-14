@@ -10,7 +10,12 @@ public class FeedDTO {
         private int feedId;
         private String email;
         private String nickname;
-        private String img;
+//        private String img;
+
+
+        private byte[] img;
+        private byte[] creatureImg;
+
         private String caption;
         private LocalDateTime lastCreateTime;
         private int likes;

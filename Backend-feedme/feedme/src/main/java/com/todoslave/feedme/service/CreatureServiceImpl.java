@@ -2,13 +2,17 @@ package com.todoslave.feedme.service;
 
 import com.todoslave.feedme.DTO.CreatureInfoResponseDTO;
 import com.todoslave.feedme.domain.entity.avatar.Creature;
-import com.todoslave.feedme.domain.entity.membership.Emotion;
+
 import com.todoslave.feedme.domain.entity.membership.Member;
 import com.todoslave.feedme.login.util.SecurityUtil;
 import com.todoslave.feedme.repository.CreatureRepository;
 import com.todoslave.feedme.repository.MemberRepository;
+import com.todoslave.feedme.util.FlaskClientUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -19,6 +23,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
+
 import javax.swing.*;
 import java.time.LocalDate;
 import java.time.Period;
@@ -27,16 +32,21 @@ import java.time.Period;
 @RequiredArgsConstructor
 public class CreatureServiceImpl implements CreatureService {
 
-    @Autowired
-    final private MemberRepository memberRepository;
-    @Autowired
-    final private CreatureRepository creatureRepository;
+//    @Autowired
+//    final private MemberRepository memberRepository;
+//    @Autowired
+//    final private CreatureRepository creatureRepository;
+    private final MemberRepository memberRepository;
+    private final CreatureRepository creatureRepository;
+    private final RestTemplate restTemplate = new RestTemplate();
+    private final FlaskClientUtil flaskClientUtil;
 
     //크리쳐 만들기
     @Override
-    public Creature createFristCreature(String keyword, String photo, String creatureName) {
+    public Creature createFristCreature(String keyword, MultipartFile photo, String creatureName) {
         //멤버 가져오고
         Member member = SecurityUtil.getCurrentMember();
+
         //크리쳐 만들고
         Creature creature = new Creature();
         //이름 설정하고
@@ -45,14 +55,44 @@ public class CreatureServiceImpl implements CreatureService {
         creature.setCreatureKeyword(keyword);
         //멤버와 매핑 시켜주고
         creature.setMember(member);
+
         //경험치와 레벨은 자동 0으로 설정
 
         creatureRepository.save(creature); //저장
 
-        //여기서 사진 만들라고 명령 내리시고!!!!!!!!!!!!!!!!!!!!!!
-        //AI
+        // 멤버의 닉네임을 포함하여 Flask 서버로 데이터 전송
+        sendPhotoToAIServer(creature.getId(), keyword, photo, member.getNickname());
 
         return creature;
+    }
+
+    @SneakyThrows
+    private void sendPhotoToAIServer(int creatureId, String keyword, MultipartFile photo, String nickname) { //POST로 전송한다.
+        String flaskUrl = "http://localhost:3333/yolo";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+
+        MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+        body.add("creatureId", Integer.toString(creatureId)); // int형 creatureId를 String으로 변환
+        body.add("keyword", keyword);
+        body.add("nickname", nickname); // 멤버의 닉네임 추가
+        body.add("photo", new ByteArrayResource(photo.getBytes()) {
+            @Override
+            public String getFilename() {
+                return photo.getOriginalFilename();
+            }
+        });
+//        body.add("photo", photo.getResource());    --> 사진파일을 어떻게 줄꺼니?
+
+
+        HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
+
+        ResponseEntity<String> response = restTemplate.postForEntity(flaskUrl, requestEntity, String.class);
+
+        if (!response.getStatusCode().is2xxSuccessful()) {
+            throw new RuntimeException("AI 서버로 사진 전송에 실패했습니다.");
+        }
     }
 
 
@@ -109,7 +149,7 @@ public class CreatureServiceImpl implements CreatureService {
         creatureInfoResponseDTO.setName(member.getCreature().getCreatureName());
         creatureInfoResponseDTO.setLevel(member.getCreature().getLevel());
         creatureInfoResponseDTO.setExp(member.getCreature().getExp());
-        creatureInfoResponseDTO.setImg(generateCreatureImgPath(member));
+        creatureInfoResponseDTO.setImg(flaskClientUtil.getCreatureImageAsByteArray(member.getNickname(), member.getCreature().getId(), member.getCreature().getLevel()));
 
         // 현재 날짜 가져오기
         LocalDate currentDate = LocalDate.now();
@@ -185,12 +225,4 @@ public class CreatureServiceImpl implements CreatureService {
         creatureRepository.save(creature);
     }
 
-
-    //크리쳐 이미지 주소
-    private String generateCreatureImgPath(Member member) {
-        Creature creature = member.getCreature();
-        int creatureLevel = creature.getLevel();
-        int creatureId = creature.getId();
-        return "https://i11b104.p.ssafy.io/image/creature/" + creatureId + "_" +creatureLevel;
-    }
 }
