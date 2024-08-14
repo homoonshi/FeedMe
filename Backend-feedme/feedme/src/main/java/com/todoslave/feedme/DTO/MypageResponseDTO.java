@@ -15,6 +15,7 @@ public class MypageResponseDTO {
     private String creatureName;
     private int exp;
     private int level;
-    private String image;
+//    private String image;
+    private byte[] image;
     private int togetherDay;
 }

@@ -11,6 +11,7 @@ import com.todoslave.feedme.repository.FriendRepository;
 import com.todoslave.feedme.repository.FriendRequestRepository;
 import com.todoslave.feedme.repository.MemberRepository;
 
+import com.todoslave.feedme.util.FlaskClientUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,6 +36,7 @@ public class MemberServiceImpl implements MemberService {
     private final FriendRepository friendRepository;
 
     private final FriendRequestRepository friendRequestRepository;
+    private final FlaskClientUtil flaskClientUtil;
 
     @Override
     public Member findById(int userId) {
@@ -109,9 +111,12 @@ public class MemberServiceImpl implements MemberService {
             mem.setNickname(member.getNickname());
 
             if (member.getCreature() != null) {
-                mem.setCreatureImg(generateCreatureImgPath(member));
+                mem.setCreatureImg(flaskClientUtil.getCreatureImageAsByteArray(member.getNickname(), member.getCreature().getId(), member.getCreature().getLevel()));
             } else {
-                mem.setCreatureImg("알 이미지");
+                //알 사진
+                mem.setCreatureImg(flaskClientUtil.getCreatureImageAsByteArray(member.getNickname(), 0, 0));
+
+
             }
 
             if (member.getId() == SecurityUtil.getCurrentUserId()) {
@@ -160,7 +165,8 @@ public class MemberServiceImpl implements MemberService {
         myPage.setCreatureName(creature.getCreatureName());
         myPage.setExp(creature.getExp());
         myPage.setLevel(creature.getLevel());
-        myPage.setImage(generateCreatureImgPath(member));
+        myPage.setImage(flaskClientUtil.getCreatureImageAsByteArray(member.getNickname(), creature.getId(), creature.getLevel()));
+
 
         LocalDate currentDate = LocalDate.now();
         LocalDate joinDate = member.getJoinDate().toLocalDate();
@@ -171,10 +177,4 @@ public class MemberServiceImpl implements MemberService {
         return myPage;
     }
 
-    private String generateCreatureImgPath(Member member) {
-        Creature creature = member.getCreature();
-        int creatureLevel = creature.getLevel();
-        int creatureId = creature.getId();
-        return "https://i11b104.p.ssafy.io/image/creature/" + creatureId + "_" + creatureLevel;
-    }
 }

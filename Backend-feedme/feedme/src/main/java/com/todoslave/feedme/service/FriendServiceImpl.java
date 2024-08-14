@@ -14,6 +14,7 @@ import com.todoslave.feedme.domain.entity.membership.Member;
 import com.todoslave.feedme.login.util.SecurityUtil;
 import com.todoslave.feedme.mapper.FriendRequestMapper;
 import com.todoslave.feedme.repository.*;
+import com.todoslave.feedme.util.FlaskClientUtil;
 import jakarta.transaction.Transactional;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -29,6 +30,8 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class FriendServiceImpl implements FriendService{
+    @Autowired
+    private FlaskClientUtil flaskClientUtil;
 
 
 //    private final MemberChatService memberChatService;
@@ -82,7 +85,9 @@ public class FriendServiceImpl implements FriendService{
         FriendReqResponseDTO friendReqResponseDTO = new FriendReqResponseDTO();
         friendReqResponseDTO.setId(request.getId());
         friendReqResponseDTO.setCounterpartNickname(request.getCounterpartId().getNickname());
-        friendReqResponseDTO.setCreatureImg(generateCreatureImgPath(request.getCounterpartId()));
+
+        friendReqResponseDTO.setCreatureImg(flaskClientUtil.getCreatureImageAsByteArray(request.getCounterpartId().getNickname(), request.getCounterpartId().getCreature().getId(), request.getCounterpartId().getCreature().getLevel()));
+
 
         alarmService.requestFriendship(friendReqResponseDTO, counterpart.getId());
     }
@@ -149,13 +154,13 @@ public class FriendServiceImpl implements FriendService{
         return friends;
     }
 
-    //크리쳐 이미지 주소
-    private String generateCreatureImgPath(Member member) {
-        Creature creature = member.getCreature();
-        int creatureLevel = creature.getLevel();
-        int creatureId = creature.getId();
-        return "https://i11b104.p.ssafy.io/image/creature/" + creatureId + "_" +creatureLevel;
-    }
+//    //크리쳐 이미지 주소
+//    private String generateCreatureImgPath(Member member) {
+//        Creature creature = member.getCreature();
+//        int creatureLevel = creature.getLevel();
+//        int creatureId = creature.getId();
+//        return "https://i11b104.p.ssafy.io/image/creature/" + creatureId + "_" +creatureLevel;
+//    }
 
 
 
@@ -172,7 +177,10 @@ public class FriendServiceImpl implements FriendService{
             FriendReqResponseDTO dto = new FriendReqResponseDTO();
             dto.setId(f.getId());
             dto.setCounterpartNickname(f.getCounterpartId().getNickname());
-            String img = generateCreatureImgPath(f.getCounterpartId());
+
+//            String img = generateCreatureImgPath(f.getCounterpartId());
+
+            byte[] img = flaskClientUtil.getCreatureImageAsByteArray(f.getCounterpartId().getNickname(), f.getCounterpartId().getCreature().getId(), f.getCounterpartId().getCreature().getLevel());
             dto.setCreatureImg(img);
 
             friendResponses.add(dto);

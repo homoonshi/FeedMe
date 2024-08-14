@@ -9,7 +9,8 @@ public class FriendInfoResponseDTO {
   private String roomId;
   private String nickname;
   private String creatureNickname;
-  private String creatureImg;
+//  private String creatureImg;
+  private byte[] creatureImg;
   private int level;
   private int exp;
   private int join;

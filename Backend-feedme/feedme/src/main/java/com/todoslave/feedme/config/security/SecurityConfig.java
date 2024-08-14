@@ -45,6 +45,7 @@ public class SecurityConfig {
                         .requestMatchers("/login/oauth2/code/**", "/login/**", "/testsite", "/signup", "/user", "/v3/api-docs/**",
                                 "/swagger-ui/**", "/creature", "/swagger-ui.html", "/users/**").permitAll() // 유저 설정
                         .requestMatchers("/ws/**","/alarms/**").permitAll()
+                        .requestMatchers("/creature_data/**", "/creature_diary/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2 -> oauth2
