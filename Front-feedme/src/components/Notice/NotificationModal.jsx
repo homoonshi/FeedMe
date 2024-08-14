@@ -63,7 +63,7 @@ const NotificationModal = ({ onClose }) => {
   useEffect(() => {
     const requestList = async () => {
       try {
-        const res = await axios.get('http://localhost:8080/friends/request', {
+        const res = await axios.get('https://i11b104.p.ssafy.io/api/friends/request', {
           headers: {
             'Authorization': sessionStorage.getItem('accessToken')
           }
@@ -85,7 +85,7 @@ const NotificationModal = ({ onClose }) => {
 
   const handleReject = async (index, requestId) => {
     try {
-      await axios.post(`http://localhost:8080/friends/reject/${requestId}`, {}, {
+      await axios.post(`https://i11b104.p.ssafy.io/api/friends/reject/${requestId}`, {}, {
         headers: {
           'Authorization': token,
           'Content-Type': 'application/json',
@@ -99,7 +99,7 @@ const NotificationModal = ({ onClose }) => {
 
   const handleAccept = async (index, requestId) => {
     try {
-      await axios.post(`http://localhost:8080/friends/accept/${requestId}`, {}, {
+      await axios.post(`https://i11b104.p.ssafy.io/api/friends/accept/${requestId}`, {}, {
         headers: {
           'Authorization': token,
           'Content-Type': 'application/json',
