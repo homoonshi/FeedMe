@@ -4,6 +4,12 @@ FROM node:20 AS build
 # Set the working directory for the build stage
 WORKDIR /app
 
+# Define build arguments
+ARG REACT_APP_API_KEY
+
+# Set environment variables
+ENV REACT_APP_API_KEY=$REACT_APP_API_KEY
+
 # Copy the package.json and package-lock.json (if available) and install dependencies
 COPY package.json package-lock.json ./
 RUN npm install --silent
