@@ -5,8 +5,8 @@ spring:
       enabled: false # Spring Boot Admin 비활성화
   jmx:
     enabled: false # JMX 비활성화
-#  main:
-#    application-class: com.todoslave.FeedmeApplication
+  main:
+    application-class: com.todoslave.FeedmeApplication
 
   security:
     oauth2:
@@ -85,7 +85,7 @@ jwt:
 openai:
   model: "gpt-3.5-turbo"
   api:
-    key: "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"
+    key: ${GPT_SECRET_KEY}
     url: "https://api.openai.com/v1/chat/completions"
 
 
@@ -100,7 +100,7 @@ openai:
 #    enabled: false # JMX 비활성화
 #  main:
 #    application-class: com.todoslave.FeedmeApplication
-#
+#    allow-circular-references: true #뺄지도?
 #  security:
 #    oauth2:
 #      client:
@@ -177,7 +177,7 @@ openai:
 #openai:
 #  model: "gpt-3.5-turbo"
 #  api:
-#    key: "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"
+#    key: ${GPT_SECRET_KEY}
 #    url: "https://api.openai.com/v1/chat/completions"
 #
 #server:
