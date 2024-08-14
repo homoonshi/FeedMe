@@ -82,7 +82,7 @@ public class MemberChatServiceImpl implements MemberChatService{
       chatResponse.setCounterpartNickname(nickname);
       Creature creature = creatureRepository.findByMemberId(counterPartId);
       chatResponse.setAvatar(
-          "http://localhost:8080/image/creature/"+creature.getMember().getId()+"_"+creature.getLevel());
+              "http://localhost:8080/image/creature/"+creature.getMember().getId()+"_"+creature.getLevel());
       MemberChatRoomChecked checked = memberChatRoomCheckedRepository.findByMemberChatRoomIdAndMemberId(room.getId(),memberId);
       chatResponse.setIsChecked(checked.getIsChecked());
       chatResponse.setReceiveTime(room.getReceiveTime());
@@ -125,12 +125,10 @@ public class MemberChatServiceImpl implements MemberChatService{
     Creature creature = creatureRepository.findByMemberId(countpart.getId());
 
     MemberChatListResponseDTO memberChatListResponseDTO = new MemberChatListResponseDTO();
-
-    memberChatListResponseDTO.setId(room.getId());
-    memberChatListResponseDTO.setNickname(countpart.getNickname());
-    memberChatListResponseDTO.setCreatureImage(
-        "https://i11b104.p.ssafy.io/image/creature/image/creature/"+creature.getMember().getId()+"_"+creature.getLevel());
-
+    memberChatListResponseDTO.setFriendId(room.getId());
+    memberChatListResponseDTO.setCounterpartNickname(countpart.getNickname());
+    memberChatListResponseDTO.setAvatar(
+            "http://localhost:8080/image/creature/"+creature.getMember().getId()+"_"+creature.getLevel());
     memberChatListResponseDTO.setIsChecked(1);
     memberChatListResponseDTO.setReceiveTime(room.getReceiveTime());
 
@@ -163,7 +161,7 @@ public class MemberChatServiceImpl implements MemberChatService{
 
   // 채팅방 메세지 저장
   public MemberChatMessageResponseDTO insertChatMessage(String roomId, MemberChatMessageRequestDTO message)
-      throws IOException {
+          throws IOException {
     MemberChatMessage memberChatMessage = new MemberChatMessage();
 
     int memberId = message.getSendId();
@@ -215,8 +213,7 @@ public class MemberChatServiceImpl implements MemberChatService{
     memberChatListResponseDTO.setCounterpartNickname(counterpartNickname);
     Creature creature = creatureRepository.findByMemberId(counterPartId);
 
-    memberChatListResponseDTO.setAvatar("https://i11b104.p.ssafy.io/image/creature/image/creature/"+creature.getMember().getId()+"_"+creature.getLevel());
-
+    memberChatListResponseDTO.setAvatar("http://localhost:8080/image/creature/"+creature.getMember().getId()+"_"+creature.getLevel());
 
     // 채팅방 갱신 (나)
     alarmService.renewChattingRoom(memberChatListResponseDTO, memberId,1);
@@ -224,7 +221,7 @@ public class MemberChatServiceImpl implements MemberChatService{
     memberChatListResponseDTO.setCounterpartNickname(member.getNickname());
     creature = creatureRepository.findByMemberId(memberId);
 
-    memberChatListResponseDTO.setAvatar("https://i11b104.p.ssafy.io/image/creature/image/creature/"+creature.getMember().getId()+"_"+creature.getLevel());
+    memberChatListResponseDTO.setAvatar("http://localhost:8080/image/creature/"+creature.getMember().getId()+"_"+creature.getLevel());
 
     // 채팅방 갱신 (상대)
     alarmService.renewChattingRoom(memberChatListResponseDTO, counterPartId, 0);
