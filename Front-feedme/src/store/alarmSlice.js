@@ -18,12 +18,15 @@ const alarmSlice = createSlice({
   name: 'alarm',
   initialState,
   reducers: {
+    setNotifications: (state, action) => {
+      state.notifications = action.payload;
+    },
     addNotifications: (state, action) => {
       state.notifications.push(action.payload);
     },
     removeNotifications: (state, action) => {
       state.notifications = state.notifications.filter(
-        (notification) => notification.id !== action.payload
+        (_, i) => i !== action.payload
       );
     },
     setRequests: (state, action) => {
@@ -54,6 +57,7 @@ const alarmSlice = createSlice({
 });
 
 export const { 
+  setNotifications,
   addNotifications,
   removeNotifications,
   setRequests,

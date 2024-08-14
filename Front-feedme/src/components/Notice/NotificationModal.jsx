@@ -9,7 +9,7 @@ import customParseFormat from 'dayjs/plugin/customParseFormat';
 import CloseIcon from '@mui/icons-material/Close';
 import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
 import GroupAddOutlinedIcon from '@mui/icons-material/GroupAddOutlined';
-import { addNotifications, setRequests, addRequests, removeRequests, setIsSettingsMode, setIsSwitchOn, setRequestMode, setAlarmTime } from '../../store/alarmSlice';
+import { setNotifications, addNotifications, removeNotifications, setRequests, addRequests, removeRequests, setIsSettingsMode, setIsSwitchOn, setRequestMode, setAlarmTime } from '../../store/alarmSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { EventSourcePolyfill } from 'event-source-polyfill';
@@ -24,9 +24,14 @@ const NotificationModal = ({ onClose }) => {
   const { notifications, requests, isSettingsMode, isSwitchOn, isRequestMode, alarmTime } = useSelector((state) => state.alarm);
   const { token } = useSelector((state) => state.auth);
 
+  useEffect(() => {
+    alarmList();
+    requestList();
+  }, []);
+
   // useEffect(() => {
-  
-  //   const eventSource = new EventSourcePolyfill('https://i11b104.p.ssafy.io/api/alarms/subscribe/alarm', {
+
+  //   const eventSource = new EventSourcePolyfill('http://localhost:8080/alarms/subscribe/alarm', {
   //     headers: {
   //       'Authorization': sessionStorage.getItem('accessToken')
   //     }
@@ -45,15 +50,15 @@ const NotificationModal = ({ onClose }) => {
   //   // eventSource.onmessage = (event) => {
   //   //   // 이벤트 데이터 처리
   //   //   console.log('event data', event.data);
-    
+
   //   // };
-  
+
   //   eventSource.addEventListener('error', (error) => {
   //     // SSE 연결 오류 처리
   //     console.error('SSE Error:', error);
   //     eventSource.close(); // 연결을 닫기
   //   });
-  
+
   //   // 컴포넌트가 언마운트되면 SSE 연결을 닫기
   //   return () => {
   //     eventSource.close();
@@ -62,7 +67,7 @@ const NotificationModal = ({ onClose }) => {
 
   const requestList = async () => {
     try {
-      const res = await axios.get('https://i11b104.p.ssafy.io/api/friends/request', {
+      const res = await axios.get('http://localhost:8080/friends/request', {
         headers: {
           'Authorization': sessionStorage.getItem('accessToken')
         }
@@ -74,18 +79,30 @@ const NotificationModal = ({ onClose }) => {
     }
   };
 
-  useEffect(() => {
-    requestList();
-  }, []);
+  const alarmList = async () => {
+    try {
+      const res = await axios.get('http://localhost:8080/alarms', {
+        headers: {
+          'Authorization': sessionStorage.getItem('accessToken')
+        }
+      });
+      console.log('alarms : ', res.data);
+      dispatch(setNotifications(res.data));
+    } catch (error) {
+      console.log('Error : ', error);
+    }
+  }
 
   const handleDelete = (index) => {
-    const newNotifications = notifications.filter((_, i) => i !== index);
-    dispatch(addNotifications(newNotifications));
+    console.log('index : ', index);
+    dispatch(removeNotifications(index));
+    console.log(notifications);
+    // window.location.reload();
   };
 
   const handleReject = async (index, requestId) => {
     try {
-      await axios.post(`https://i11b104.p.ssafy.io/api/friends/reject/${requestId}`, {}, {
+      await axios.post(`http://localhost:8080/friends/reject/${requestId}`, {}, {
         headers: {
           'Authorization': sessionStorage.getItem('accessToken'),
           'Content-Type': 'application/json',
@@ -101,7 +118,7 @@ const NotificationModal = ({ onClose }) => {
 
   const handleAccept = async (index, requestId) => {
     try {
-      await axios.post(`https://i11b104.p.ssafy.io/api/friends/accept/${requestId}`, {}, {
+      await axios.post(`http://localhost:8080/friends/accept/${requestId}`, {}, {
         headers: {
           'Authorization': sessionStorage.getItem('accessToken'),
           'Content-Type': 'application/json',
@@ -123,7 +140,7 @@ const NotificationModal = ({ onClose }) => {
       dispatch(setAlarmTime(time));
 
       try {
-        await axios.post('https://i11b104.p.ssafy.io/api/alarms/time', {
+        await axios.post('http://localhost:8080/alarms/time', {
           alarmTime: intAlarmTime
         },
           {
@@ -151,7 +168,7 @@ const NotificationModal = ({ onClose }) => {
   };
 
   const toggleRequestMode = () => {
-    // const eventSource2 = new EventSourcePolyfill('https://i11b104.p.ssafy.io/api/alarms/subscribe/chat', {
+    // const eventSource2 = new EventSourcePolyfill('http://localhost:8080/alarms/subscribe/chat', {
     //   headers: {
     //     'Authorization': sessionStorage.getItem('accessToken')
     //   }
@@ -269,7 +286,7 @@ const NotificationModal = ({ onClose }) => {
                           width: "19px",
                           marginRight: "13px"
                         }} />
-                      <span>{notification}</span>
+                      <span>{notification.content}</span>
                       <CloseIcon
                         style={{
                           width: "19px",
