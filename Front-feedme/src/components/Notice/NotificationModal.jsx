@@ -29,45 +29,45 @@ const NotificationModal = ({ onClose }) => {
     requestList();
   }, []);
 
-  // useEffect(() => {
+  useEffect(() => {
 
-  //   const eventSource = new EventSourcePolyfill('https://i11b104.p.ssafy.io/api/alarms/subscribe/alarm', {
-  //     headers: {
-  //       'Authorization': sessionStorage.getItem('accessToken')
-  //     }
-  //   });
+    const eventSource = new EventSourcePolyfill('http://localhost:8080/alarms/subscribe/alarm', {
+      headers: {
+        'Authorization': sessionStorage.getItem('accessToken')
+      }
+    });
 
-  //   console.log('요청 완료!');
+    console.log('요청 완료!');
 
-  //   eventSource.addEventListener('alarm', (event) => { // 서버에서 설정한 이름과 같아야 함.
-  //     // 서버에서 데이터가 전송될 때 호출되는 이벤트 핸들러
-  //     console.log(event.data);
-  //     console.log('Success!');
-  //     const newNotification = JSON.parse(event.data);
-  //     dispatch(addNotifications(newNotification));
-  //   });
+    eventSource.addEventListener('alarm', (event) => { // 서버에서 설정한 이름과 같아야 함.
+      // 서버에서 데이터가 전송될 때 호출되는 이벤트 핸들러
+      console.log('event data : ', event.data);
+      console.log('Success!');
+      const newNotification = JSON.parse(event.data);
+      dispatch(addNotifications(newNotification));
+    });
 
-  //   // eventSource.onmessage = (event) => {
-  //   //   // 이벤트 데이터 처리
-  //   //   console.log('event data', event.data);
+    // eventSource.onmessage = (event) => {
+    //   // 이벤트 데이터 처리
+    //   console.log('event data', event.data);
 
-  //   // };
+    // };
 
-  //   eventSource.addEventListener('error', (error) => {
-  //     // SSE 연결 오류 처리
-  //     console.error('SSE Error:', error);
-  //     eventSource.close(); // 연결을 닫기
-  //   });
+    eventSource.addEventListener('error', (error) => {
+      // SSE 연결 오류 처리
+      console.error('SSE Error:', error);
+      eventSource.close(); // 연결을 닫기
+    });
 
-  //   // 컴포넌트가 언마운트되면 SSE 연결을 닫기
-  //   return () => {
-  //     eventSource.close();
-  //   };
-  // }, []);
+    // 컴포넌트가 언마운트되면 SSE 연결을 닫기
+    return () => {
+      eventSource.close();
+    };
+  }, []);
 
   const requestList = async () => {
     try {
-      const res = await axios.get('https://i11b104.p.ssafy.io/api/friends/request', {
+      const res = await axios.get('http://localhost:8080/friends/request', {
         headers: {
           'Authorization': sessionStorage.getItem('accessToken')
         }
@@ -81,7 +81,7 @@ const NotificationModal = ({ onClose }) => {
 
   const alarmList = async () => {
     try {
-      const res = await axios.get('https://i11b104.p.ssafy.io/api/alarms', {
+      const res = await axios.get('http://localhost:8080/alarms', {
         headers: {
           'Authorization': sessionStorage.getItem('accessToken')
         }
@@ -102,7 +102,7 @@ const NotificationModal = ({ onClose }) => {
 
   const handleReject = async (index, requestId) => {
     try {
-      await axios.post(`https://i11b104.p.ssafy.io/api/friends/reject/${requestId}`, {}, {
+      await axios.post(`http://localhost:8080/friends/reject/${requestId}`, {}, {
         headers: {
           'Authorization': sessionStorage.getItem('accessToken'),
           'Content-Type': 'application/json',
@@ -118,7 +118,7 @@ const NotificationModal = ({ onClose }) => {
 
   const handleAccept = async (index, requestId) => {
     try {
-      await axios.post(`https://i11b104.p.ssafy.io/api/friends/accept/${requestId}`, {}, {
+      await axios.post(`http://localhost:8080/friends/accept/${requestId}`, {}, {
         headers: {
           'Authorization': sessionStorage.getItem('accessToken'),
           'Content-Type': 'application/json',
@@ -140,7 +140,7 @@ const NotificationModal = ({ onClose }) => {
       dispatch(setAlarmTime(time));
 
       try {
-        await axios.post('https://i11b104.p.ssafy.io/api/alarms/time', {
+        await axios.post('http://localhost:8080/alarms/time', {
           alarmTime: intAlarmTime
         },
           {
@@ -168,28 +168,28 @@ const NotificationModal = ({ onClose }) => {
   };
 
   const toggleRequestMode = () => {
-    // const eventSource2 = new EventSourcePolyfill('https://i11b104.p.ssafy.io/api/alarms/subscribe/chat', {
-    //   headers: {
-    //     'Authorization': sessionStorage.getItem('accessToken')
-    //   }
-    // });
+    const eventSource2 = new EventSourcePolyfill('http://localhost:8080/alarms/subscribe/chat', {
+      headers: {
+        'Authorization': sessionStorage.getItem('accessToken')
+      }
+    });
 
-    // console.log('요청 완료!2');
+    console.log('요청 완료!2');
 
-    // eventSource2.addEventListener('friend', (event) => { // 서버에서 설정한 이름과 같아야 함.
-    //   // 서버에서 데이터가 전송될 때 호출되는 이벤트 핸들러
-    //   console.log(event.data);
-    //   console.log('Success!');
-    //   const newRequest = JSON.parse(event.data);
-    //   dispatch(addRequests(newRequest));
-    // });
+    eventSource2.addEventListener('friend', (event) => { // 서버에서 설정한 이름과 같아야 함.
+      // 서버에서 데이터가 전송될 때 호출되는 이벤트 핸들러
+      console.log(event.data);
+      console.log('Success!');
+      const newRequest = JSON.parse(event.data);
+      dispatch(addRequests(newRequest));
+    });
 
     dispatch(setRequestMode(!isRequestMode));
 
-    // // 컴포넌트가 언마운트되면 SSE 연결을 닫기
-    // return () => {
-    //   eventSource2.close();
-    // };
+    // 컴포넌트가 언마운트되면 SSE 연결을 닫기
+    return () => {
+      eventSource2.close();
+    };
   }
 
   return (
