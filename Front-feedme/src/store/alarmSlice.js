@@ -26,7 +26,7 @@ const alarmSlice = createSlice({
     },
     removeNotifications: (state, action) => {
       state.notifications = state.notifications.filter(
-        (_, i) => i !== action.payload
+        (requests) => requests.id !== action.payload
       );
     },
     setRequests: (state, action) => {

@@ -93,11 +93,23 @@ const NotificationModal = ({ onClose }) => {
     }
   }
 
-  const handleDelete = (index) => {
-    console.log('index : ', index);
-    dispatch(removeNotifications(index));
-    console.log(notifications);
-    // window.location.reload();
+  const handleDelete = async (alarmId) => {
+    console.log('index : ', alarmId);
+
+    try {
+      await axios.delete(`https://i11b104.p.ssafy.io/api/friends/reject/${alarmId}`, {}, {
+        headers: {
+          'Authorization': sessionStorage.getItem('accessToken'),
+          'Content-Type': 'application/json',
+        }
+      });
+      dispatch(removeNotifications(alarmId));
+      console.log('알람 삭제 !');
+      // window.location.reload();
+    } catch (error) {
+      console.log('Error : ', error);
+    }
+
   };
 
   const handleReject = async (index, requestId) => {
@@ -279,8 +291,8 @@ const NotificationModal = ({ onClose }) => {
                   <span>친구 요청 목록 보기</span>
                 </div>
                 <ul>
-                  {notifications.map((notification, index) => (
-                    <li key={index}>
+                  {notifications.map((notification) => (
+                    <li key={notification.alarmId}>
                       <NotificationsNoneOutlinedIcon
                         style={{
                           width: "19px",
@@ -292,7 +304,7 @@ const NotificationModal = ({ onClose }) => {
                           width: "19px",
                           marginLeft: "auto"
                         }}
-                        className="NoticeButton" onClick={() => handleDelete(index)} />
+                        className="NoticeButton" onClick={() => handleDelete(notification.alarmId)} />
                     </li>
                   ))}
                 </ul>
