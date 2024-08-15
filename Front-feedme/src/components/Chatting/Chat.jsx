@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { setToken } from '../../store/slice';
 import { fetchUserData } from '../../store/userSlice';
-import { fetchFriendsList, updateFriendsList, addTemporaryFriend } from '../../store/friendsSlice';
+import { fetchFriendsList, updateFriendsList } from '../../store/friendsSlice';
 import { fetchFriendInfo } from '../../store/friendInfoSlice';
 import Sidebar from '../Main/Sidebar';
 import Search from '../Main/Search';
@@ -22,8 +22,8 @@ const Chat = () => {
 
   const token = useSelector((state) => state.auth.token);
   const user = useSelector((state) => state.user);
-  const friendsList = useSelector((state) => state.friends?.list || []);
-  const friendsStatus = useSelector((state) => state.friends?.status || 'idle');
+  const friendsList = useSelector((state) => state.friends.list || []); // 안전하게 접근
+  const friendsStatus = useSelector((state) => state.friends.status || 'idle'); // 안전하게 접근
   const selectedFriendInfo = useSelector((state) => state.friendInfo);
 
   const { creatureId, creatureName, exp, level, image, togetherDay } = user;
@@ -32,8 +32,8 @@ const Chat = () => {
   const [view, setView] = useState('profile');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [friendToDelete, setFriendToDelete] = useState(null);
+  const [friends, setFriends] = useState([]);
 
-  // Token 설정
   useEffect(() => {
     const sessionToken = sessionStorage.getItem('accessToken');
     if (sessionToken) {
@@ -43,7 +43,6 @@ const Chat = () => {
     }
   }, [dispatch, navigate]);
 
-  // 사용자 및 친구 목록 불러오기
   useEffect(() => {
     if (token) {
       dispatch(fetchUserData(token));
@@ -57,13 +56,17 @@ const Chat = () => {
     }
   }, [dispatch, token]);
 
-  // 친구 목록의 상태 변화 로그
   useEffect(() => {
     console.log('Current friends list:', friendsList);
     console.log('Current friends status:', friendsStatus);
+    const friend = [...firends];
+    friendList.forEach(f => {
+      const {friendId, counterpartNickname, avatar, isChecked, receiveTime} = f;
+      friend.push(f);
+    })
+    setFriends(friend);
   }, [friendsList, friendsStatus]);
 
-  // 서버로부터 실시간 이벤트 수신 및 업데이트
   useEffect(() => {
     if (token) {
       const eventSource = new EventSourcePolyfill('https://i11b104.p.ssafy.io/api/alarms/subscribe/chat', {
@@ -83,7 +86,6 @@ const Chat = () => {
     }
   }, [dispatch, token]);
 
-  // 친구 클릭 시 처리
   const handleFriendClick = (friend) => {
     setSelectedFriend(friend);
     setView(friend.isCreature ? 'creatureChat' : friend.id === 'my-avatar' ? 'creature' : 'profile');
@@ -92,7 +94,6 @@ const Chat = () => {
     }
   };
 
-  // 채팅 클릭 시 처리
   const handleChatClick = (friend) => {
     if (selectedFriend && selectedFriend.friendId === friend.friendId && view === 'chat') {
       return;
@@ -107,7 +108,6 @@ const Chat = () => {
     }, 0);
   };
 
-  // 친구 삭제 처리
   const handleDeleteFriend = (friend) => {
     setFriendToDelete(friend);
     setIsModalOpen(true);
@@ -131,7 +131,7 @@ const Chat = () => {
           <div className="ChatRightContents">
             <div className="ChatFriendList">
               <ChattingFriendList
-                friends={friendsList}
+                friends={friends}
                 onFriendClick={handleFriendClick}
                 onChatClick={handleChatClick}
               />

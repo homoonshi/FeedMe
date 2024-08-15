@@ -67,7 +67,7 @@ const ChattingFriendList = ({ friends: initialFriends, onFriendClick, onChatClic
       />
       <div className="ChatFriendList">
         <div key="my-avatar" className="ChatFriendItem">
-          <img src={`data:image/gif;base64,${user.image}`} alt="내 아바타" className="ChatFriendAvatar" />
+          <img src={ user.image ? `data:image/gif;base64,${user.image}` : getRandomEggImage()} alt="내 아바타" className="ChatFriendAvatar" />
           <div className="ChatFriendInfo">
             <span onClick={() => onFriendClick({ id: 'my-avatar', name: user.nickname, avatar: user.image })} className="ChatFriendName">
               {user.creatureName}
