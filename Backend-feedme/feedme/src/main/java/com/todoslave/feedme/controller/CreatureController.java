@@ -40,7 +40,6 @@ public class CreatureController {
 //    }
 //
 
-
     @Operation(summary = "크리쳐 생성")
     @PostMapping
     public ResponseEntity<?> createCreature(
