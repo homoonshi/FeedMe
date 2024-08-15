@@ -69,7 +69,7 @@ public class CreatureServiceImpl implements CreatureService {
     @SneakyThrows
     private void sendPhotoToAIServer(int creatureId, String keyword, MultipartFile photo, String nickname) { //POST로 전송한다.
 //        String flaskUrl = "http://127.0.0.1:33333/yolo";
-        String flaskUrl = "http://host.docker.internal:33333/yolo";
+        String flaskUrl = "http://flask:33333/yolo";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 
