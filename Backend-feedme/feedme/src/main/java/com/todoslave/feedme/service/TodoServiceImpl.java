@@ -191,6 +191,7 @@ public class TodoServiceImpl implements TodoService {
     todo.setMember(SecurityUtil.getCurrentMember());
     todo.setTodoCategory(todoCategoryRepository.findById(todoCreateRequestDTO.getCategoryId()).orElseThrow());
     todo.setContent(todoCreateRequestDTO.getContent());
+    todo.setCreatedAt(todoCreateRequestDTO.getTodoDay());
     todo = todoRepository.save(todo);
 
     TodoResponseDTO todoResponseDTO = new TodoResponseDTO();
