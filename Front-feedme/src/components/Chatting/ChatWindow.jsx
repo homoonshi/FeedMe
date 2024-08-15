@@ -12,7 +12,6 @@ const ChatWindow = ({ roomId }) => {
   const user = useSelector((state) => state.user);
   const { sendId, nickname } = user;
 
-  const [username, setUsername] = useState('');
   const [messageContent, setMessageContent] = useState('');
   const [messages, setMessages] = useState([]);
   const [hasMore, setHasMore] = useState(true);
@@ -21,7 +20,7 @@ const ChatWindow = ({ roomId }) => {
   const stompClient = useRef(null);
   const isSubscribed = useRef(false);
 
-  const limit = 10;
+  const limit = 5;
 
   useEffect(() => {
     if (roomId) {
@@ -42,7 +41,7 @@ const ChatWindow = ({ roomId }) => {
 
   const renewConnect = async (id) => {
     try {
-      const response = await axios.post('https://i11b104.p.ssafy.io/api/friends/chats/connect', 
+      const response = await axios.post(`https://i11b104.p.ssafy.io/api/friends/chats/connect`, 
       {}, // 본문 데이터가 필요 없을 경우 빈 객체 전달
       {
         params: {
@@ -59,10 +58,9 @@ const ChatWindow = ({ roomId }) => {
     }
   };
   
-
   const renewDisconnect = async (id) => {
     try {
-      const response = await axios.post('https://i11b104.p.ssafy.io/api/friends/chats/disconnect',
+      const response = await axios.post(`https://i11b104.p.ssafy.io/api/friends/chats/disconnect`,
       {}, // 본문 데이터가 필요 없을 경우 빈 객체 전달
         {
           params: {
@@ -84,6 +82,8 @@ const ChatWindow = ({ roomId }) => {
     if (stompClient.current) {
       disconnect(); // 기존 연결이 있을 경우 해제
     }
+
+    renewConnect(roomId);
 
     const socket = new SockJS('https://i11b104.p.ssafy.io/api/ws/friendChat');
     const newClient = new Client({
@@ -114,8 +114,14 @@ const ChatWindow = ({ roomId }) => {
                     if (updatedMessages.length === 0) {
                         setHasMore(false);
                     } else {
+                        const previousScrollHeight = messageContainerRef.current.scrollHeight;
                         setMessages((prevMessages) => [...updatedMessages.reverse(), ...prevMessages]);
                         setSkip((prevSkip) => prevSkip + limit);
+
+                        setTimeout(() => {
+                            const newScrollHeight = messageContainerRef.current.scrollHeight;
+                            messageContainerRef.current.scrollTop = newScrollHeight - previousScrollHeight;
+                        }, 100); // 스크롤 위치를 복원합니다.
                     }
                     setHasMore(!slice.last);
                 });

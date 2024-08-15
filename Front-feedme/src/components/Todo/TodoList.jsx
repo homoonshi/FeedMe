@@ -17,7 +17,7 @@ const ToDoList = ({onClick}) => {
         });
   
         if (response.status === 200) {
-          console.log(response.data); // 실제 데이터에 접근
+          console.log('todos : ', response.data); // 실제 데이터에 접근
           setIncompletedTodos(response.data); // 불러온 데이터를 상태로 설정
         } else {
           console.log('불러오기 실패', response);

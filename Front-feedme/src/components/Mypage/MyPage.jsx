@@ -126,7 +126,7 @@ const MyPage = () => {
     fetch(`https://i11b104.p.ssafy.io/api/users`, { 
       method: 'PATCH',
       headers: {
-        'Authorization': `${token}`,
+        'Authorization': sessionStorage.getItem('accessToken'),
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
@@ -154,7 +154,7 @@ const MyPage = () => {
     fetch(`https://i11b104.p.ssafy.io/api/creature`, {
       method: 'DELETE',
       headers: {
-        'Authorization': `${token}`, 
+        'Authorization': sessionStorage.getItem('accessToken'), 
       },
     })
       .then(response => {
@@ -172,29 +172,8 @@ const MyPage = () => {
         setReleaseModalOpen(false); 
       });
   };
+
   
-  // const handleUserDel = () =>{
-  //   fetch(`https://i11b104.p.ssafy.io/api/users`, {
-  //     method: 'DELETE',
-  //     headers: {
-  //       'Authorization': `${token}`, 
-  //     },
-  //   })
-  //     .then(response => {
-  //       if (response.ok) {
-  //         console.log(`유저 삭제 성공`);
-  //         navigate('/Login');
-  //       } else {
-  //         console.error('삭제 실패');
-  //       }
-  //     })
-  //     .catch(error => {
-  //       console.error('Error:', error);
-  //     })
-  //     .finally(() => {
-  //       setReleaseModalOpen(false); 
-  //     });
-  // }
 
   return (
     <div className="MyPageBack">
@@ -220,7 +199,6 @@ const MyPage = () => {
                 <div className="MyPageInfoBox">{brithday}</div> 
               </label>
               <div className='MyPageButtons'>
-                {/* <button className="MyPgaeUserDel" onClick={handleUserDel}>회원 탈퇴</button> */}
                 <button className="MyPageButtonLogout" onClick={handleLogoutClick}>로그아웃</button>
                 <button className="MyPageButton" onClick={handleEditClick}>정보 수정</button>
               </div>
