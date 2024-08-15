@@ -14,7 +14,7 @@ const ChatCreature = ({ user }) => {
   const [chatHistory, setChatHistory] = useState([]);  
   const [loading, setLoading] = useState(false); 
   const chatWindowRef = useRef(null);
-
+  console.log(user)
   useEffect(() => {
     const sessionToken = sessionStorage.getItem('accessToken');
     if (sessionToken) {
@@ -44,7 +44,7 @@ const ChatCreature = ({ user }) => {
     setChatHistory(prevHistory => [
       ...prevHistory,
       { type: 'user', text: inputValue },
-      { type: 'bot', text: '응답 중...' },
+      { type: 'bot', text: `${user.creatureName}가 생각 중 입니다...`},
     ]);
 
     setInputValue(''); 
