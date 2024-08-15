@@ -75,6 +75,7 @@ public class MemberController {
         return ResponseEntity.ok(member);
     }
 
+
     @Operation(summary = "맴버 수정")
     @PatchMapping
     public ResponseEntity<?> updateMember(@RequestBody MemberSignupRequestDTO memberSignupRequestDTO){
@@ -90,6 +91,7 @@ public class MemberController {
         return ResponseEntity.ok(member);
     }
 
+
     @Operation(summary = "맴버 정보 가져오기 (테스트용)")
     @GetMapping("/holder/test")
     public Member getCurrentMember() {
@@ -102,6 +104,7 @@ public class MemberController {
 
         return ResponseEntity.ok(memberService.getMyPage());
     }
+
 
     @Operation(summary = "로그아웃")
     @GetMapping("/logout")

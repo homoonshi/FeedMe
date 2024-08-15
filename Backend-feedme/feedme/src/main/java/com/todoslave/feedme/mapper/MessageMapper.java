@@ -18,7 +18,7 @@ public class MessageMapper {
 
     MemberChatMessageResponseDTO dto = new MemberChatMessageResponseDTO();
 
-    Member member = memberRepository.getById(message.getSendId());
+    Member member = memberRepository.findById(message.getSendId()).orElseThrow();
     dto.setSendNickname(member.getNickname());
     dto.setMessage(message.getContent());
     dto.setTransmitAt(message.getTransmitAt());

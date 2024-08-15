@@ -49,7 +49,7 @@ public class AlarmController {
     }
 
     @DeleteMapping("/{alarmId}")
-    public ResponseEntity<Void> removeAlarm(@PathVariable int alarmId){
+    public ResponseEntity<Void> removeAlarm(@PathVariable("alarmId") int alarmId){
         alarmService.deleteAlarm(alarmId);
         return ResponseEntity.noContent().build();
     }

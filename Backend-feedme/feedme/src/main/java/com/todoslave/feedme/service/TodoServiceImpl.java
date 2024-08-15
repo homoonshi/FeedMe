@@ -256,11 +256,6 @@ public class TodoServiceImpl implements TodoService {
       return false;
     }
 
-    //완료처리
-    DayOff dayOff = new DayOff();
-    dayOff.setEndDay(date);
-    dayOff.setMember(SecurityUtil.getCurrentMember());
-    dayOffService.saveDayOff(dayOff);
 
     //일정 끝내기
     List<Todo> todoList = todoRepository.findByMemberIdAndCreatedAt(SecurityUtil.getCurrentUserId(),date);
@@ -299,11 +294,22 @@ public class TodoServiceImpl implements TodoService {
     diaryRepository.save(Diary);
 
 
+    //완료처리
+    DayOff dayOff = new DayOff();
+    dayOff.setEndDay(date);
+    dayOff.setMember(SecurityUtil.getCurrentMember());
+    dayOffService.saveDayOff(dayOff);
+
+
     // 그림일기 요청 추가 (Flask 서버로 전송)
     createPictureDiary(date);
 
+
+
     //경험치 올리기
     creatureService.expUp(completedTodos+completedCreatureTodos);
+
+
 
     //예본 해
       return true;
@@ -332,9 +338,6 @@ public class TodoServiceImpl implements TodoService {
 
     // Flask 서버로부터 받은 그림일기 데이터를 활용할 수 있습니다.
   }
-
-
-
 
 
 

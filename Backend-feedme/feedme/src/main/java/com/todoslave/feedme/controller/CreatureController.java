@@ -28,6 +28,7 @@ public class CreatureController {
     @Operation(summary = "크리쳐 생성")
     @PostMapping
     public ResponseEntity<?> createCreature(@RequestBody CreatureMakeRequestDTO request, @RequestHeader("Authorization") final String accessToken) {
+
         Member member = SecurityUtil.getCurrentMember();
 
             Creature creature = creatureService.createFristCreature(request.getKeyword(), request.getPhoto(), request.getCreatureName());
