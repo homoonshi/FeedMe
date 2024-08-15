@@ -7,5 +7,6 @@ public class PaginationRequestDTO {
 
   private int skip;
   private int limit;
+  private int memberId;
 
 }
