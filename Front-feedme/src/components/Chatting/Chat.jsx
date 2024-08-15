@@ -31,7 +31,9 @@ const Chat = () => {
 
   const token = useSelector((state) => state.auth.token);
   const user = useSelector((state) => state.user);
-  const friendsList = useSelector((state) => state.friendsList.list);
+  const friendsList = useSelector((state) => state.friends.list);
+  const friendsStatus = useSelector((state) => state.friends.status);
+
   const selectedFriendInfo = useSelector((state) => state.friendInfo);
 
   const { creatureId, creatureName, exp, level, image, togetherDay, error } = user;
@@ -39,9 +41,21 @@ const Chat = () => {
   useEffect(() => {
     if (token) {
       dispatch(fetchUserData(token));
-      dispatch(fetchFriendsList(token));
+      dispatch(fetchFriendsList(token)).then((response) => {
+        if (response.meta.requestStatus === 'fulfilled') {
+          console.log('Friends list loaded successfully:', response.payload);
+        } else if (response.meta.requestStatus === 'rejected') {
+          console.error('Failed to load friends list:', response.payload);
+        }
+      });
     }
   }, [dispatch, token]);
+
+  useEffect(() => {
+    console.log('Current friends list:', friendsList);
+    console.log('Current friends status:', friendsStatus);
+  }, [friendsList, friendsStatus]);
+  
 
   useEffect(() => {
     if (token) {
