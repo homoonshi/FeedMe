@@ -8,6 +8,7 @@ import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCalendarTodos, addCalendarTodos, setDailyTodos } from '../../store/todoSlice';
 import { useNavigate } from 'react-router-dom';
+import moment from "moment";
 
 function ReactCalendar() {
   const dispatch = useDispatch();
@@ -64,33 +65,37 @@ function ReactCalendar() {
   };
 
   // 날짜 클릭 시 다른 페이지로 이동하는 함수
-  const handleDateClick = async (date) => {
+  const handleDateClick = (date) => {
 
     // console.log('data : ', date);
     // console.log('calendarTodos : ', calendarTodos);
     // console.log('dailyTodos : ', dailyTodos);
 
-    try {
-      const response = await axios.get('http://localhost:8080/todos/calendar/daily', {
-        params: { date: date },
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': sessionStorage.getItem('accessToken'), // 필요한 경우 토큰 포함
-        },
-      });
+    // try {
+    //   const response = await axios.get('http://localhost:8080/todos/calendar/daily', {
+    //     params: { date: date },
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //       'Authorization': sessionStorage.getItem('accessToken'), // 필요한 경우 토큰 포함
+    //     },
+    //   });
 
-      if (response.status === 200) {
-        console.log('dailyTodos : ', response.data);
-        setDailyTodos(response.data); // 받은 데이터로 상태 업데이트
-        navigate('/Todo');
-      } else {
-        console.error('할 일 목록을 가져오는 데 실패했습니다:', response.data);
-      }
-    } catch (error) {
-      console.error('서버 요청 중 오류 발생:', error);
-    }
+    //   if (response.status === 200) {
+    //     console.log('dailyTodos : ', response.data);
+    //     // setDailyTodos(response.data); // 받은 데이터로 상태 업데이트
+    //     navigate('/Todo');
+    //   } else {
+    //     console.error('할 일 목록을 가져오는 데 실패했습니다:', response.data);
+    //   }
+    // } catch (error) {
+    //   console.error('서버 요청 중 오류 발생:', error);
+    // }
     
     // const formattedDate = date.toISOString().split('T')[0];
+
+    const formattedDate = moment(date).format('YYYY-MM-DD'); // 날짜를 YYYY-MM-DD 형식으로 포맷
+
+    navigate('/Todo', { state: { date: formattedDate } }); // 상태로 날짜 전달
 
   };
 
@@ -99,6 +104,7 @@ function ReactCalendar() {
       <Calendar
         onChange={onChange}
         value={value}
+        formatDay={(locale, date) => moment(date).format("DD")}
         tileContent={tileContent}
         onClickDay={handleDateClick}
       />

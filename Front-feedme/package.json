@@ -23,6 +23,7 @@
     "event-source-polyfill": "^1.0.31",
     "framer-motion": "^11.3.12",
     "http-proxy-middleware": "^3.0.0",
+    "moment": "^2.30.1",
     "qs": "^6.12.3",
     "quill": "^2.0.2",
     "react": "^18.3.1",

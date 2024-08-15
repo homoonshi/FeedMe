@@ -13,7 +13,7 @@ const TodoMainList = ({ date }) => {
   const [categoryModalIsOpen, setCategoryModalIsOpen] = useState(false);
   const [todoModalIsOpen, setTodoModalIsOpen] = useState(false);
   const [addTodoModalIsOpen, setAddTodoModalIsOpen] = useState(false);
-  const [drawingModalIsOpen, setDrawingModalIsOpen] = useState(false); 
+  const [drawingModalIsOpen, setDrawingModalIsOpen] = useState(false);
   const [newCategoryTitle, setNewCategoryTitle] = useState('');
   const [newTodo, setNewTodo] = useState('');
   const [editedTodo, setEditedTodo] = useState('');
@@ -23,65 +23,75 @@ const TodoMainList = ({ date }) => {
 
   // 처음 컴포넌트가 열렸을 때 category 불러옴
   useEffect(() => {
-    const categoryRequest = async () => {
-      try {
-        const response = await axios.get(`http://localhost:8080/category`, {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': sessionStorage.getItem('accessToken'),
-          }
-        });
-
-        if (response.status === 200) {
-          console.log('카테고리 불러오기 성공:', response.data);
-          const datas = response.data.map(category => ({
-            categoryId: category.id,
-            categoryName: category.name,
-            items: []
-          }));
-          
-          setCategories(datas);
-        } else {
-          console.log('카테고리 불러오기 실패:', response);
-        }
-      } catch (error) {
-        console.error('카테고리 요청 중 오류 발생:', error);
+    console.log('input date : ', date);
+    if (date) {
+      // `date` 값이 있을 때 `currentDate`를 설정
+      const newDate = new Date(date);
+      if (newDate !== new Date()) {
+        console.log('newDate : ', newDate);
+        setCurrentDate(newDate);
+        console.log('currentDate1 : ', currentDate);
+      } else {
+        console.warn('유효하지 않은 날짜입니다:', date);
       }
-    };
-
+    } else {
+      // `date` 값이 없을 때 현재 날짜를 설정
+      setCurrentDate(new Date());
+    }
+    console.log('currentDate2 :', currentDate);
     categoryRequest();
   }, []);
 
-  useEffect(() => {
-    console.log(date);
-
-    if (!date) {
-        const newDate = new Date();
-        console.log('currentDate 설정됨:', newDate);
-        setCurrentDate(newDate);
-    } else {
-        const newDate = new Date(date);
-        if (isNaN(newDate.getTime())) {
-            console.warn('유효하지 않은 날짜입니다:', date);
-        } else {
-            setCurrentDate(newDate);
-            console.log('currentDate 설정됨:', newDate);
+  const categoryRequest = async () => {
+    console.log('categoryRequest');
+    console.log('currentDate3 : ', currentDate);
+    try {
+      const response = await axios.get(`http://localhost:8080/category`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': sessionStorage.getItem('accessToken'),
         }
+      });
+
+      if (response.status === 200) {
+        console.log('카테고리 불러오기 성공:', response.data);
+        const datas = response.data.map(category => ({
+          categoryId: category.id,
+          categoryName: category.name,
+          items: []
+        }));
+
+        setCategories(datas);
+      } else {
+        console.log('카테고리 불러오기 실패:', response);
+      }
+    } catch (error) {
+      console.error('카테고리 요청 중 오류 발생:', error);
     }
-}, [date]);
+  };
 
-useEffect(() => {
+  useEffect(() => {
+    todoRequest();
+  }, [currentDate]);
 
+  // useEffect(() => {
   const clearCategoryItems = () => {
+    console.log('clearCategoryItems');
+
     setCategories(prevCategories => {
       return prevCategories.map(category => ({
         ...category,
         items: [] // 각 category의 items를 빈 배열로 초기화
       }));
     });
+
+    // window.location.reload();
   };
 
   const todoRequest = async () => {
+    console.log('todoRequest');
+    console.log("현재 날짜:", currentDate);
+
     if (isLoading) return;  // 이미 로딩 중이면 실행하지 않음
     setIsLoading(true);
 
@@ -141,9 +151,8 @@ useEffect(() => {
     }
   };
 
-  todoRequest();
-}, [currentDate]);
-  
+  // }, [currentDate]);
+
 
   // 날짜 증가
   const handleIncreaseDate = () => {
@@ -178,7 +187,7 @@ useEffect(() => {
   const handleAddTodoSubmit = async () => {
     if (newTodo) {
       try {
-        console.log("현재 카테고리 아이디",currentCategoryIndex);
+        console.log("현재 카테고리 아이디", currentCategoryIndex);
         const response = await axios.post(
           `http://localhost:8080/todos`,
           null,  // POST 요청의 본문이 없는 경우 null을 사용합니다.
@@ -193,7 +202,7 @@ useEffect(() => {
             },
           }
         );
-        
+
 
         if (response.status === 200) {
           console.log('할일 추가 성공:', response.data);
@@ -221,18 +230,18 @@ useEffect(() => {
   const handleEditTodo = async (categoryIndex, todoIndex) => {
     if (editedTodo) {
       try {
-        const response = await axios.patch(`http://localhost:8080/todos`, 
+        const response = await axios.patch(`http://localhost:8080/todos`,
           null,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': sessionStorage.getItem('accessToken'),
-          },
-          params : {
-            id: todoIndex,
-            content: editedTodo,
-          },
-        }
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': sessionStorage.getItem('accessToken'),
+            },
+            params: {
+              id: todoIndex,
+              content: editedTodo,
+            },
+          }
         );
 
         if (response.status === 200) {
@@ -332,7 +341,7 @@ useEffect(() => {
   const handleCategoryModalSubmit = async () => {
     if (newCategoryTitle) {
       try {
-        const response = await axios.post(`http://localhost:8080/category/${newCategoryTitle}`, null,{
+        const response = await axios.post(`http://localhost:8080/category/${newCategoryTitle}`, null, {
           headers: {
             'Authorization': sessionStorage.getItem('accessToken'),
           }
@@ -358,8 +367,8 @@ useEffect(() => {
 
   const isSameDay = (date1, date2) => {
     return date1.getFullYear() === date2.getFullYear() &&
-           date1.getMonth() === date2.getMonth() &&
-           date1.getDate() === date2.getDate();
+      date1.getMonth() === date2.getMonth() &&
+      date1.getDate() === date2.getDate();
   };
 
   const today = new Date();
@@ -369,7 +378,7 @@ useEffect(() => {
   return (
     <div className="TodoMainListContainer">
       <div className="TodoHeader">
-        <FaAngleLeft className="TodoArrow" onClick={handleDecreaseDate} /> 
+        <FaAngleLeft className="TodoArrow" onClick={handleDecreaseDate} />
         <h3>{currentDate.toISOString().split('T')[0]}</h3>
         <FaAngleRight className="TodoArrow" onClick={handleIncreaseDate} />
       </div>
@@ -482,7 +491,7 @@ useEffect(() => {
         overlayClassName="TodoMainOverlay"
       >
         <h2 className="TodoMainModalTitle">그림일기 생성</h2>
-        <img src={diary} alt="그림일기 이미지" className="TodoMainModalDImage" /> 
+        <img src={diary} alt="그림일기 이미지" className="TodoMainModalDImage" />
         <div className="TodoMainModalButtons">
           <button className="TodoMainModalButton" onClick={() => setDrawingModalIsOpen(false)}>취소</button>
           <button className="TodoMainModalButton">생성</button>
