@@ -23,29 +23,32 @@ const TodoMainList = ({ date }) => {
   const [diaryButton, setDiaryButton] = useState(false);
 
   // 처음 컴포넌트가 열렸을 때 category 불러옴
+  // 날짜가 변경되면 categoryRequest 및 todoRequest를 호출
   useEffect(() => {
-    console.log('input date : ', date);
     if (date) {
-      // `date` 값이 있을 때 `currentDate`를 설정
       const newDate = new Date(date);
-      if (newDate !== new Date()) {
-        console.log('newDate : ', newDate);
+      if (newDate.toDateString() !== new Date().toDateString()) {
         setCurrentDate(newDate);
-        console.log('currentDate1 : ', currentDate);
       } else {
         console.warn('유효하지 않은 날짜입니다:', date);
       }
     } else {
-      // `date` 값이 없을 때 현재 날짜를 설정
       setCurrentDate(new Date());
     }
-    console.log('currentDate2 :', currentDate);
-    categoryRequest();
-  }, []);
+  }, [date]);
+
+  // currentDate가 변경되었을 때 categoryRequest 호출
+  useEffect(() => {
+    if (currentDate) {
+      console.log('currentDate updated:', currentDate);
+      categoryRequest();
+      todoRequest();  // currentDate가 업데이트된 후에만 todoRequest 호출
+    }
+  }, [currentDate]);
 
   const categoryRequest = async () => {
     console.log('categoryRequest');
-    console.log('currentDate3 : ', currentDate);
+    console.log('currentDate for categoryRequest : ', currentDate);
     try {
       const response = await axios.get(`https://i11b104.p.ssafy.io/api/category`, {
         headers: {
@@ -71,10 +74,6 @@ const TodoMainList = ({ date }) => {
     }
   };
 
-  useEffect(() => {
-    todoRequest();
-  }, [currentDate]);
-
   const clearCategoryItems = () => {
     console.log('clearCategoryItems');
 
@@ -96,7 +95,7 @@ const TodoMainList = ({ date }) => {
     setIsLoading(true);
 
     try {
-      const diaryPossible = await axios.get(`https://i11b104.p.ssafy.io/api/dayoff/${currentDate}`, {
+      const diaryPossible = await axios.get(`https://i11b104.p.ssafy.io/api/dayoff/${currentDate.toISOString().split('T')[0]}`, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem('accessToken'),
