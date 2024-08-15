@@ -55,7 +55,7 @@ const ChattingFriendList = ({ friends: initialFriends, onFriendClick, onChatClic
       />
       <div className="ChatFriendList">
         <div key="my-avatar" className="ChatFriendItem">
-          <img src={user.image} alt="내 아바타" className="ChatFriendAvatar" />
+          <img src={`data:image/gif;base64,${user.image}`} alt="내 아바타" className="ChatFriendAvatar" />
           <div className="ChatFriendInfo">
             <span onClick={() => onFriendClick({ id: 'my-avatar', name: user.nickname, avatar: user.image })} className="ChatFriendName">
               {user.creatureName}
@@ -73,7 +73,7 @@ const ChattingFriendList = ({ friends: initialFriends, onFriendClick, onChatClic
           .sort((a, b) => new Date(b.receiveTime) - new Date(a.receiveTime))
           .map(friend => (
             <div key={friend.friendId} className="ChatFriendItem">
-              <img src={friend.avatar} alt={friend.counterpartNickname} className="ChatFriendAvatar" />
+              <img src={`data:image/gif;base64,${friend.avatar}`} alt={friend.counterpartNickname} className="ChatFriendAvatar" />
               <div className="ChatFriendInfo">
                 <span onClick={() => onFriendClick(friend)} className="ChatFriendName">
                   {friend.counterpartNickname}
