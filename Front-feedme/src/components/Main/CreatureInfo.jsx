@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import ToDoList from '../Todo/TodoList';
 import '../Main/CreatureInfo.css';
 import { useNavigate } from 'react-router-dom';
@@ -30,14 +30,14 @@ const CreatureInfo = () => {
 
   const MoveTo = (path) => {
     navigate(path);
-  }
+  };
 
   return (
     <div className='CreatureInfo'>
       <h2>{creatureName}</h2>
       <img 
         className='CreatureInfoPhoto' 
-        src={image} 
+        src={`data:image/gif;base64,${image}`} 
         alt="creature" 
         onClick={() => MoveTo('/MyPage')} 
       />
