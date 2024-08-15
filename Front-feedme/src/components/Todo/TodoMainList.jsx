@@ -23,32 +23,30 @@ const TodoMainList = ({ date }) => {
   const [diaryButton, setDiaryButton] = useState(false);
 
   useEffect(() => {
-    const updateDateAndFetchCategories = () => {
+    const updateDateAndFetchCategories = async () => {
       console.log('input date : ', date);
+      
+      let newDate = new Date();
       if (date) {
-        // `date` 값이 있을 때 `currentDate`를 설정
-        const newDate = new Date(date);
-        if (newDate.getTime() !== new Date().getTime()) {
-          console.log('newDate : ', newDate);
-          setCurrentDate(newDate);
-        } else {
+        newDate = new Date(date);
+        if (newDate.getTime() === new Date().getTime()) {
           console.warn('유효하지 않은 날짜입니다:', date);
+          return;
         }
-      } else {
-        // `date` 값이 없을 때 현재 날짜를 설정
-        setCurrentDate(new Date());
       }
+      
+      setCurrentDate(newDate); // 상태 업데이트
+  
+      await new Promise((resolve) => setTimeout(resolve, 0)); // 다음 작업으로 넘어가기 전에 상태 업데이트 대기
+      
+      console.log('currentDate after setting:', newDate);
+      await categoryRequest(); // 상태가 업데이트된 후에 categoryRequest 호출
     };
   
     updateDateAndFetchCategories();
   }, [date]);
   
-  useEffect(() => {
-    if (currentDate) {
-      console.log('currentDate changed:', currentDate);
-      categoryRequest();
-    }
-  }, [currentDate]);
+  
   
 
   const categoryRequest = async () => {
