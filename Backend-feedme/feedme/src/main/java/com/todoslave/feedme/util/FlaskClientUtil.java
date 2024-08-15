@@ -116,6 +116,11 @@ public class FlaskClientUtil {
 //
 //        } else {
             // 일반적인 경우
+
+        if(level==0){
+            return null;
+        }
+
             url = String.format("http://flask:33333/store/%s/%d/%d", username, creatureId, level);
 //        }
 
