@@ -22,44 +22,30 @@ const TodoMainList = ({ date }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [diaryButton, setDiaryButton] = useState(false);
 
-  // 날짜 설정 및 카테고리 요청 로직
+  // 처음 컴포넌트가 열렸을 때 category 불러옴
   useEffect(() => {
     console.log('input date : ', date);
-
-    let newDate = new Date();
     if (date) {
-      newDate = new Date(date);
-      if (newDate.toDateString() !== new Date().toDateString()) {
-        setCurrentDate(date);
-        console.log('newDate : ', date);
+      // `date` 값이 있을 때 `currentDate`를 설정
+      const newDate = new Date(date);
+      if (newDate !== new Date()) {
+        console.log('newDate : ', newDate);
+        setCurrentDate(newDate);
+        console.log('currentDate1 : ', currentDate);
       } else {
         console.warn('유효하지 않은 날짜입니다:', date);
       }
     } else {
+      // `date` 값이 없을 때 현재 날짜를 설정
       setCurrentDate(new Date());
-      newDate = new Date();
     }
-
-    // 다음 작업을 현재 newDate가 설정된 후에 실행되도록 설정
-    setTimeout(() => {
-      console.log('currentDate1 : ', newDate);
-      console.log('currentDate2 :', currentDate);  // currentDate는 여기서 이전 상태를 유지하고 있을 가능성이 큽니다
-    }, 0);
-
-  }, [date]);
-
-  // currentDate가 변경되었을 때 categoryRequest 호출
-  useEffect(() => {
-    if (currentDate) {
-      console.log('currentDate updated:', currentDate);
-      categoryRequest();
-      todoRequest();  // currentDate가 업데이트된 후에만 todoRequest 호출
-    }
-  }, [currentDate]);
+    console.log('currentDate2 :', currentDate);
+    categoryRequest();
+  }, []);
 
   const categoryRequest = async () => {
     console.log('categoryRequest');
-    console.log('currentDate for categoryRequest : ', currentDate);
+    console.log('currentDate3 : ', currentDate);
     try {
       const response = await axios.get(`https://i11b104.p.ssafy.io/api/category`, {
         headers: {
@@ -85,6 +71,10 @@ const TodoMainList = ({ date }) => {
     }
   };
 
+  useEffect(() => {
+    todoRequest();
+  }, [currentDate]);
+
   const clearCategoryItems = () => {
     console.log('clearCategoryItems');
 
@@ -106,7 +96,7 @@ const TodoMainList = ({ date }) => {
     setIsLoading(true);
 
     try {
-      const diaryPossible = await axios.get(`https://i11b104.p.ssafy.io/api/dayoff/${currentDate.toISOString().split('T')[0]}`, {
+      const diaryPossible = await axios.get(`https://i11b104.p.ssafy.io/api/dayoff/${currentDate}`, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem('accessToken'),
