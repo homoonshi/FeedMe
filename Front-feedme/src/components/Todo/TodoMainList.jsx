@@ -55,12 +55,11 @@ const TodoMainList = ({ date }) => {
     console.log(date);
     if(date === ""){
         const newDate = new Date();
-        const formattedDate = newDate.toDateString();
-        console.log('currentDate 설정됨:', formattedDate);
-        setCurrentDate(formattedDate);
+        console.log('currentDate 설정됨:', newDate);
+        setCurrentDate(newDate);
     } else {
         const newDate = new Date(date);
-        setCurrentDate(newDate.toDateString());
+        setCurrentDate(newDate);
         console.log('currentDate 설정됨:', newDate);
     }
 }, [date]);
@@ -333,7 +332,7 @@ const TodoMainList = ({ date }) => {
     <div className="TodoMainListContainer">
       <div className="TodoHeader">
         <FaAngleLeft className="TodoArrow" onClick={handleDecreaseDate} /> 
-        <h3>{currentDate.toDateString()}</h3>
+        <h3>{currentDate.toISOString().split('T')[0]}</h3>
         <FaAngleRight className="TodoArrow" onClick={handleIncreaseDate} />
       </div>
 
