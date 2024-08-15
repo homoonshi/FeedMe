@@ -5,8 +5,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleLeft, faRotate } from '@fortawesome/free-solid-svg-icons';
 import './CreatureResult.css';
 import '../../assets/font/Font.css';
-import catImage from '../../assets/images/rain_16.png';
-import { logout, setToken } from '../../store/slice';
 import { fetchUserData } from '../../store/userSlice';
 
 const CreatureResult = () => {

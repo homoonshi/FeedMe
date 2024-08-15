@@ -9,6 +9,7 @@ const initialState = {
   keyword: 'pink',
   token: null,
   hasCreature: false,
+  photo:''
 };
 
 const authSlice = createSlice({
@@ -20,6 +21,9 @@ const authSlice = createSlice({
     },
     setBirthday: (state, action) => {
       state.birthday = action.payload;
+    },
+    setphoto:(state,action)=>{
+      state.photo = action.payload;
     },
     setEmail: (state, action) => {
       state.email = action.payload;
@@ -59,6 +63,7 @@ const authSlice = createSlice({
 export const { 
   setNickname, 
   setBirthday, 
+  setphoto,
   setEmail,
   setCreatureName,
   setKeyword,
