@@ -107,10 +107,10 @@ public class FlaskClientUtil {
         // 조건에 따라 URL 결정
         if (creatureId == null || creatureId == 0 || level == null || level == 0) {
             // creatureId나 level이 null 또는 0인 경우
-            url = String.format("http://localhost:33333/store/default_creature_image/%s", username);
+            url = String.format("http://flask:33333/store/default_creature_image/%s", username);
         } else {
             // 일반적인 경우
-            url = String.format("http://localhost:33333/store/creature_data/%s/%d/%d", username, creatureId, level);
+            url = String.format("http://flask:33333/store/creature_data/%s/%d/%d", username, creatureId, level);
         }
 
         // GET 요청을 통해 Flask 서버로부터 이미지 데이터 받기
@@ -137,7 +137,7 @@ public class FlaskClientUtil {
         String formattedDate = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
         // URL 생성 (날짜는 쿼리 파라미터로 전송)
-        String url = String.format("http://localhost:33333/store/creature_diary/%s/%s", username, formattedDate);
+        String url = String.format("http://flask:33333/store/creature_diary/%s/%s", username, formattedDate);
 
         // GET 요청을 통해 Flask 서버로부터 그림일기 데이터 받기
         ResponseEntity<ByteArrayResource> response = restTemplate.getForEntity(url, ByteArrayResource.class);
