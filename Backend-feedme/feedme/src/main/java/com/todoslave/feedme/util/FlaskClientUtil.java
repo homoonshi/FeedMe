@@ -107,6 +107,10 @@ public class FlaskClientUtil {
     public byte[] getCreatureImageAsByteArray(String username, Integer creatureId, Integer level) {
         String url;
 
+        System.out.println(username);
+        System.out.println(creatureId);
+        System.out.println(level);
+        System.out.println("되라요!");
         // URL 생성: username을 creatureId로 간주하여 사용
         if (creatureId == null || creatureId == 0 || level == null || level == 0) {
             // creatureId나 level이 null 또는 0인 경우, 기본 이미지를 요청
