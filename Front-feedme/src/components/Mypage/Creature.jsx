@@ -23,7 +23,8 @@ const Creature = ({ creature }) => {
     <div className="MCreature">
       <p className="MCreatureName">{creature.name}</p>
       <p className="MCreatureterm">🤍 {creature.daysTogether}일째 함께하는 중</p>
-      <img src={creature.image} alt="creature" />
+      
+      <img src={`data:image/gif;base64,${creature.image}`} alt="creature" />
       <div className="MCreatureInfo">
         <p className="MCreatureLv">Lv. {creature.level}</p>
         <div className="MCreatureExp">
