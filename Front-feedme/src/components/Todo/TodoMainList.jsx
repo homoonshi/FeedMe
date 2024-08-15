@@ -55,12 +55,12 @@ const TodoMainList = ({ date }) => {
     console.log(date);
     if(date === ""){
         const newDate = new Date();
-        const formattedDate = newDate.toLocaleDateString();
+        const formattedDate = newDate.toDateString();
         console.log('currentDate 설정됨:', formattedDate);
         setCurrentDate(formattedDate);
     } else {
         const newDate = new Date(date);
-        setCurrentDate(newDate.toLocaleDateString());
+        setCurrentDate(newDate.toDateString());
         console.log('currentDate 설정됨:', newDate);
     }
 }, [date]);
