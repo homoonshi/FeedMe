@@ -154,7 +154,7 @@ const TodoMainList = (date) => {
   const handleAddTodoSubmit = async () => {
     if (newTodo) {
       try {
-        const response = await axios.post(`http://localhost:8080/todos`, {
+        const response = await axios.post(`https://i11b104.p.ssafy.io/api/todos`, {
           headers: {
             'Content-Type': 'application/json',
             'Authorization': sessionStorage.getItem('accessToken'),
@@ -203,7 +203,7 @@ const TodoMainList = (date) => {
     const handleEditTodo = async (categoryIndex, todoIndex) => {
       if (editedTodo) {
         try {
-          const response = await axios.patch(`http://localhost:8080/todos`, {
+          const response = await axios.patch(`https://i11b104.p.ssafy.io/api/todos`, {
             headers: {
               'Content-Type': 'application/json',
               'Authorization': sessionStorage.getItem('accessToken'),
@@ -253,7 +253,7 @@ const TodoMainList = (date) => {
 
     const handleDeleteTodo = async (categoryIndex, todoIndex) => {
       try {
-        const response = await axios.delete(`http://localhost:8080/todos/${todoIndex}`, {
+        const response = await axios.delete(`https://i11b104.p.ssafy.io/api/todos/${todoIndex}`, {
           headers: {
             'Content-Type': 'application/json',
             'Authorization': sessionStorage.getItem('accessToken'),
@@ -326,7 +326,7 @@ const TodoMainList = (date) => {
   const handleCategoryModalSubmit = async () => {
     if (newCategoryTitle) {
       try {
-        const response = await axios.post(`http://localhost:8080/category/${newCategoryTitle}`, {}, {
+        const response = await axios.post(`https://i11b104.p.ssafy.io/api/category/${newCategoryTitle}`, {}, {
           headers: {
             'Authorization': sessionStorage.getItem('accessToken'),
           }
