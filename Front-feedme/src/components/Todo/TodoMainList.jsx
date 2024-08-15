@@ -13,88 +13,118 @@ const TodoMainList = ({ date }) => {
   const [categoryModalIsOpen, setCategoryModalIsOpen] = useState(false);
   const [todoModalIsOpen, setTodoModalIsOpen] = useState(false);
   const [addTodoModalIsOpen, setAddTodoModalIsOpen] = useState(false);
-  const [drawingModalIsOpen, setDrawingModalIsOpen] = useState(false); 
+  const [drawingModalIsOpen, setDrawingModalIsOpen] = useState(false);
   const [newCategoryTitle, setNewCategoryTitle] = useState('');
   const [newTodo, setNewTodo] = useState('');
   const [editedTodo, setEditedTodo] = useState('');
   const [currentCategoryIndex, setCurrentCategoryIndex] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [diaryButton, setDiaryButton] = useState(false);
 
   // 처음 컴포넌트가 열렸을 때 category 불러옴
   useEffect(() => {
-    const categoryRequest = async () => {
-      try {
-        const response = await axios.get('https://i11b104.p.ssafy.io/api/category', {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': sessionStorage.getItem('accessToken'),
-          }
-        });
-
-        if (response.status === 200) {
-          console.log('카테고리 불러오기 성공:', response.data);
-          const datas = response.data.map(category => ({
-            categoryId: category.id,
-            categoryName: category.name,
-            items: []
-          }));
-
-          setCategories(datas);
-        } else {
-          console.log('카테고리 불러오기 실패:', response);
-        }
-      } catch (error) {
-        console.error('카테고리 요청 중 오류 발생:', error);
+    console.log('input date : ', date);
+    if (date) {
+      // `date` 값이 있을 때 `currentDate`를 설정
+      const newDate = new Date(date);
+      if (newDate !== new Date()) {
+        console.log('newDate : ', newDate);
+        setCurrentDate(newDate);
+        console.log('currentDate1 : ', currentDate);
+      } else {
+        console.warn('유효하지 않은 날짜입니다:', date);
       }
-    };
-
+    } else {
+      // `date` 값이 없을 때 현재 날짜를 설정
+      setCurrentDate(new Date());
+    }
+    console.log('currentDate2 :', currentDate);
     categoryRequest();
   }, []);
 
-  // 부모 컴포넌트에서 props로 date 받으면 currentDate 다시 설정 
-  useEffect(() => {
-    console.log(date);
-    if(date === ""){
-        const newDate = new Date();
-        console.log('currentDate 설정됨:', newDate);
-        setCurrentDate(newDate);
-    } else {
-        const newDate = new Date(date);
-        setCurrentDate(newDate);
-        console.log('currentDate 설정됨:', newDate);
-    }
-}, [date]);
-
-
-  // currentDate 날짜가 바뀌면 category 안에 있는 todo를 싹 다 날리고 서버에서 다시 받음
-  useEffect(() => {
-    const clearCategoryItems = () => {
-      setCategories(prevCategories => {
-        return prevCategories.map(category => ({
-          ...category,
-          items: [] // 각 category의 items를 빈 배열로 초기화
-        }));
+  const categoryRequest = async () => {
+    console.log('categoryRequest');
+    console.log('currentDate3 : ', currentDate);
+    try {
+      const response = await axios.get(`https://i11b104.p.ssafy.io/api/category`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': sessionStorage.getItem('accessToken'),
+        }
       });
-    };
 
-    clearCategoryItems();
+      if (response.status === 200) {
+        console.log('카테고리 불러오기 성공:', response.data);
+        const datas = response.data.map(category => ({
+          categoryId: category.id,
+          categoryName: category.name,
+          items: []
+        }));
 
-    const todoRequest = async () => {
-      try {
-        const response = await axios.get('https://i11b104.p.ssafy.io/api/todos/calendar/daily', {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': sessionStorage.getItem('accessToken'),
-          },
-          params: {
-            date: currentDate.toISOString().split('T')[0] // date를 YYYY-MM-DD 형식으로 변환
-          }
-        });
+        setCategories(datas);
+      } else {
+        console.log('카테고리 불러오기 실패:', response);
+      }
+    } catch (error) {
+      console.error('카테고리 요청 중 오류 발생:', error);
+    }
+  };
 
-        if (response.status === 200) {
-          console.log('할일 불러오기 성공:', response.data);
-          const todosData = response.data;
-          const updatedCategories = [...categories];
+  useEffect(() => {
+    todoRequest();
+  }, [currentDate]);
 
+  // useEffect(() => {
+  const clearCategoryItems = () => {
+    console.log('clearCategoryItems');
+
+    setCategories(prevCategories => {
+      return prevCategories.map(category => ({
+        ...category,
+        items: [] // 각 category의 items를 빈 배열로 초기화
+      }));
+    });
+
+    // window.location.reload();
+  };
+
+  const todoRequest = async () => {
+    console.log('todoRequest');
+    console.log("현재 날짜:", currentDate);
+
+    if (isLoading) return;  // 이미 로딩 중이면 실행하지 않음
+    setIsLoading(true);
+
+    try {
+      const diaryPossible = await axios.get(`https://i11b104.p.ssafy.io/api/dayoff/${currentDate}`,{
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': sessionStorage.getItem('accessToken'),
+        },
+      });
+
+      if(diaryPossible.status === 200){
+        const diary = diaryPossible.data;
+        setDiaryButton(diary);
+      }
+
+      clearCategoryItems();
+      const response = await axios.get(`https://i11b104.p.ssafy.io/api/todos/calendar/daily`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': sessionStorage.getItem('accessToken'),
+        },
+        params: {
+          date: currentDate.toISOString().split('T')[0] // date를 YYYY-MM-DD 형식으로 변환
+        }
+      });
+
+      if (response.status === 200) {
+        console.log('할일 불러오기 성공:', response.data);
+        const todosData = response.data;
+
+        setCategories(prevCategories => {
+          const updatedCategories = [...prevCategories];
           todosData.forEach(todo => {
             const { id, categoryId, content, createdAt, isCompleted } = todo;
 
@@ -109,33 +139,37 @@ const TodoMainList = ({ date }) => {
             }
           });
 
-          setCategories(updatedCategories);
-        } else {
-          console.log('할일 불러오기 실패:', response);
-        }
-      } catch (error) {
-        console.error('할일 요청 중 오류 발생:', error);
+          return updatedCategories;
+        });
+      } else {
+        console.log('할일 불러오기 실패:', response);
       }
-    };
+    } catch (error) {
+      console.error('할일 요청 중 오류 발생:', error);
+    } finally {
+      setIsLoading(false);  // 로딩 상태 초기화
+    }
+  };
 
-    todoRequest();
-  }, [currentDate]);
+  // }, [currentDate]);
+
 
   // 날짜 증가
   const handleIncreaseDate = () => {
-    const d = new Date(currentDate.setDate(currentDate.getDate() + 1));
-    const today = new Date();
-    if (d.getTime() <= today.getTime()) {
-      setCurrentDate(d);
-      console.log('날짜 증가:', d);
+    const IncreaseDate = new Date(currentDate);
+    IncreaseDate.setDate(currentDate.getDate() + 1);    
+    if (new Date() >= IncreaseDate) {
+      setCurrentDate(IncreaseDate);
+      console.log('날짜 증가:', IncreaseDate);
     }
   };
 
   // 날짜 감소
   const handleDecreaseDate = () => {
-    const d = new Date(currentDate.setDate(currentDate.getDate() - 1));
-    setCurrentDate(d);
-    console.log('날짜 감소:', d);
+    const decreaseDate = new Date(currentDate);
+    decreaseDate.setDate(currentDate.getDate() - 1);    
+    setCurrentDate(decreaseDate);
+    console.log('날짜 감소:', decreaseDate);
   };
 
   // 카테고리 추가 창 열림
@@ -153,15 +187,22 @@ const TodoMainList = ({ date }) => {
   const handleAddTodoSubmit = async () => {
     if (newTodo) {
       try {
-        const response = await axios.post('https://i11b104.p.ssafy.io/api/todos', {
-          content: newTodo,
-          categoryId: currentCategoryIndex,
-        }, {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': sessionStorage.getItem('accessToken'),
-          },
-        });
+        console.log("현재 카테고리 아이디", currentCategoryIndex);
+        const response = await axios.post(
+          `https://i11b104.p.ssafy.io/api/todos`,
+          null,  // POST 요청의 본문이 없는 경우 null을 사용합니다.
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': sessionStorage.getItem('accessToken'),
+            },
+            params: {
+              content: newTodo,
+              categoryId: currentCategoryIndex,
+            },
+          }
+        );
+
 
         if (response.status === 200) {
           console.log('할일 추가 성공:', response.data);
@@ -189,15 +230,19 @@ const TodoMainList = ({ date }) => {
   const handleEditTodo = async (categoryIndex, todoIndex) => {
     if (editedTodo) {
       try {
-        const response = await axios.patch('https://i11b104.p.ssafy.io/api/todos', {
-          id: todoIndex,
-          content: editedTodo,
-        }, {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': sessionStorage.getItem('accessToken'),
-          },
-        });
+        const response = await axios.patch(`https://i11b104.p.ssafy.io/api/todos`,
+          null,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': sessionStorage.getItem('accessToken'),
+            },
+            params: {
+              id: todoIndex,
+              content: editedTodo,
+            },
+          }
+        );
 
         if (response.status === 200) {
           console.log('할일 수정 성공:', response.data);
@@ -234,7 +279,7 @@ const TodoMainList = ({ date }) => {
         },
       });
 
-      if (response.status === 200) {
+      if (response.status === 204) {
         console.log('할일 삭제 성공:', response.data);
         const updatedCategories = [...categories];
         const items = updatedCategories[categoryIndex].items;
@@ -243,10 +288,11 @@ const TodoMainList = ({ date }) => {
 
         if (todoToDeleteIndex !== -1) {
           items.splice(todoToDeleteIndex, 1);
-          setCategories(updatedCategories);
         }
+        setCategories(updatedCategories);
         setSelectedTodo({ categoryIndex: null, todoIndex: null });
         setTodoModalIsOpen(false);
+        setEditedTodo('');
       }
     } catch (error) {
       console.error('할일 삭제 중 오류 발생:', error);
@@ -262,8 +308,9 @@ const TodoMainList = ({ date }) => {
 
   // 할일 완료/미완료 버튼
   const toggleTodoComplete = async (categoryIndex, todoIndex) => {
+    console.log(todoIndex);
     try {
-      const response = await axios.post(`https://i11b104.p.ssafy.io/api/category/complete/${todoIndex}`, null, {
+      const response = await axios.post(`https://i11b104.p.ssafy.io/api/todos/complete/${todoIndex}`, null, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem('accessToken'),
@@ -294,7 +341,7 @@ const TodoMainList = ({ date }) => {
   const handleCategoryModalSubmit = async () => {
     if (newCategoryTitle) {
       try {
-        const response = await axios.post('https://i11b104.p.ssafy.io/api/category', { name: newCategoryTitle }, {
+        const response = await axios.post(`https://i11b104.p.ssafy.io/api/category/${newCategoryTitle}`, null, {
           headers: {
             'Authorization': sessionStorage.getItem('accessToken'),
           }
@@ -320,8 +367,8 @@ const TodoMainList = ({ date }) => {
 
   const isSameDay = (date1, date2) => {
     return date1.getFullYear() === date2.getFullYear() &&
-           date1.getMonth() === date2.getMonth() &&
-           date1.getDate() === date2.getDate();
+      date1.getMonth() === date2.getMonth() &&
+      date1.getDate() === date2.getDate();
   };
 
   const today = new Date();
@@ -331,7 +378,7 @@ const TodoMainList = ({ date }) => {
   return (
     <div className="TodoMainListContainer">
       <div className="TodoHeader">
-        <FaAngleLeft className="TodoArrow" onClick={handleDecreaseDate} /> 
+        <FaAngleLeft className="TodoArrow" onClick={handleDecreaseDate} />
         <h3>{currentDate.toISOString().split('T')[0]}</h3>
         <FaAngleRight className="TodoArrow" onClick={handleIncreaseDate} />
       </div>
@@ -342,15 +389,15 @@ const TodoMainList = ({ date }) => {
             <div className="TodoSectionHeader">
               <h4>{category.categoryName}</h4>
               {category.categoryName !== '일일 미션' && (
-                <FaPlus className="AddTodoButton" onClick={() => handleAddTodo(categoryIndex)} />
+                <FaPlus className="AddTodoButton" onClick={() => handleAddTodo(category.categoryId)} />
               )}
             </div>
             <ul>
               {category.items.map((item, todoIndex) => (
                 <li key={todoIndex} className="TodoItem">
                   <div className="TodoItemContent">
-                    <input type="checkbox" checked={item.isCompleted} onChange={() => toggleTodoComplete(categoryIndex, todoIndex)} /> {item.content}
-                    <FaEllipsisH className="TodoOptionsButton" onClick={() => toggleOptions(categoryIndex, todoIndex, item.content)} />
+                    <input type="checkbox" checked={item.isCompleted} onChange={() => toggleTodoComplete(categoryIndex, item.id)} /> {item.content}
+                    <FaEllipsisH className="TodoOptionsButton" onClick={() => toggleOptions(categoryIndex, item.id, item.content)} />
                   </div>
                 </li>
               ))}
@@ -360,7 +407,7 @@ const TodoMainList = ({ date }) => {
       </div>
 
       <div className="TodoActions">
-        {(isSameDay(currentDate, today) || isSameDay(currentDate, yesterday)) && (
+        {(isSameDay(currentDate, today) || isSameDay(currentDate, yesterday)) || diaryButton && (
           <button className="CreateDrawingButton" onClick={() => setDrawingModalIsOpen(true)}>
             <FaPen className="DrawingIcon" />
             그림일기 생성
@@ -444,7 +491,7 @@ const TodoMainList = ({ date }) => {
         overlayClassName="TodoMainOverlay"
       >
         <h2 className="TodoMainModalTitle">그림일기 생성</h2>
-        <img src={diary} alt="그림일기 이미지" className="TodoMainModalDImage" /> 
+        <img src={diary} alt="그림일기 이미지" className="TodoMainModalDImage" />
         <div className="TodoMainModalButtons">
           <button className="TodoMainModalButton" onClick={() => setDrawingModalIsOpen(false)}>취소</button>
           <button className="TodoMainModalButton">생성</button>
