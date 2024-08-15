@@ -82,7 +82,7 @@ const CreatureCreate = () => {
     // };
 
     // try {
-    //   const response = await axios.post('https://i11b104.p.ssafy.io/api/creature', creatureData, {
+    //   const response = await axios.post('http://localhost:8080/creature', creatureData, {
     //     headers: {
     //       'Content-Type': 'application/json',
     //       'Authorization': sessionStorage.getItem('accessToken'), // 또는 token 변수를 사용
@@ -106,7 +106,7 @@ const CreatureCreate = () => {
     }
 
     try {
-      const response = await axios.post('https://i11b104.p.ssafy.io/api/creature', formData, {
+      const response = await axios.post('http://localhost:8080/creature', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           'Authorization': sessionStorage.getItem('accessToken'), // 또는 token 변수를 사용
@@ -129,7 +129,7 @@ const CreatureCreate = () => {
   
     // // 서버에 JSON 형식으로 데이터 보내기
     // try {
-    //   const response = await axios.post('https://i11b104.p.ssafy.io/api/creature', {
+    //   const response = await axios.post('http://localhost:8080/creature', {
     //     creatureName : creatureName,
     //     keyword : keyword,
     //     photo: photo.name  

@@ -51,7 +51,7 @@ const ChatCreature = ({ user }) => {
     setLoading(true); 
 
     try {
-      const response = await axios.get('https://i11b104.p.ssafy.io/api/api/chat/creature', {
+      const response = await axios.get('http://localhost:8080/api/chat/creature', {
         params: {
           ragQuestion: inputValue,
         },

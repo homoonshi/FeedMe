@@ -28,7 +28,7 @@ function ReactCalendar() {
     formattedDate.setDate(formattedDate.getDate() + 1);  // 날짜에 1일 추가
     const date = formattedDate.toISOString().split('T')[0];  // YYYY-MM-DD 형식으로 변환
     console.log(date);
-    axios.get(`https://i11b104.p.ssafy.io/api/todos/calendar?date=${date}`,
+    axios.get(`http://localhost:8080/todos/calendar?date=${date}`,
       {
         headers: { Authorization: sessionStorage.getItem('accessToken'), },
       }
