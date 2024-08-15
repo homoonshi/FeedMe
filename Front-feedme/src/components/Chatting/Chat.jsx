@@ -133,7 +133,9 @@ const Chat = () => {
                     />
                   )}
                   {view === 'creatureChat' && (
-                    <ChatCreature /> 
+                    <ChatCreature 
+                      user={user}
+                    /> 
                   )}
                 </div>
               ) : (
