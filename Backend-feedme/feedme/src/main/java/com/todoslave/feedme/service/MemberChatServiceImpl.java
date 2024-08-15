@@ -141,7 +141,7 @@ public class MemberChatServiceImpl implements MemberChatService{
 
   // 채팅방 메세지 불러오기
   @Transactional
-  public Slice<MemberChatMessageResponseDTO> getChatMessage(String roomId, int skip, int limit) {
+  public Slice<MemberChatMessageResponseDTO> getChatMessage(String roomId, int skip, int limit, int memberId) {
 
     if (roomRepository.findById(roomId).orElseThrow() == null) {
       return null;
@@ -151,8 +151,6 @@ public class MemberChatServiceImpl implements MemberChatService{
     Pageable pageable = PageRequest.of(skip / limit, limit);
 
     Slice<MemberChatMessage> messages = messageRepository.findByMemberChatRoomIdOrderByTransmitAtDesc(roomId, pageable);
-
-    int memberId = SecurityUtil.getCurrentUserId();
 
     System.out.println("memberId is : " + memberId);
     System.out.println("Room Id is : " + roomId);

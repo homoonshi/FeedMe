@@ -66,7 +66,7 @@ public class MemberChatController {
   @SendTo("/chatRoom/loadMessages/{roomId}")
   public Slice<MemberChatMessageResponseDTO> findMessages(@DestinationVariable String roomId,
                                               @Payload PaginationRequestDTO request){
-    Slice<MemberChatMessageResponseDTO> messages = chatService.getChatMessage(roomId, request.getSkip(), request.getLimit());
+    Slice<MemberChatMessageResponseDTO> messages = chatService.getChatMessage(roomId, request.getSkip(), request.getLimit(), request.getMemberId());
 
     for (MemberChatMessageResponseDTO message : messages) {
       System.out.println(message.toString());
