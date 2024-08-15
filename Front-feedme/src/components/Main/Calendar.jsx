@@ -17,6 +17,10 @@ function ReactCalendar() {
   const { token } = useSelector((state) => state.auth);
   const { calendarTodos, dailyTodos } = useSelector((state) => state.todo);
 
+  const handleMonthChange = ({ activeStartDate }) => {
+    console.log('달이 변경되었습니다:', activeStartDate);
+    // activeStartDate는 사용자가 선택한 달의 첫 번째 날짜입니다.
+  };
 
   useEffect(() => {
     const date = value.toISOString().split('T')[0];
@@ -67,32 +71,6 @@ function ReactCalendar() {
   // 날짜 클릭 시 다른 페이지로 이동하는 함수
   const handleDateClick = (date) => {
 
-    // console.log('data : ', date);
-    // console.log('calendarTodos : ', calendarTodos);
-    // console.log('dailyTodos : ', dailyTodos);
-
-    // try {
-    //   const response = await axios.get('https://i11b104.p.ssafy.io/api/todos/calendar/daily', {
-    //     params: { date: date },
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //       'Authorization': sessionStorage.getItem('accessToken'), // 필요한 경우 토큰 포함
-    //     },
-    //   });
-
-    //   if (response.status === 200) {
-    //     console.log('dailyTodos : ', response.data);
-    //     // setDailyTodos(response.data); // 받은 데이터로 상태 업데이트
-    //     navigate('/Todo');
-    //   } else {
-    //     console.error('할 일 목록을 가져오는 데 실패했습니다:', response.data);
-    //   }
-    // } catch (error) {
-    //   console.error('서버 요청 중 오류 발생:', error);
-    // }
-    
-    // const formattedDate = date.toISOString().split('T')[0];
-
     const formattedDate = moment(date).format('YYYY-MM-DD'); // 날짜를 YYYY-MM-DD 형식으로 포맷
 
     navigate('/Todo', { state: { date: formattedDate } }); // 상태로 날짜 전달
@@ -107,6 +85,7 @@ function ReactCalendar() {
         formatDay={(locale, date) => moment(date).format("DD")}
         tileContent={tileContent}
         onClickDay={handleDateClick}
+        onActiveStartDateChange={handleMonthChange}
       />
     </div>
   );
