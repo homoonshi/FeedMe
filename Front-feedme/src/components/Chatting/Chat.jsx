@@ -20,6 +20,19 @@ const Chat = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const token = useSelector((state) => state.auth.token);
+  const user = useSelector((state) => state.user);
+  const friendsList = useSelector((state) => state.friends.list);
+  const friendsStatus = useSelector((state) => state.friends.status);
+  const selectedFriendInfo = useSelector((state) => state.friendInfo);
+
+  const { creatureId, creatureName, exp, level, image, togetherDay } = user;
+
+  const [selectedFriend, setSelectedFriend] = useState(null);
+  const [view, setView] = useState('profile');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [friendToDelete, setFriendToDelete] = useState(null);
+
   useEffect(() => {
     const sessionToken = sessionStorage.getItem('accessToken');
     if (sessionToken) {
@@ -28,15 +41,6 @@ const Chat = () => {
       navigate('/login');
     }
   }, [dispatch, navigate]);
-
-  const token = useSelector((state) => state.auth.token);
-  const user = useSelector((state) => state.user);
-  const friendsList = useSelector((state) => state.friends.list);
-  const friendsStatus = useSelector((state) => state.friends.status);
-
-  const selectedFriendInfo = useSelector((state) => state.friendInfo);
-
-  const { creatureId, creatureName, exp, level, image, togetherDay, error } = user;
 
   useEffect(() => {
     if (token) {
@@ -55,7 +59,6 @@ const Chat = () => {
     console.log('Current friends list:', friendsList);
     console.log('Current friends status:', friendsStatus);
   }, [friendsList, friendsStatus]);
-  
 
   useEffect(() => {
     if (token) {
@@ -69,17 +72,12 @@ const Chat = () => {
         const newChat = JSON.parse(event.data);
         dispatch(updateFriendsList(newChat));
       });
-      
+
       return () => {
         eventSource.close();
       };
     }
   }, [dispatch, token]);
-
-  const [selectedFriend, setSelectedFriend] = useState(null);
-  const [view, setView] = useState('profile');
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [friendToDelete, setFriendToDelete] = useState(null);
 
   const handleFriendClick = (friend) => {
     setSelectedFriend(friend);
@@ -93,7 +91,7 @@ const Chat = () => {
     if (selectedFriend && selectedFriend.friendId === friend.friendId && view === 'chat') {
       return;
     }
-    
+
     setSelectedFriend(null);
     setView(null);
 
@@ -143,7 +141,7 @@ const Chat = () => {
                   )}
                   {view === 'creature' && (
                     <Creature
-                      creature={{ id: creatureId, name: creatureName, daysTogether: togetherDay, level: level, exp: exp, image: image }}
+                      creature={{ id: creatureId, name: creatureName, daysTogether: togetherDay, level, exp, image }}
                     />
                   )}
                   {view === 'creatureChat' && (
