@@ -46,7 +46,7 @@ const ToDoList = ({onClick}) => {
 
           setIncompletedTodos(updatedIncompletedTodo);
         }else{
-          console.log("일일 미션 안한거 추가 실패", IncompletedMission);
+          console.log("일일 미션 안한거 추가 실패", creatureRes);
         }
       } catch (error) {
         console.error('서버 요청 중 오류 발생', error);
