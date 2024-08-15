@@ -8,8 +8,7 @@ import axios from 'axios';
 
 const TodoMainList = ({ date }) => {
   const [categories, setCategories] = useState([]);
-  const [categories, setCategories] = useState([]);  // 빈 배열로 초기화, 투두
-  const [todoMission, setTodoMission] = useState([]); // 일일 미션
+  const [todoMission, setTodoMission] = useState([]);
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedTodo, setSelectedTodo] = useState({ categoryIndex: null, todoIndex: null });
   const [categoryModalIsOpen, setCategoryModalIsOpen] = useState(false);
@@ -24,39 +23,32 @@ const TodoMainList = ({ date }) => {
   const [diaryButton, setDiaryButton] = useState(false);
 
   useEffect(() => {
-    const updateDateAndFetchCategories = () => {
+    const initializeData = async () => {
       console.log('input date : ', date);
+
       if (date) {
-        // `date` 값이 있을 때 `currentDate`를 설정
         const newDate = new Date(date);
-        if (newDate.getTime() !== new Date().getTime()) {
-          console.log('newDate : ', newDate);
+        if (!isNaN(newDate.getTime())) {
           setCurrentDate(newDate);
         } else {
           console.warn('유효하지 않은 날짜입니다:', date);
         }
-      } else {
-        // `date` 값이 없을 때 현재 날짜를 설정
-        setCurrentDate(new Date());
       }
-    };
-  
-    updateDateAndFetchCategories();
-  }, [date]);
-  
-  useEffect(() => {
-    if (currentDate) {
-      console.log('currentDate changed:', currentDate);
-      categoryRequest();
-    }
-  }, [currentDate]);
-  
 
-  const categoryRequest = () => {
+      await new Promise((resolve) => setTimeout(resolve, 0)); // 상태 업데이트 후 다음 작업으로 넘어가기 전 대기
+      console.log('currentDate2 :', currentDate);
+      await categoryRequest();
+      await todoRequest(); // 날짜가 업데이트된 후 todoRequest 호출
+    };
+
+    initializeData();
+  }, [date]);
+
+  const categoryRequest = async () => {
     console.log('categoryRequest');
     console.log('currentDate3 : ', currentDate);
     try {
-      const response = axios.get(`https://i11b104.p.ssafy.io/api/category`, {
+      const response = await axios.get(`https://i11b104.p.ssafy.io/api/category`, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem('accessToken'),
@@ -80,29 +72,28 @@ const TodoMainList = ({ date }) => {
     }
   };
 
-  useEffect(() => {
-    handleTodoRequest();
-  }, [currentDate]);
-
   const clearCategoryItems = () => {
     console.log('clearCategoryItems');
 
     setCategories(prevCategories => {
       return prevCategories.map(category => ({
         ...category,
-        items: []
+        items: [] // 각 category의 items를 빈 배열로 초기화
       }));
     });
 
     setTodoMission([]);
   };
 
-  const handleTodoRequest = () => {
+  const todoRequest = async () => {
+    console.log('todoRequest');
+    console.log("현재 날짜:", currentDate);
+
     if (isLoading) return;
     setIsLoading(true);
 
     try {
-      const diaryPossible = await axios.get(`https://i11b104.p.ssafy.io/api/dayoff/${currentDate}`, {
+      const diaryPossible = await axios.get(`https://i11b104.p.ssafy.io/api/dayoff/${currentDate.toISOString().split('T')[0]}`, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem('accessToken'),
@@ -153,9 +144,10 @@ const TodoMainList = ({ date }) => {
       }
     } catch (error) {
       console.error('할일 요청 중 오류 발생:', error);
+    } finally {
+      setIsLoading(false);
     }
 
-    // 크리쳐 미션 종료
     try {
       const mission = await axios.get(`https://i11b104.p.ssafy.io/api/creatureTodo/calendar/daily`, {
         headers: {
@@ -163,7 +155,7 @@ const TodoMainList = ({ date }) => {
           'Authorization': sessionStorage.getItem('accessToken'),
         },
         params: {
-          date: currentDate.toISOString().split('T')[0] // date를 YYYY-MM-DD 형식으로 변환
+          date: currentDate.toISOString().split('T')[0]
         }
       });
 
@@ -187,7 +179,7 @@ const TodoMainList = ({ date }) => {
     } catch (error) {
       console.error('할일 요청 중 오류 발생:', error);
     } finally {
-      setIsLoading(false);  // 로딩 상태 초기화
+      setIsLoading(false);
     }
   };
 
@@ -227,29 +219,31 @@ const TodoMainList = ({ date }) => {
     console.log('날짜 증가:', IncreaseDate);
   };
 
+  // 날짜 감소
   const handleDecreaseDate = () => {
     const decreaseDate = new Date(currentDate);
     decreaseDate.setDate(currentDate.getDate() - 1);
-    decreaseDate.setDate(currentDate.getDate() - 1);
     setCurrentDate(decreaseDate);
-    handleTodoRequest();
     console.log('날짜 감소:', decreaseDate);
   };
 
+  // 카테고리 추가 창 열림
   const handleAddCategory = () => {
     setCategoryModalIsOpen(true);
   };
 
+  // 할일 추가 창 열림
   const handleAddTodo = (categoryIndex) => {
     setCurrentCategoryIndex(categoryIndex);
     setAddTodoModalIsOpen(true);
   };
 
-  const handleAddTodoSubmit = () => {
+  // 할일 추가
+  const handleAddTodoSubmit = async () => {
     if (newTodo) {
       try {
         console.log("현재 카테고리 아이디", currentCategoryIndex);
-        const response = axios.post(
+        const response = await axios.post(
           `https://i11b104.p.ssafy.io/api/todos`,
           null,
           {
@@ -260,7 +254,6 @@ const TodoMainList = ({ date }) => {
             params: {
               content: newTodo,
               categoryId: currentCategoryIndex,
-              todoDay: currentDate.toISOString().split('T')[0]
               todoDay: currentDate.toISOString().split('T')[0]
             },
           }
@@ -288,10 +281,11 @@ const TodoMainList = ({ date }) => {
     }
   };
 
-  const handleEditTodo = (categoryIndex, todoIndex) => {
+  // 할일 수정
+  const handleEditTodo = async (categoryIndex, todoIndex) => {
     if (editedTodo) {
       try {
-        const response = axios.patch(`https://i11b104.p.ssafy.io/api/todos`,
+        const response = await axios.patch(`https://i11b104.p.ssafy.io/api/todos`,
           null,
           {
             headers: {
@@ -409,12 +403,12 @@ const TodoMainList = ({ date }) => {
             'Authorization': sessionStorage.getItem('accessToken'),
           }
         });
-  
+
         if (response.status === 200) {
           console.log('카테고리 생성 성공:', response.data);
           const newCategory = response.data;
           const newCategories = [...categories];
-  
+
           newCategories.push({ categoryId: newCategory.id, categoryName: newCategory.name, items: [] });
           setCategories(newCategories);
           setNewCategoryTitle('');
