@@ -32,7 +32,6 @@ const Chat = () => {
   const [view, setView] = useState('profile');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [friendToDelete, setFriendToDelete] = useState(null);
-  const [friends, setFriends] = useState([]);
 
   useEffect(() => {
     const sessionToken = sessionStorage.getItem('accessToken');
@@ -59,12 +58,6 @@ const Chat = () => {
   useEffect(() => {
     console.log('Current friends list:', friendsList);
     console.log('Current friends status:', friendsStatus);
-    const friend = [...firends];
-    friendList.forEach(f => {
-      const {friendId, counterpartNickname, avatar, isChecked, receiveTime} = f;
-      friend.push(f);
-    })
-    setFriends(friend);
   }, [friendsList, friendsStatus]);
 
   useEffect(() => {
@@ -131,7 +124,7 @@ const Chat = () => {
           <div className="ChatRightContents">
             <div className="ChatFriendList">
               <ChattingFriendList
-                friends={friends}
+                friends={friendsList}
                 onFriendClick={handleFriendClick}
                 onChatClick={handleChatClick}
               />
