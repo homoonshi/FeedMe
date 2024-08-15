@@ -24,8 +24,9 @@ function ReactCalendar() {
   };
 
   const calendarTodo = (month) => {
-    const date = month.toISOString().split('T')[0];
-    date.setDate(date.getDate() + 1);
+    const formattedDate = new Date(month);  // 새로운 Date 객체 생성
+    formattedDate.setDate(formattedDate.getDate() + 1);  // 날짜에 1일 추가
+    const date = formattedDate.toISOString().split('T')[0];  // YYYY-MM-DD 형식으로 변환
     console.log(date);
     axios.get(`https://i11b104.p.ssafy.io/api/todos/calendar?date=${date}`,
       {
