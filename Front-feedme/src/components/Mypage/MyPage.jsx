@@ -38,7 +38,7 @@ const EditModal = ({  onClose, onConfirm, nickname, setNickname, birthday, setBi
           />
         </label> */}
         <label>
-          생ㅤ일:
+          생일:
           <input 
             type="date" 
             value={birthday} 
