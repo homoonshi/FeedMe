@@ -45,8 +45,7 @@ const TodoMainList = ({ date }) => {
   
     updateDateAndFetchCategories();
   }, [date]);
-  
-  
+    
   
 
   const categoryRequest = async () => {
