@@ -407,7 +407,7 @@ const TodoMainList = ({ date }) => {
       </div>
 
       <div className="TodoActions">
-        {(isSameDay(currentDate, today) || isSameDay(currentDate, yesterday)) && diaryButton  (
+        {(isSameDay(currentDate, today) || isSameDay(currentDate, yesterday)) && diaryButton && (
           <button className="CreateDrawingButton" onClick={() => setDrawingModalIsOpen(true)}>
             <FaPen className="DrawingIcon" />
             그림일기 생성
