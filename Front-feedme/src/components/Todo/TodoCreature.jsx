@@ -1,5 +1,4 @@
 import React, { useEffect, useState  } from 'react';
-import CreatureImage from '../../assets/images/test1.png';
 import RingImage from '../../assets/images/ring.gif';
 import PopImage from '../../assets/images/pop.gif';
 import '../../assets/font/Font.css' 
