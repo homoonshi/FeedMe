@@ -72,7 +72,8 @@ const ToDoList = ({ onClick }) => {
             incompletedTodos.map((todo, index) => (
               <li key={index}>
                 <AiFillFire style={{
-                  color: 'rgb(255,95,95)'
+                  color: 'rgb(255,95,95)',
+                  marginRight : '5px'
                 }}/>
                 <label htmlFor={`todo-${index}`}>{todo.content}</label>
               </li>
