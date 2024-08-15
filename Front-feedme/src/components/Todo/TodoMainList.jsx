@@ -23,94 +23,29 @@ const TodoMainList = ({ date }) => {
   const [diaryButton, setDiaryButton] = useState(false);
 
   useEffect(() => {
-    const fetchTodosAndMissions = async () => {
-      console.log('현재 날짜:', currentDate);
-      setIsLoading(true);
-
-      try {
-        clearCategoryItems();
-
-        // 할일 불러오기
-        const todosResponse = await axios.get(`https://i11b104.p.ssafy.io/api/todos/calendar/daily`, {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': sessionStorage.getItem('accessToken'),
-          },
-          params: {
-            date: currentDate.toISOString().split('T')[0], // date를 YYYY-MM-DD 형식으로 변환
-          },
-        });
-
-        if (todosResponse.status === 200) {
-          console.log('할일 불러오기 성공:', todosResponse.data);
-          const todosData = todosResponse.data;
-
-          setCategories(prevCategories => {
-            const updatedCategories = [...prevCategories];
-            todosData.forEach(todo => {
-              const { id, categoryId, content, createdAt, isCompleted } = todo;
-
-              const categoryIndex = updatedCategories.findIndex(category => category.categoryId === categoryId);
-              if (categoryIndex !== -1) {
-                updatedCategories[categoryIndex].items.push({
-                  id,
-                  content,
-                  createdAt,
-                  isCompleted,
-                });
-              }
-            });
-
-            return updatedCategories;
-          });
-        } else {
-          console.log('할일 불러오기 실패:', todosResponse);
+    const updateDateAndFetchCategories = async () => {
+      console.log('input date : ', date);
+      
+      let newDate = new Date();
+      if (date) {
+        newDate = new Date(date);
+        if (newDate.getTime() === new Date().getTime()) {
+          console.warn('유효하지 않은 날짜입니다:', date);
+          return;
         }
-
-        // 일일 미션 불러오기
-        const missionResponse = await axios.get(`https://i11b104.p.ssafy.io/api/creatureTodo/calendar/daily`, {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': sessionStorage.getItem('accessToken'),
-          },
-          params: {
-            date: currentDate.toISOString().split('T')[0], // date를 YYYY-MM-DD 형식으로 변환
-          },
-        });
-
-        if (missionResponse.status === 200) {
-          console.log('일일 미션 불러오기 성공:', missionResponse.data);
-          const missionData = missionResponse.data.map(mission => ({
-            id: mission.id,
-            content: mission.content,
-            createdAt: mission.createdAt,
-            isCompleted: mission.isCompleted,
-          }));
-          setTodoMission(missionData);
-        } else {
-          console.log('일일 미션 불러오기 실패:', missionResponse);
-        }
-
-        // 다이어리 버튼 상태 확인
-        const diaryResponse = await axios.get(`https://i11b104.p.ssafy.io/api/dayoff/${currentDate.toISOString().split('T')[0]}`, {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': sessionStorage.getItem('accessToken'),
-          },
-        });
-
-        if (diaryResponse.status === 200) {
-          setDiaryButton(diaryResponse.data);
-        }
-      } catch (error) {
-        console.error('데이터 요청 중 오류 발생:', error);
-      } finally {
-        setIsLoading(false);
       }
+      
+      setCurrentDate(newDate); // 상태 업데이트
+  
+      await new Promise((resolve) => setTimeout(resolve, 0)); // 다음 작업으로 넘어가기 전에 상태 업데이트 대기
+      
+      console.log('currentDate after setting:', newDate);
+      await categoryRequest(); // 상태가 업데이트된 후에 categoryRequest 호출
     };
-
-    fetchTodosAndMissions();
-  }, [currentDate]);
+  
+    updateDateAndFetchCategories();
+  }, [date]);
+    
   
 
   const categoryRequest = async () => {
