@@ -22,7 +22,8 @@ const Chat = () => {
 
   const token = useSelector((state) => state.auth.token);
   const user = useSelector((state) => state.user);
-  const friendsList = useSelector((state) => state.friends || []); // 안전하게 접근
+  const friendsList = useSelector((state) => state.friends.list || []); // friends.list로 접근해야 함
+  const friendsStatus = useSelector((state) => state.friends.status || 'idle'); // status 필드 접근 추가
   const selectedFriendInfo = useSelector((state) => state.friendInfo);
 
   const { creatureId, creatureName, exp, level, image, togetherDay } = user;
@@ -56,7 +57,7 @@ const Chat = () => {
 
   useEffect(() => {
     console.log('Current friends list:', friendsList);
-    console.log('Current friends status:', friendsStatus);
+    console.log('Current friends status:', friendsStatus); // friendsStatus로 상태를 로그에 출력
   }, [friendsList, friendsStatus]);
 
   useEffect(() => {
