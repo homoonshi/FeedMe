@@ -20,12 +20,11 @@ function ReactCalendar() {
   const handleMonthChange = ({ activeStartDate }) => {
     const date = new Date(activeStartDate);
     onChange(date);
+    calendarTodo(date);
   };
 
-  useEffect(() => {
-    const date = value.toISOString().split('T')[0];
-    console.log('value : ', date);
-
+  const calendarTodo = (month) => {
+    const date = month.toISOString().split('T')[0];
     axios.get(`https://i11b104.p.ssafy.io/api/todos/calendar?date=${date}`,
       {
         headers: { Authorization: sessionStorage.getItem('accessToken'), },
@@ -39,7 +38,11 @@ function ReactCalendar() {
         }
       })
       .catch((error) => console.error('Error:', error));
-  }, [value]);
+  }
+
+  useEffect(() => {
+    calendarTodo(value);  
+  },[]);
 
   // console.log('Calendar Todos:', calendarTodos);
 
