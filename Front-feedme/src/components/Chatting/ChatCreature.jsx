@@ -94,6 +94,11 @@ const ChatCreature = ({ user }) => {
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           placeholder="질문을 입력하세요..."
+          onKeyPress={(e) => {  
+            if (e.key === 'Enter') {  
+              handleSend();
+            }
+          }}
           disabled={loading} 
         />
         <button onClick={handleSend} disabled={loading}>보내기</button>
