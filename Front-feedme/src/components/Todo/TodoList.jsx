@@ -70,7 +70,9 @@ const ToDoList = ({ onClick }) => {
         <ul>
           {incompletedTodos && incompletedTodos.length > 0 ? (
             incompletedTodos.map((todo, index) => (
-              <li key={index}>
+              <li key={index} style={{
+                alignItems : 'cetner'
+              }}>
                 <AiFillFire style={{
                   color: 'rgb(255,95,95)',
                   marginRight : '5px'
