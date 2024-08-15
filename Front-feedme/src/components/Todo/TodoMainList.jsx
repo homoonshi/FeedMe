@@ -22,27 +22,26 @@ const TodoMainList = ({ date }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [diaryButton, setDiaryButton] = useState(false);
 
+  // 처음 컴포넌트가 열렸을 때 category 불러옴
   useEffect(() => {
-    const initializeData = async () => {
-      console.log('input date : ', date);
-
-      if (date) {
-        const newDate = new Date(date);
-        if (!isNaN(newDate.getTime())) {
-          setCurrentDate(newDate);
-        } else {
-          console.warn('유효하지 않은 날짜입니다:', date);
-        }
+    console.log('input date : ', date);
+    if (date) {
+      // `date` 값이 있을 때 `currentDate`를 설정
+      const newDate = new Date(date);
+      if (newDate !== new Date()) {
+        console.log('newDate : ', newDate);
+        setCurrentDate(newDate);
+        console.log('currentDate1 : ', currentDate);
+      } else {
+        console.warn('유효하지 않은 날짜입니다:', date);
       }
-
-      await new Promise((resolve) => setTimeout(resolve, 0)); // 상태 업데이트 후 다음 작업으로 넘어가기 전 대기
-      console.log('currentDate2 :', currentDate);
-      await categoryRequest();
-      await todoRequest(); // 날짜가 업데이트된 후 todoRequest 호출
-    };
-
-    initializeData();
-  }, [date]);
+    } else {
+      // `date` 값이 없을 때 현재 날짜를 설정
+      setCurrentDate(new Date());
+    }
+    console.log('currentDate2 :', currentDate);
+    categoryRequest();
+  }, []);
 
   const categoryRequest = async () => {
     console.log('categoryRequest');
@@ -72,6 +71,10 @@ const TodoMainList = ({ date }) => {
     }
   };
 
+  useEffect(() => {
+    todoRequest();
+  }, [currentDate]);
+
   const clearCategoryItems = () => {
     console.log('clearCategoryItems');
 
@@ -89,11 +92,11 @@ const TodoMainList = ({ date }) => {
     console.log('todoRequest');
     console.log("현재 날짜:", currentDate);
 
-    if (isLoading) return;
+    if (isLoading) return;  // 이미 로딩 중이면 실행하지 않음
     setIsLoading(true);
 
     try {
-      const diaryPossible = await axios.get(`https://i11b104.p.ssafy.io/api/dayoff/${currentDate.toISOString().split('T')[0]}`, {
+      const diaryPossible = await axios.get(`https://i11b104.p.ssafy.io/api/dayoff/${currentDate}`, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem('accessToken'),
@@ -113,7 +116,7 @@ const TodoMainList = ({ date }) => {
           'Authorization': sessionStorage.getItem('accessToken'),
         },
         params: {
-          date: currentDate.toISOString().split('T')[0]
+          date: currentDate.toISOString().split('T')[0] // date를 YYYY-MM-DD 형식으로 변환
         }
       });
 
@@ -145,9 +148,10 @@ const TodoMainList = ({ date }) => {
     } catch (error) {
       console.error('할일 요청 중 오류 발생:', error);
     } finally {
-      setIsLoading(false);
+      setIsLoading(false);  // 로딩 상태 초기화
     }
 
+    // 크리쳐 미션 종료
     try {
       const mission = await axios.get(`https://i11b104.p.ssafy.io/api/creatureTodo/calendar/daily`, {
         headers: {
@@ -155,7 +159,7 @@ const TodoMainList = ({ date }) => {
           'Authorization': sessionStorage.getItem('accessToken'),
         },
         params: {
-          date: currentDate.toISOString().split('T')[0]
+          date: currentDate.toISOString().split('T')[0] // date를 YYYY-MM-DD 형식으로 변환
         }
       });
 
@@ -179,7 +183,7 @@ const TodoMainList = ({ date }) => {
     } catch (error) {
       console.error('할일 요청 중 오류 발생:', error);
     } finally {
-      setIsLoading(false);
+      setIsLoading(false);  // 로딩 상태 초기화
     }
   };
 
@@ -245,7 +249,7 @@ const TodoMainList = ({ date }) => {
         console.log("현재 카테고리 아이디", currentCategoryIndex);
         const response = await axios.post(
           `https://i11b104.p.ssafy.io/api/todos`,
-          null,
+          null,  // POST 요청의 본문이 없는 경우 null을 사용합니다.
           {
             headers: {
               'Content-Type': 'application/json',
