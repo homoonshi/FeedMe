@@ -22,8 +22,7 @@ const Chat = () => {
 
   const token = useSelector((state) => state.auth.token);
   const user = useSelector((state) => state.user);
-  const friendsList = useSelector((state) => state.friends.list || []); // 안전하게 접근
-  const friendsStatus = useSelector((state) => state.friends.status || 'idle'); // 안전하게 접근
+  const friendsList = useSelector((state) => state.friends || []); // 안전하게 접근
   const selectedFriendInfo = useSelector((state) => state.friendInfo);
 
   const { creatureId, creatureName, exp, level, image, togetherDay } = user;
