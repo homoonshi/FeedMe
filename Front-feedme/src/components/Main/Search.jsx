@@ -143,7 +143,11 @@ const Search = () => {
                     {suggestion.requested ? '친구 신청 중' : '친구 신청'}
                   </button>
                 )}
-                {suggestion.friend && '친구'} {/* 친구인 경우에만 "친구" 표시 */}
+                {suggestion.friend && (
+                  <button>
+                    {'친구'}
+                  </button>
+                )} {/* 친구인 경우에만 "친구" 표시 */}
               </li>
             ))}
           </ul>
