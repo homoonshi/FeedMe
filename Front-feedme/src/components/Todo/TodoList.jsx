@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './TodoList.css';
 import axios from 'axios';
+import { AiFillFire } from "react-icons/ai";
 
 const ToDoList = ({ onClick }) => {
 
@@ -70,6 +71,9 @@ const ToDoList = ({ onClick }) => {
           {incompletedTodos && incompletedTodos.length > 0 ? (
             incompletedTodos.map((todo, index) => (
               <li key={index}>
+                <AiFillFire style={{
+                  color: 'rgb(255,95,95)'
+                }}/>
                 <label htmlFor={`todo-${index}`}>{todo.content}</label>
               </li>
             ))
