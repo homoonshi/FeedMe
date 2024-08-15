@@ -35,7 +35,7 @@ public class Todo {
     private String content;
 
     // 생성 일자
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @Column(name = "created_at", nullable = false)
     private LocalDate createdAt;
 
     //완료 여부
