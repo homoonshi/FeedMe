@@ -361,14 +361,14 @@ public class TodoServiceImpl implements TodoService {
   @SneakyThrows
   private void createPictureDiary(LocalDate date, List<String> todolist) {
     // Flask 서버 URL 설정
-    String flaskUrl = "http://flask:33333/story";
+    String flaskUrl = "http://flask:33333/store/creature_diary";
 
     // HTTP 헤더 설정
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 
     Member member = SecurityUtil.getCurrentMember();
-    String keyword = member.getCreature().getCreatureKeyword();
+    // String keyword = member.getCreature().getCreatureKeyword();
     String nickname = member.getNickname();
 
     // 날짜를 문자열 형식으로 변환 (yyyy-MM-dd)
@@ -380,7 +380,8 @@ public class TodoServiceImpl implements TodoService {
 
     // 요청 본문 설정
     MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
-    body.add("username", nickname);
+    body.add("nickname", nickname);
+    body.add("creature_name",SecurityUtil.getCurrentMember().getCreature().getCreatureName());
     body.add("date", formattedDate);
     body.add("todolist", todolistJson);
 
@@ -393,7 +394,6 @@ public class TodoServiceImpl implements TodoService {
     // if (!response.getStatusCode().is2xxSuccessful()) {
     // throw new RuntimeException("Failed to create picture diary on Flask server.");
     // }
-
 
     //응답이 필요하지 않을 때
     restTemplate.postForEntity(flaskUrl, requestEntity, Void.class);

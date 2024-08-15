@@ -146,7 +146,7 @@ public class FriendServiceImpl implements FriendService{
             FriendResponseDTO friendResponseDTO = new FriendResponseDTO();
             friendResponseDTO.setFriendId(friend.getId());
             friendResponseDTO.setCounterpartNickname(counterpart.getNickname());
-//            friendResponseDTO.setCreatureimg(imageUtill.);
+            friendResponseDTO.setCreatureImg(flaskClientUtil.getCreatureImageAsByteArray(friend.getMember().getNickname(),friend.getMember().getCreature().getId(),friend.getMember().getCreature().getLevel()));
             friends.add(friendResponseDTO);
 
         }
