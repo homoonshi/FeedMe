@@ -18,8 +18,8 @@ function ReactCalendar() {
   const { calendarTodos, dailyTodos } = useSelector((state) => state.todo);
 
   const handleMonthChange = ({ activeStartDate }) => {
-    console.log('달이 변경되었습니다:', activeStartDate);
-    // activeStartDate는 사용자가 선택한 달의 첫 번째 날짜입니다.
+    const date = activeStartDate.toISOString().split('T')[0];
+    onChange(date);
   };
 
   useEffect(() => {
