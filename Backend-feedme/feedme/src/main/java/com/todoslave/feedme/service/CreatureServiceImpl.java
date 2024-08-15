@@ -218,7 +218,7 @@ public class CreatureServiceImpl implements CreatureService {
 
     @Override
     public boolean checkNickname(String creatureName) {
-        return creatureRepository.findByNickname(creatureName).isPresent();
+        return creatureRepository.findBycreatureName(creatureName).isPresent();
     }
 
 
