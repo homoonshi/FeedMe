@@ -3,12 +3,14 @@ import SockJS from 'sockjs-client';
 import { Client } from '@stomp/stompjs';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUserData } from '../../store/userSlice';
+import axios from 'axios';
+import './ChatWindow.css';
 
 const ChatWindow = ({ roomId }) => {
   const dispatch = useDispatch();
   const token = useSelector((state) => state.auth.token);
   const user = useSelector((state) => state.user);
-  const { sendId } = user;
+  const { sendId, nickname } = user;
 
   const [username, setUsername] = useState('');
   const [messageContent, setMessageContent] = useState('');
@@ -38,10 +40,52 @@ const ChatWindow = ({ roomId }) => {
     }
   }, [dispatch, token]);
 
+  const renewConnect = async (id) => {
+    try {
+      const response = await axios.post('https://i11b104.p.ssafy.io/api/friends/chats/connect', 
+      {}, // 본문 데이터가 필요 없을 경우 빈 객체 전달
+      {
+        params: {
+          room: id // URL에 추가될 요청 파라미터
+        },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': sessionStorage.getItem('accessToken'),
+        }
+      });
+      console.log(response.data);
+    } catch (error) {
+      console.error('Error fetching connect:', error);
+    }
+  };
+  
+
+  const renewDisconnect = async (id) => {
+    try {
+      const response = await axios.post('https://i11b104.p.ssafy.io/api/friends/chats/disconnect',
+      {}, // 본문 데이터가 필요 없을 경우 빈 객체 전달
+        {
+          params: {
+            room: id // URL에 추가될 요청 파라미터
+          },
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': sessionStorage.getItem('accessToken'),
+          }
+        });
+        console.log(response.data);
+      } catch (error) {
+        console.error('Error fetching connect:', error);
+      }
+  };
+
   const connect = () => {
+
     if (stompClient.current) {
       disconnect(); // 기존 연결이 있을 경우 해제
     }
+
+    renewConnect(roomId);
 
     const socket = new SockJS('https://i11b104.p.ssafy.io/api/ws/friendChat');
     const newClient = new Client({
@@ -52,9 +96,9 @@ const ChatWindow = ({ roomId }) => {
         onConnect: (frame) => {
             console.log('Connected: ' + frame);
             
-            stompClient.current = newClient; // 새로운 클라이언트 인스턴스를 할당
+            stompClient.current = newClient; 
 
-            if (stompClient.current) { // stompClient.current가 null이 아닌 경우에만 subscribe 시도
+            if (stompClient.current) { 
                 stompClient.current.subscribe(`/chatRoom/messages/${roomId}`, (message) => {
                     const receivedMessage = JSON.parse(message.body);
                     showMessage(receivedMessage);
@@ -63,17 +107,23 @@ const ChatWindow = ({ roomId }) => {
                 stompClient.current.subscribe(`/chatRoom/loadMessages/${roomId}`, (message) => {
                     const slice = JSON.parse(message.body);
                     const newMessages = slice.content || [];
-                    if (newMessages.length === 0) {
+
+                    const updatedMessages = newMessages.map(msg => ({
+                      ...msg,
+                      isOwnMessage: msg.sendNickname === nickname 
+                    }));
+
+                    if (updatedMessages.length === 0) {
                         setHasMore(false);
                     } else {
-                        setMessages((prevMessages) => [...newMessages.reverse(), ...prevMessages]);
+                        setMessages((prevMessages) => [...updatedMessages.reverse(), ...prevMessages]);
                         setSkip((prevSkip) => prevSkip + limit);
                     }
                     setHasMore(!slice.last);
                 });
 
                 isSubscribed.current = true;
-                fetchMoreData(); // 초기 데이터 로드
+                fetchMoreData(); 
             } else {
                 console.warn('stompClient.current is null after connection');
             }
@@ -102,6 +152,7 @@ const ChatWindow = ({ roomId }) => {
       setSkip(0); // 스킵 초기화
       setHasMore(true); // 페이징 관련 상태 초기화
       console.log("Disconnected from the WebSocket");
+      renewDisconnect(roomId);
     }
   };
 
@@ -144,7 +195,8 @@ const ChatWindow = ({ roomId }) => {
 
     try {
         if (message && typeof message === 'object') {
-            setMessages((prevMessages) => [...prevMessages, message]);
+            const isOwnMessage = message.sendNickname === nickname;
+            setMessages((prevMessages) => [...prevMessages, { ...message, isOwnMessage }]);
         } else {
             console.warn("Unexpected message format:", message);
         }
@@ -154,39 +206,39 @@ const ChatWindow = ({ roomId }) => {
     }
 
     if (messageContainerRef.current) {
-        messageContainerRef.current.scrollTop = messageContainerRef.current.scrollHeight;
+        setTimeout(() => {
+            messageContainerRef.current.scrollTop = messageContainerRef.current.scrollHeight;
+        }, 100); // 짧은 지연 시간 설정
     }
-  };
+};
 
   return (
-    <div>
-      <div>
-        <input
-          type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          placeholder="Enter your username"
-        />
-        <br />
+    <div className='WebChatDiv'>
+      
+      <div
+        id="messageContainer"
+        ref={messageContainerRef}
+        onScroll={handleScroll}
+      >
+        {messages.map((message, index) => (
+          <div 
+            key={index} 
+            className={`message ${message.isOwnMessage ? 'own' : 'other'}`}
+          >
+            {message.message}
+          </div>
+        ))}
+      </div>
+
+      <div className="WebChats">
         <input
           type="text"
           value={messageContent}
           onChange={(e) => setMessageContent(e.target.value)}
           placeholder="Enter your message"
+          className="WebChatInput"
         />
-        <button onClick={sendMessage}>Send</button>
-      </div>
-      <div
-        id="messageContainer"
-        style={{ height: '40vh', overflow: 'auto', border: '1px solid black', padding: '10px' }}
-        ref={messageContainerRef}
-        onScroll={handleScroll}
-      >
-        {messages.map((message, index) => (
-          <div key={index} className="message" style={{ padding: '5px', borderBottom: '1px solid #ddd' }}>
-            {message.message}
-          </div>
-        ))}
+        <button onClick={sendMessage} className="WebChatButton">Send</button>
       </div>
     </div>
   );
