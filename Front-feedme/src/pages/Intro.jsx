@@ -1,11 +1,42 @@
-import React from 'react';
+import React, { useEffect,useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../pages/Intro.css';
 import '../assets/font/Font.css';
-
+ 
 const Intro = () => {
   const navigate = useNavigate();
-
+  const [weatherCategory, setWeatherCategory] = useState('notknow');
+  
+  useEffect(() =>{
+    const fetchWeather = async () => {
+      try {
+        navigator.geolocation.getCurrentPosition(
+          async (position) => {
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+            const apiKey = process.env.REACT_APP_API_KEY;
+            const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}`);
+            const data = await response.json();
+            if (response.ok) {
+              
+            } else {
+              console.error('날씨 정보 가져오기 실패:', data);
+              setWeatherCategory('notknow');
+            }
+          },
+          (error) => {
+            console.error("위치 정보 가져오기 실패:", error);
+            setWeatherCategory('notknow');
+          }
+        );
+      } catch (error) {
+        console.error("날씨 정보 가져오는 중 오류 발생:", error);
+        setWeatherCategory('notknow');
+      }
+    };
+    fetchWeather();
+  })
+  
   const handleClick = () => {
     const token = sessionStorage.getItem('accessToken');
     console.log('토큰:', token);
