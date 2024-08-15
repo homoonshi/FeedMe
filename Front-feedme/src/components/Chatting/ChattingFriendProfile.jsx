@@ -14,6 +14,7 @@ const ChattingFriendProfile = ({ friend, onDelete }) => {
     dispatch(deleteFriend({ token, counterpartNickname: friend.nickname }))
       .then(() => {
         onDelete(friend); // 성공 시 onDelete 콜백 호출
+        window.location.reload();
       });
   };
 
