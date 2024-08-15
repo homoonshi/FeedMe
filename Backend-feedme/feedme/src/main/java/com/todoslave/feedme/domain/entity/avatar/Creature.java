@@ -29,7 +29,7 @@ public class Creature {
 
     // 레벨
     @Column(nullable = false)
-    private int level = 0 ; //레벨 1로 초기화 한다는 뜻
+    private int level = 1 ; //레벨 1로 초기화 한다는 뜻
 
     // 경험치
     @Column(name = "exp", nullable = false)
