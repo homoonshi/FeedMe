@@ -152,7 +152,7 @@ public class MemberChatServiceImpl implements MemberChatService{
 
     Slice<MemberChatMessage> messages = messageRepository.findByMemberChatRoomIdOrderByTransmitAtDesc(roomId, pageable);
 
-    int memberId = 1;
+    int memberId = SecurityUtil.getCurrentUserId();
 
     System.out.println("memberId is : " + memberId);
     System.out.println("Room Id is : " + roomId);
