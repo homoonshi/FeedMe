@@ -70,8 +70,8 @@ const TodoCreature = () => {
   return (
     <div className="TodoCreatureA">
       <p className="TodoCreatureAName">Lv. {level}</p> 
-      {/* <img src={`data:image/gif;base64,${image}`} alt="creature" /> */}
-      <img src={test} alt="creature" />
+      <img src={`data:image/gif;base64,${image}`} alt="creature" />
+      {/* <img src={test} alt="creature" /> */}
       {effectImage && <img src={effectImage} alt="effect" className="TodoCreatureEffect" />}
       <div className="TodoCreatureAInfo">
         <div className="TodoCreatureAExp">
