@@ -137,7 +137,6 @@ const TodoMainList = (date) => {
   // 날짜 감소
   const handleDecreaseDate = () => {
     setCurrentDate(new Date(currentDate.setDate(currentDate.getDate() - 1)));
-    handleTodo();
   };
 
   // 카테고리 추가 창 열림
@@ -239,7 +238,7 @@ const TodoMainList = (date) => {
               }
             }
     
-            setCategories(newCategories);
+            setCategories(updatedCategories);
             setSelectedTodo({ categoryIndex: null, todoIndex: null });
             setEditedTodo('');
             setTodoModalIsOpen(false);
@@ -335,14 +334,10 @@ const TodoMainList = (date) => {
   
         if (response.status === 200) {
           const newCategory = response.data; 
-          const formattedDate = formatDate(currentDate);
+          const { id, name } = newCategory;
           const newCategories = { ...categories };
           
-          if (!newCategories[formattedDate]) {
-            newCategories[formattedDate] = [];
-          }
-          
-          newCategories[formattedDate].push(newCategory);
+          newCategories.push({ categoryId : id, categoryName : name, items : [] });
           setCategories(newCategories);
           setNewCategoryTitle('');
           setCategoryModalIsOpen(false);
