@@ -28,7 +28,7 @@
 }
 
 .TodoSections {
-  height: 380px;
+  height: 350px;
   display: flex;
   flex-direction: column;
   gap: 0.5%; 

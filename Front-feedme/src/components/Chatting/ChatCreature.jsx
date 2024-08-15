@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { setToken } from '../../store/slice';
@@ -10,9 +10,11 @@ import '../../assets/font/Font.css';
 const ChatCreature = ({ user }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [inputValue, setInputValue] = useState('');  // 입력창에 입력된 값을 관리
-  const [chatHistory, setChatHistory] = useState([]);  // 채팅 기록을 관리
-  
+  const [inputValue, setInputValue] = useState('');  
+  const [chatHistory, setChatHistory] = useState([]);  
+  const [loading, setLoading] = useState(false); 
+  const chatWindowRef = useRef(null);
+
   useEffect(() => {
     const sessionToken = sessionStorage.getItem('accessToken');
     if (sessionToken) {
@@ -30,9 +32,23 @@ const ChatCreature = ({ user }) => {
     }
   }, [dispatch, token]);
 
-  // 서버로 요청을 보내는 함수
+  useEffect(() => {
+    if (chatWindowRef.current) {
+      chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight;
+    }
+  }, [chatHistory]);
+
   const handleSend = async () => {
-    if (!inputValue.trim()) return; // 입력값이 없으면 요청하지 않음
+    if (!inputValue.trim()) return; 
+    
+    setChatHistory(prevHistory => [
+      ...prevHistory,
+      { type: 'user', text: inputValue },
+      { type: 'bot', text: '응답 중...' },
+    ]);
+
+    setInputValue(''); 
+    setLoading(true); 
 
     try {
       const response = await axios.get('https://i11b104.p.ssafy.io/api/api/chat/creature', {
@@ -40,26 +56,32 @@ const ChatCreature = ({ user }) => {
           ragQuestion: inputValue,
         },
         headers: {
-          Authorization: `${token}`, // 인증 토큰 추가
+          Authorization: `${token}`, 
         },
       });
 
-      // 서버 응답을 채팅 기록에 추가
-      setChatHistory(prevHistory => [
-        ...prevHistory,
-        { type: 'user', text: inputValue },
-        { type: 'bot', text: response.data.ragData },
-      ]);
-
-      setInputValue(''); // 입력창 초기화
+      
+      setChatHistory(prevHistory => {
+        const updatedHistory = [...prevHistory];
+        updatedHistory[updatedHistory.length - 1] = { type: 'bot', text: response.data.ragData };
+        return updatedHistory;
+      });
     } catch (error) {
       console.error('Error fetching chat data:', error);
+      
+      setChatHistory(prevHistory => {
+        const updatedHistory = [...prevHistory];
+        updatedHistory[updatedHistory.length - 1] = { type: 'bot', text: '오류가 발생했습니다. 다시 시도해주세요.' };
+        return updatedHistory;
+      });
+    } finally {
+      setLoading(false);  
     }
   };
 
   return (
     <div className="ChatCreatureMain">
-      <div className="chat-window">
+      <div className="chat-window" ref={chatWindowRef}>
         {chatHistory.map((chat, index) => (
           <div key={index} className={`chat-message ${chat.type}`}>
             {chat.text}
@@ -72,8 +94,9 @@ const ChatCreature = ({ user }) => {
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           placeholder="질문을 입력하세요..."
+          disabled={loading} 
         />
-        <button onClick={handleSend}>Send</button>
+        <button onClick={handleSend} disabled={loading}>Send</button>
       </div>
     </div>
   );
