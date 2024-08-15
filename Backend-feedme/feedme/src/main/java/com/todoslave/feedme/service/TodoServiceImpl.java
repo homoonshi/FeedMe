@@ -234,7 +234,11 @@ public class TodoServiceImpl implements TodoService {
   public TodoResponseDTO completeTodo(int todoId) {
 
     Todo todo = todoRepository.findById(todoId).orElseThrow();
-    todo.setIsCompleted(1);
+    if(todo.getIsCompleted()==1){
+      todo.setIsCompleted(0);
+    }else{
+      todo.setIsCompleted(1);
+    }
 
     TodoResponseDTO todoResponseDTO = new TodoResponseDTO();
     todoResponseDTO.setId(todo.getId());
