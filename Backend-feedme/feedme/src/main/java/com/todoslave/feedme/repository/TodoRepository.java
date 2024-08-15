@@ -29,4 +29,6 @@ public interface TodoRepository extends JpaRepository<Todo, Integer> {
   List<Todo> findByMemberIdAndCreatedAt(int memberId, LocalDate createdAt);
 
   List<Todo> findByMemberId(int id);
+  @Query("SELECT COUNT(t) FROM Todo t WHERE t.member.id = :memberId AND FUNCTION('DATE', t.createdAt) = :createdAt AND t.isCompleted = :isCompleted")
+  long countByMemberIdAndCreatedAtAndIsCompleted(@Param("memberId") int memberId, @Param("createdAt") LocalDate createdAt, @Param("isCompleted") int isCompleted);
 }
