@@ -23,7 +23,7 @@ const TodoMainList = ({ date }) => {
   useEffect(() => {
     const categoryRequest = async () => {
       try {
-        const response = await axios.get('https://i11b104.p.ssafy.io/api/category', {
+        const response = await axios.get('http://localhost:8080/category', {
           headers: {
             'Content-Type': 'application/json',
             'Authorization': sessionStorage.getItem('accessToken'),
@@ -72,7 +72,7 @@ const TodoMainList = ({ date }) => {
 
     const todoRequest = async () => {
       try {
-        const response = await axios.get('https://i11b104.p.ssafy.io/api/todos/calendar/daily', {
+        const response = await axios.get('http://localhost:8080/todos/calendar/daily', {
           headers: {
             'Content-Type': 'application/json',
             'Authorization': sessionStorage.getItem('accessToken'),
@@ -145,7 +145,7 @@ const TodoMainList = ({ date }) => {
   const handleAddTodoSubmit = async () => {
     if (newTodo) {
       try {
-        const response = await axios.post('https://i11b104.p.ssafy.io/api/todos', {
+        const response = await axios.post('http://localhost:8080/todos', {
           content: newTodo,
           categoryId: currentCategoryIndex,
         }, {
@@ -181,7 +181,7 @@ const TodoMainList = ({ date }) => {
   const handleEditTodo = async (categoryIndex, todoIndex) => {
     if (editedTodo) {
       try {
-        const response = await axios.patch('https://i11b104.p.ssafy.io/api/todos', {
+        const response = await axios.patch('http://localhost:8080/todos', {
           id: todoIndex,
           content: editedTodo,
         }, {
@@ -219,7 +219,7 @@ const TodoMainList = ({ date }) => {
   // 할일 삭제
   const handleDeleteTodo = async (categoryIndex, todoIndex) => {
     try {
-      const response = await axios.delete(`https://i11b104.p.ssafy.io/api/todos/${todoIndex}`, {
+      const response = await axios.delete(`http://localhost:8080/todos/${todoIndex}`, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem('accessToken'),
@@ -255,7 +255,7 @@ const TodoMainList = ({ date }) => {
   // 할일 완료/미완료 버튼
   const toggleTodoComplete = async (categoryIndex, todoIndex) => {
     try {
-      const response = await axios.post(`https://i11b104.p.ssafy.io/api/category/complete/${todoIndex}`, null, {
+      const response = await axios.post(`http://localhost:8080/category/complete/${todoIndex}`, null, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem('accessToken'),
@@ -286,7 +286,7 @@ const TodoMainList = ({ date }) => {
   const handleCategoryModalSubmit = async () => {
     if (newCategoryTitle) {
       try {
-        const response = await axios.post('https://i11b104.p.ssafy.io/api/category', { name: newCategoryTitle }, {
+        const response = await axios.post('http://localhost:8080/category', { name: newCategoryTitle }, {
           headers: {
             'Authorization': sessionStorage.getItem('accessToken'),
           }

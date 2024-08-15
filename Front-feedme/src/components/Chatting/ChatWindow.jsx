@@ -42,7 +42,7 @@ const ChatWindow = ({ roomId }) => {
 
   const renewConnect = async (id) => {
     try {
-      const response = await axios.post('https://i11b104.p.ssafy.io/api/friends/chats/connect', 
+      const response = await axios.post('http://localhost:8080/friends/chats/connect', 
       {}, // 본문 데이터가 필요 없을 경우 빈 객체 전달
       {
         params: {
@@ -62,7 +62,7 @@ const ChatWindow = ({ roomId }) => {
 
   const renewDisconnect = async (id) => {
     try {
-      const response = await axios.post('https://i11b104.p.ssafy.io/api/friends/chats/disconnect',
+      const response = await axios.post('http://localhost:8080/friends/chats/disconnect',
       {}, // 본문 데이터가 필요 없을 경우 빈 객체 전달
         {
           params: {
@@ -85,7 +85,7 @@ const ChatWindow = ({ roomId }) => {
       disconnect(); // 기존 연결이 있을 경우 해제
     }
 
-    const socket = new SockJS('https://i11b104.p.ssafy.io/api/ws/friendChat');
+    const socket = new SockJS('http://localhost:8080/ws/friendChat');
     const newClient = new Client({
         webSocketFactory: () => socket,
         debug: (str) => {

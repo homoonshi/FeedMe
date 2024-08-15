@@ -35,7 +35,7 @@ const ChatCreature = ({ user }) => {
     if (!inputValue.trim()) return; // 입력값이 없으면 요청하지 않음
 
     try {
-      const response = await axios.get('https://i11b104.p.ssafy.io/api/api/chat/creature', {
+      const response = await axios.get('http://localhost:8080/api/chat/creature', {
         params: {
           ragQuestion: inputValue,
         },
