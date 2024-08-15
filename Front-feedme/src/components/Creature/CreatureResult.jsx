@@ -16,6 +16,12 @@ const CreatureResult = () => {
   const token = useSelector((state) => state.auth.token);
   const user = useSelector((state) => state.user);
 
+  useEffect(() => {
+    if (token) {
+      dispatch(fetchUserData(token));
+    }
+  }, [dispatch, token]);
+  
   const { creatureName, photo } = useSelector((state) => state.auth);
   
   console.log(user)
