@@ -241,6 +241,11 @@ const ChatWindow = ({ roomId }) => {
           onChange={(e) => setMessageContent(e.target.value)}
           placeholder="메시지를 입력하세요"
           className="WebChatInput"
+          onKeyPress={(e) => {  
+            if (e.key === 'Enter') {  
+              sendMessage();
+            }
+          }}
         />
         <button onClick={sendMessage} className="WebChatButton">보내기</button>
       </div>
