@@ -69,6 +69,8 @@
 //}
 package com.todoslave.feedme.util;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.IOUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -85,10 +87,12 @@ import java.time.format.DateTimeFormatter;
 public class FlaskClientUtil {
 
     private final RestTemplate restTemplate;
+    private final ObjectMapper objectMapper;
 
     // HTTP 요청을 위해 사용
     public FlaskClientUtil(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
+        this.objectMapper = new ObjectMapper();
     }
 
     /**
@@ -100,46 +104,76 @@ public class FlaskClientUtil {
      * @return Flask 서버로부터 받은 이미지 데이터 (byte[])
      */
 
-
-
     public byte[] getCreatureImageAsByteArray(String username, Integer creatureId, Integer level) {
         String url;
 
-        // 조건에 따라 URL 결정
+        // URL 생성: username을 creatureId로 간주하여 사용
         if (creatureId == null || creatureId == 0 || level == null || level == 0) {
+            // creatureId나 level이 null 또는 0인 경우, 기본 이미지를 요청
             url = String.format("http://flask:33333/store/default_creature_image/%s", username);
         } else {
+            // 일반적인 경우
             url = String.format("http://flask:33333/store/creature_data/%s/%d/%d", username, creatureId, level);
         }
 
-        // GET 요청을 통해 Flask 서버로부터 이미지 데이터 받기
-        ResponseEntity<ByteArrayResource> response = restTemplate.getForEntity(url, ByteArrayResource.class);
+        ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
 
-        // 응답 확인을 위한 로그 출력
-        System.out.println("Response Status Code: " + response.getStatusCode());
-        System.out.println("Response Headers: " + response.getHeaders());
-        System.out.println("Response Body Length: " + (response.getBody() != null ? response.getBody().contentLength() : "No Body"));
-
-        // 요청이 성공했는지 확인하고, 성공하지 않았으면 예외를 던짐
         if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
-            byte[] byteArray = toByteArray(response.getBody());
+            try {
+                // JSON 응답을 파싱하여 gif_data를 가져옴
+                JsonNode root = objectMapper.readTree(response.getBody());
+                String base64GifData = root.path("gif_data").asText();
 
-            // 바이트 배열의 길이 출력
-            System.out.println("Received Byte Array Length: " + byteArray.length);
-
-            // 바이트 배열의 첫 번째 몇 바이트만 출력 (예: 10바이트)
-            int previewLength = Math.min(byteArray.length, 10);
-            System.out.print("Byte Array Preview: ");
-            for (int i = 0; i < previewLength; i++) {
-                System.out.printf("%02X ", byteArray[i]); // 16진수 형식으로 출력
+                // Base64로 인코딩된 데이터를 디코딩하여 바이트 배열로 변환
+                return Base64.getDecoder().decode(base64GifData);
+            } catch (Exception e) {
+                throw new RuntimeException("Failed to parse JSON or decode Base64 data", e);
             }
-            System.out.println();
-
-            return byteArray;
         } else {
             throw new RuntimeException("Failed to retrieve image from Flask server.");
         }
     }
+
+
+
+//    public byte[] getCreatureImageAsByteArray(String username, Integer creatureId, Integer level) {
+//        String url;
+//
+//        // 조건에 따라 URL 결정
+//        if (creatureId == null || creatureId == 0 || level == null || level == 0) {
+//            url = String.format("http://flask:33333/store/default_creature_image/%s", username);
+//        } else {
+//            url = String.format("http://flask:33333/store/creature_data/%s/%d/%d", username, creatureId, level);
+//        }
+//
+//        // GET 요청을 통해 Flask 서버로부터 이미지 데이터 받기
+//        ResponseEntity<ByteArrayResource> response = restTemplate.getForEntity(url, ByteArrayResource.class);
+//
+//        // 응답 확인을 위한 로그 출력
+//        System.out.println("Response Status Code: " + response.getStatusCode());
+//        System.out.println("Response Headers: " + response.getHeaders());
+//        System.out.println("Response Body Length: " + (response.getBody() != null ? response.getBody().contentLength() : "No Body"));
+//
+//        // 요청이 성공했는지 확인하고, 성공하지 않았으면 예외를 던짐
+//        if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
+//            byte[] byteArray = toByteArray(response.getBody());
+//
+//            // 바이트 배열의 길이 출력
+//            System.out.println("Received Byte Array Length: " + byteArray.length);
+//
+//            // 바이트 배열의 첫 번째 몇 바이트만 출력 (예: 10바이트)
+//            int previewLength = Math.min(byteArray.length, 10);
+//            System.out.print("Byte Array Preview: ");
+//            for (int i = 0; i < previewLength; i++) {
+//                System.out.printf("%02X ", byteArray[i]); // 16진수 형식으로 출력
+//            }
+//            System.out.println();
+//
+//            return byteArray;
+//        } else {
+//            throw new RuntimeException("Failed to retrieve image from Flask server.");
+//        }
+//    }
 
     // Helper method to convert ByteArrayResource to byte[]
     private byte[] toByteArray(ByteArrayResource resource) {
