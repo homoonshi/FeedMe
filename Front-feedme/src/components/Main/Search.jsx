@@ -129,25 +129,18 @@ const Search = () => {
             {suggestions.map((suggestion, index) => (
               <li key={index} onClick={() => handleSuggestionClick(suggestion)}>
                 {suggestion.nickname}
-                {!suggestion.friend && (
-                  <button
-                    className="suggestionsListButton"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      if (!suggestion.requested && !suggestion.friend) {
-                        handleFriendRequest(suggestion.nickname);
-                      }
-                    }}
-                    disabled={suggestion.requested}
-                  >
-                    {suggestion.requested ? '친구 신청 중' : '친구 신청'}
-                  </button>
-                )}
-                {suggestion.friend && (
-                  <button>
-                    {'친구'}
-                  </button>
-                )} {/* 친구인 경우에만 "친구" 표시 */}
+                <button
+                  className="suggestionsListButton"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (!suggestion.requested && !suggestion.friend) {
+                      handleFriendRequest(suggestion.nickname);
+                    }
+                  }}
+                  disabled={suggestion.requested || suggestion.friend}
+                >
+                  {suggestion.friend ? '친구' : suggestion.requested ? '친구 신청 중' : '친구 신청'}
+                </button>
               </li>
             ))}
           </ul>
