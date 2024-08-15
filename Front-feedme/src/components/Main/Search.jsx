@@ -140,6 +140,7 @@ const Search = () => {
                     }}
                     disabled={suggestion.requested} 
                   >
+                    {suggestion.friend && 친구}
                     {!suggestion.friend && suggestion.requested ? '친구 신청 중' : '친구 신청'}
                   </button>
                 )}
