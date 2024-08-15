@@ -26,7 +26,7 @@ const NotificationModal = ({ onClose }) => {
 
   useEffect(() => {
   
-    const eventSource = new EventSourcePolyfill('https://i11b104.p.ssafy.io/api/alarms/subscribe/alarm', {
+    const eventSource = new EventSourcePolyfill('http://localhost:8080/alarms/subscribe/alarm', {
       headers: {
         'Authorization': sessionStorage.getItem('accessToken')
       }
@@ -68,7 +68,7 @@ const NotificationModal = ({ onClose }) => {
   const handleReject = (index) => {
     // 서버에서 요청을 거절하기 위한 API 호출
     const requestId = requests[index].id;
-    axios.post(`https://i11b104.p.ssafy.io/api/friends/reject/${requestId}`)
+    axios.post(`http://localhost:8080/friends/reject/${requestId}`)
       .then(() => {
         dispatch(removeRequests(index));
       })
@@ -80,7 +80,7 @@ const NotificationModal = ({ onClose }) => {
   const handleAccept = (index) => {
     // 서버에서 요청을 수락하기 위한 API 호출
     const requestId = requests[index].id;
-    axios.post(`https://i11b104.p.ssafy.io/api/friends/accept/${requestId}`)
+    axios.post(`http://localhost:8080/friends/accept/${requestId}`)
       .then(() => {
         dispatch(addRequests(index));
       })
@@ -97,7 +97,7 @@ const NotificationModal = ({ onClose }) => {
       dispatch(setAlarmTime(time));
 
       try {
-        await axios.post('https://i11b104.p.ssafy.io/api/alarms/time', {
+        await axios.post('http://localhost:8080/alarms/time', {
           alarmTime: intAlarmTime
         },
           {
@@ -128,7 +128,7 @@ const NotificationModal = ({ onClose }) => {
   };
 
   const toggleRequestMode = () => {
-    const eventSource2 = new EventSourcePolyfill('https://i11b104.p.ssafy.io/api/alarms/subscribe/chat', {
+    const eventSource2 = new EventSourcePolyfill('http://localhost:8080/alarms/subscribe/chat', {
       headers: {
         'Authorization': sessionStorage.getItem('accessToken')
       }
