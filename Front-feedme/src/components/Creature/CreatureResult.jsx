@@ -6,6 +6,11 @@ import { faAngleLeft, faRotate } from '@fortawesome/free-solid-svg-icons';
 import './CreatureResult.css';
 import '../../assets/font/Font.css';
 import { fetchUserData } from '../../store/userSlice';
+import eg1 from '../../assets/images/1.gif'
+import eg2 from '../../assets/images/2.gif'
+import eg3 from '../../assets/images/3.gif'
+import eg4 from '../../assets/images/4.gif'
+import eg5 from '../../assets/images/5.gif'
 
 const CreatureResult = () => {
   const dispatch = useDispatch();
@@ -21,8 +26,13 @@ const CreatureResult = () => {
   }, [dispatch, token]);
   
   const { creatureName, photo } = useSelector((state) => state.auth);
+  const getRandomEggImage = () => {
+    const eggImages = [eg1, eg2, eg3, eg4, eg5];
+    return eggImages[Math.floor(Math.random() * eggImages.length)];
+  };
+
+  const displayImage = photo ? `data:image/gif;base64,${photo}` : getRandomEggImage();
   
-  console.log(user)
   return (
     <div className="CreatureResultMain">
       <div className="CreatureResultContainer">
@@ -33,7 +43,7 @@ const CreatureResult = () => {
           <div className="CreatureResultName">{creatureName}</div>
         </div>
         <div className="CreatureResultHeader">
-          <img src={`data:image/gif;base64,${photo}`} alt="Cat" className="CreatureResultImage" />
+          <img src={displayImage} alt="Creature" className="CreatureResultImage" />
         </div>
         <Link to="/Main">
           <button type="submit" className="CreatureResultStartButton">Start</button>
