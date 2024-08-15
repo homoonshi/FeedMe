@@ -164,7 +164,10 @@ public class TodoServiceImpl implements TodoService {
       TodoCalendarResponseDTO todoCalendarResponseDTO = new TodoCalendarResponseDTO();
 
       //안한거 갯수 더라기
-      long inCompleted = todoRepository.countByMemberIdAndCreatedAtAndIsCompleted(SecurityUtil.getCurrentUserId(),date, 0)+creatureTodoReposito.countByMemberIdAndCreatedAtAndIsCompleted(SecurityUtil.getCurrentUserId(),date,0);
+      long inCompleted = todoRepository.countByMemberIdAndCreatedAtAndIsCompleted(
+          SecurityUtil.getCurrentUserId(),date, 0)
+          +creatureTodoReposito.countByMemberIdAndCreatedAtAndIsCompleted(
+              SecurityUtil.getCurrentUserId(),date,0);
 
       todoCalendarResponseDTO.setInCompleted((int)inCompleted);
 
