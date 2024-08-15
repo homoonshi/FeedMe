@@ -129,21 +129,21 @@ const Search = () => {
             {suggestions.map((suggestion, index) => (
               <li key={index} onClick={() => handleSuggestionClick(suggestion)}>
                 {suggestion.nickname}
-                {!suggestion.friend && !suggestion.requested && (
+                {!suggestion.friend && (
                   <button
                     className="suggestionsListButton"
                     onClick={(e) => {
-                      e.stopPropagation(); 
+                      e.stopPropagation();
                       if (!suggestion.requested && !suggestion.friend) {
                         handleFriendRequest(suggestion.nickname);
                       }
                     }}
-                    disabled={suggestion.requested} 
+                    disabled={suggestion.requested}
                   >
-                    {suggestion.friend && 친구}
-                    {!suggestion.friend && suggestion.requested ? '친구 신청 중' : '친구 신청'}
+                    {suggestion.requested ? '친구 신청 중' : '친구 신청'}
                   </button>
                 )}
+                {suggestion.friend && '친구'} {/* 친구인 경우에만 "친구" 표시 */}
               </li>
             ))}
           </ul>
