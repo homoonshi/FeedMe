@@ -29,14 +29,14 @@ const EditModal = ({  onClose, onConfirm, nickname, setNickname, birthday, setBi
     <div className="MyPageLogoutModal">
       <div className="MyPageInfoModalContent">
         <p>회원 정보를 수정하시겠습니까?</p>
-        <label>
+        {/* <label>
           닉네임:
           <input 
             type="text" 
             value={nickname} 
             onChange={(e) => setNickname(e.target.value)} 
           />
-        </label>
+        </label> */}
         <label>
           생ㅤ일:
           <input 
