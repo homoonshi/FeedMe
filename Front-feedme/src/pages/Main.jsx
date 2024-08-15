@@ -77,7 +77,7 @@ const Main = () => {
             Authorization:  storedToken || token,
           },
         });
-        // console.log('get 요청 성공:', response.data);
+        console.log('get 요청 성공:', response.data);
       } catch (error) {
         // console.error('get 요청 실패:', error);
       }
