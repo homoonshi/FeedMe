@@ -15,9 +15,9 @@ const CreatureCreate = () => {
   const [photo, setPhoto] = useState(null); // local state로 photo 관리
 
   const handleImageUpload = (e) => {
-    const fileUrl = e.target.files[0];
-    if (fileUrl) {
-      setPhoto(fileUrl); // 로컬 상태에 파일 저장
+    const file = e.target.files[0];
+    if (file) {
+      setPhoto(file); // 로컬 상태에 파일 저장
     }
   };
 
@@ -68,25 +68,52 @@ const CreatureCreate = () => {
 
     // const json = formDataToJson(formData);
 
-    console.log(photo.name);
+    console.log(typeof photo);
     console.log(creatureName);
     console.log(keyword);
     console.log(token);
 
-    // 서버에 JSON 형식으로 데이터 보내기
+    // // 객체 생성
+    // const creatureData = {
+    //   creatureName: creatureName,
+    //   keyword: keyword,
+    //   photo: photo ? photo.name : null,  // photo가 선택된 경우 파일 이름을 전달
+    // };
+
+    // try {
+    //   const response = await axios.post('http://localhost:8080/creature', creatureData, {
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //       'Authorization': sessionStorage.getItem('accessToken'), // 또는 token 변수를 사용
+    //     },
+    //   });
+
+    //   if (response.status === 200) {
+    //     navigate('/CreatureResult');
+    //   } else {
+    //     console.log('크리쳐 생성 실패', response.data);
+    //   }
+    // } catch (error) {
+    //   console.error('서버 요청 중 오류 발생', error);
+    // }
+
+    const formData = new FormData();
+    formData.append('creatureName', creatureName);
+    formData.append('keyword', keyword);
+    if (photo) {
+      formData.append('file', photo); // 파일을 FormData에 추가
+    }
+
     try {
-      const response = await axios.post('http://localhost:8080/creature', {
-        creatureName,
-        keyword,
-        photo: photo.name  
-      }, {
+      const response = await axios.post('http://localhost:8080/creature', formData, {
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': sessionStorage.getItem('accessToken'),
+          'Content-Type': 'multipart/form-data',
+          'Authorization': sessionStorage.getItem('accessToken'), // 또는 token 변수를 사용
         }
       });
 
       if (response.status === 200) {
+        console.log('res : ', response);
         navigate('/CreatureResult');
       } else {
         console.log('크리쳐 생성 실패', response.data);
@@ -94,6 +121,29 @@ const CreatureCreate = () => {
     } catch (error) {
       console.error('서버 요청 중 오류 발생', error);
     }
+
+    // // 서버에 JSON 형식으로 데이터 보내기
+    // try {
+    //   const response = await axios.post('http://localhost:8080/creature', {
+    //     creatureName : creatureName,
+    //     keyword : keyword,
+    //     photo: photo.name  
+    //   }, {
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //       'Authorization': sessionStorage.getItem('accessToken'),
+    //     }
+    //   });
+
+    //   if (response.status === 200) {
+    //     navigate('/CreatureResult');
+    //   } else {
+    //     console.log('크리쳐 생성 실패', response.data);
+    //   }
+    // } catch (error) {
+    //   console.error('서버 요청 중 오류 발생', error);
+    // }
+
   };
 
   return (
@@ -103,7 +153,7 @@ const CreatureCreate = () => {
           <FontAwesomeIcon icon={faAngleLeft} size="2x" />
         </Link>
         <div className="CreatureCreateMainHeader">아바타 생성하기</div>
-        <form className="CreatureCreateForm" onSubmit={handleSubmit}>
+        <form className="CreatureCreateForm" onSubmit={handleSubmit} enctype="multipart/form-data">
           <div className="CreatureCreateFormNicknameContainer">
             <label htmlFor="nickname" className="CreatureCreateFormNickname">이ㅤ름</label>
             <input
