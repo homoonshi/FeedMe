@@ -74,8 +74,15 @@ const TodoMainList = ({ date }) => {
   };
 
   useEffect(() => {
-    todoRequest(currentDate);
+    if (isInitialRender.current) {
+      // 첫 렌더링에서는 실행하지 않음
+      isInitialRender.current = false;
+    } else {
+      // 이후 currentDate가 변할 때만 실행됨
+      todoRequest(currentDate);
+    }
   }, [currentDate]);
+
 
   const clearCategoryItems = () => {
     console.log('clearCategoryItems');
