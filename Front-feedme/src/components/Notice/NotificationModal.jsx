@@ -9,7 +9,7 @@ import customParseFormat from 'dayjs/plugin/customParseFormat';
 import CloseIcon from '@mui/icons-material/Close';
 import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
 import GroupAddOutlinedIcon from '@mui/icons-material/GroupAddOutlined';
-import { addNotifications, setRequests, addRequests, removeRequests, setIsSettingsMode, setIsSwitchOn, setRequestMode, setAlarmTime } from '../../store/alarmSlice';
+import { setNotifications, addNotifications, removeNotifications, setRequests, addRequests, removeRequests, setIsSettingsMode, setIsSwitchOn, setRequestMode, setAlarmTime } from '../../store/alarmSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { EventSourcePolyfill } from 'event-source-polyfill';
@@ -24,41 +24,46 @@ const NotificationModal = ({ onClose }) => {
   const { notifications, requests, isSettingsMode, isSwitchOn, isRequestMode, alarmTime } = useSelector((state) => state.alarm);
   const { token } = useSelector((state) => state.auth);
 
-  // useEffect(() => {
-  
-  //   const eventSource = new EventSourcePolyfill('http://localhost:8080/alarms/subscribe/alarm', {
-  //     headers: {
-  //       'Authorization': sessionStorage.getItem('accessToken')
-  //     }
-  //   });
+  useEffect(() => {
+    alarmList();
+    requestList();
+  }, []);
 
-  //   console.log('요청 완료!');
+  useEffect(() => {
 
-  //   eventSource.addEventListener('alarm', (event) => { // 서버에서 설정한 이름과 같아야 함.
-  //     // 서버에서 데이터가 전송될 때 호출되는 이벤트 핸들러
-  //     console.log(event.data);
-  //     console.log('Success!');
-  //     const newNotification = JSON.parse(event.data);
-  //     dispatch(addNotifications(newNotification));
-  //   });
+    const eventSource = new EventSourcePolyfill('http://localhost:8080/alarms/subscribe/alarm', {
+      headers: {
+        'Authorization': sessionStorage.getItem('accessToken')
+      }
+    });
 
-  //   // eventSource.onmessage = (event) => {
-  //   //   // 이벤트 데이터 처리
-  //   //   console.log('event data', event.data);
-    
-  //   // };
-  
-  //   eventSource.addEventListener('error', (error) => {
-  //     // SSE 연결 오류 처리
-  //     console.error('SSE Error:', error);
-  //     eventSource.close(); // 연결을 닫기
-  //   });
-  
-  //   // 컴포넌트가 언마운트되면 SSE 연결을 닫기
-  //   return () => {
-  //     eventSource.close();
-  //   };
-  // }, []);
+    console.log('요청 완료!');
+
+    eventSource.addEventListener('alarm', (event) => { // 서버에서 설정한 이름과 같아야 함.
+      // 서버에서 데이터가 전송될 때 호출되는 이벤트 핸들러
+      console.log('event data : ', event.data);
+      console.log('Success!');
+      const newNotification = JSON.parse(event.data);
+      dispatch(addNotifications(newNotification));
+    });
+
+    // eventSource.onmessage = (event) => {
+    //   // 이벤트 데이터 처리
+    //   console.log('event data', event.data);
+
+    // };
+
+    eventSource.addEventListener('error', (error) => {
+      // SSE 연결 오류 처리
+      console.error('SSE Error:', error);
+      eventSource.close(); // 연결을 닫기
+    });
+
+    // 컴포넌트가 언마운트되면 SSE 연결을 닫기
+    return () => {
+      eventSource.close();
+    };
+  }, []);
 
   const requestList = async () => {
     try {
@@ -74,13 +79,38 @@ const NotificationModal = ({ onClose }) => {
     }
   };
 
-  useEffect(() => {
-    requestList();
-  }, []);
+  const alarmList = async () => {
+    try {
+      const res = await axios.get('http://localhost:8080/alarms', {
+        headers: {
+          'Authorization': sessionStorage.getItem('accessToken')
+        }
+      });
+      console.log('alarms : ', res.data);
+      dispatch(setNotifications(res.data));
+    } catch (error) {
+      console.log('Error : ', error);
+    }
+  }
 
-  const handleDelete = (index) => {
-    const newNotifications = notifications.filter((_, i) => i !== index);
-    dispatch(addNotifications(newNotifications));
+  const handleDelete = async (alarmId) => {
+    console.log('alarmId : ', alarmId);
+
+    try {
+      await axios.delete(`http://localhost:8080/alarms/${alarmId}`, {}, {
+        headers: {
+          'Authorization': sessionStorage.getItem('accessToken'),
+          'Content-Type': 'application/json',
+        }
+      });
+      dispatch(removeNotifications(alarmId));
+      console.log(notifications);
+      console.log('알람 삭제 !');
+      // window.location.reload();
+    } catch (error) {
+      console.log('Error : ', error);
+    }
+
   };
 
   const handleReject = async (index, requestId) => {
@@ -151,28 +181,28 @@ const NotificationModal = ({ onClose }) => {
   };
 
   const toggleRequestMode = () => {
-    // const eventSource2 = new EventSourcePolyfill('http://localhost:8080/alarms/subscribe/chat', {
-    //   headers: {
-    //     'Authorization': sessionStorage.getItem('accessToken')
-    //   }
-    // });
+    const eventSource2 = new EventSourcePolyfill('http://localhost:8080/alarms/subscribe/friend', {
+      headers: {
+        'Authorization': sessionStorage.getItem('accessToken')
+      }
+    });
 
-    // console.log('요청 완료!2');
+    console.log('요청 완료!2');
 
-    // eventSource2.addEventListener('friend', (event) => { // 서버에서 설정한 이름과 같아야 함.
-    //   // 서버에서 데이터가 전송될 때 호출되는 이벤트 핸들러
-    //   console.log(event.data);
-    //   console.log('Success!');
-    //   const newRequest = JSON.parse(event.data);
-    //   dispatch(addRequests(newRequest));
-    // });
+    eventSource2.addEventListener('friend', (event) => { // 서버에서 설정한 이름과 같아야 함.
+      // 서버에서 데이터가 전송될 때 호출되는 이벤트 핸들러
+      console.log(event.data);
+      console.log('Success!');
+      const newRequest = JSON.parse(event.data);
+      dispatch(addRequests(newRequest));
+    });
 
     dispatch(setRequestMode(!isRequestMode));
 
-    // // 컴포넌트가 언마운트되면 SSE 연결을 닫기
-    // return () => {
-    //   eventSource2.close();
-    // };
+    // 컴포넌트가 언마운트되면 SSE 연결을 닫기
+    return () => {
+      eventSource2.close();
+    };
   }
 
   return (
@@ -262,20 +292,20 @@ const NotificationModal = ({ onClose }) => {
                   <span>친구 요청 목록 보기</span>
                 </div>
                 <ul>
-                  {notifications.map((notification, index) => (
-                    <li key={index}>
+                  {notifications.map((notification) => (
+                    <li key={notification.alarmId}>
                       <NotificationsNoneOutlinedIcon
                         style={{
                           width: "19px",
                           marginRight: "13px"
                         }} />
-                      <span>{notification}</span>
+                      <span>{notification.content}</span>
                       <CloseIcon
                         style={{
                           width: "19px",
                           marginLeft: "auto"
                         }}
-                        className="NoticeButton" onClick={() => handleDelete(index)} />
+                        className="NoticeButton" onClick={() => handleDelete(notification.alarmId)} />
                     </li>
                   ))}
                 </ul>

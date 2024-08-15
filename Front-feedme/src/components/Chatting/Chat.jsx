@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { setToken } from '../../store/slice';
 import { fetchUserData } from '../../store/userSlice';
-import { fetchFriendsList } from '../../store/friendsSlice';
+import { fetchFriendsList, updateFriendsList } from '../../store/friendsSlice';
 import { fetchFriendInfo } from '../../store/friendInfoSlice';
 import Sidebar from '../Main/Sidebar';
 import Search from '../Main/Search';
@@ -11,8 +11,10 @@ import ChattingFriendList from './ChattingFriendList';
 import ChattingFriendProfile from './ChattingFriendProfile';
 import ChatWindow from './ChatWindow';
 import Creature from '../Mypage/Creature';
+import ChatCreature from './ChatCreature';
 import './Chat.css';
 import '../../assets/font/Font.css';
+import { EventSourcePolyfill } from 'event-source-polyfill';
 
 const Chat = () => {
   const dispatch = useDispatch();
@@ -23,7 +25,7 @@ const Chat = () => {
     if (sessionToken) {
       dispatch(setToken(sessionToken));
     } else {
-      navigate('/login'); 
+      navigate('/login');
     }
   }, [dispatch, navigate]);
 
@@ -41,6 +43,25 @@ const Chat = () => {
     }
   }, [dispatch, token]);
 
+  useEffect(() => {
+    if (token) {
+      const eventSource = new EventSourcePolyfill('https://i11b104.p.ssafy.io/api/alarms/subscribe/chat', {
+        headers: {
+          'Authorization': sessionStorage.getItem('accessToken'),
+        },
+      });
+
+      eventSource.addEventListener('chattingRoom', (event) => {
+        const newChat = JSON.parse(event.data);
+        dispatch(updateFriendsList(newChat));
+      });
+      
+      return () => {
+        eventSource.close();
+      };
+    }
+  }, [dispatch, token]);
+
   const [selectedFriend, setSelectedFriend] = useState(null);
   const [view, setView] = useState('profile');
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -48,15 +69,24 @@ const Chat = () => {
 
   const handleFriendClick = (friend) => {
     setSelectedFriend(friend);
-    setView(friend.id === 'my-avatar' ? 'creature' : 'profile');
-    if (friend.id !== 'my-avatar') {
+    setView(friend.isCreature ? 'creatureChat' : friend.id === 'my-avatar' ? 'creature' : 'profile');
+    if (friend.id !== 'my-avatar' && !friend.isCreature) {
       dispatch(fetchFriendInfo({ token, counterpartNickname: friend.counterpartNickname }));
     }
   };
 
   const handleChatClick = (friend) => {
-    setSelectedFriend(friend);
-    setView('chat');
+    if (selectedFriend && selectedFriend.friendId === friend.friendId && view === 'chat') {
+      return;
+    }
+    
+    setSelectedFriend(null);
+    setView(null);
+
+    setTimeout(() => {
+      setSelectedFriend(friend);
+      setView('chat');
+    }, 0);
   };
 
   const handleDeleteFriend = (friend) => {
@@ -73,7 +103,7 @@ const Chat = () => {
     setIsModalOpen(false);
     setFriendToDelete(null);
   };
-  console.log(selectedFriend)
+
   return (
     <div className="ChatBack">
       <div className="ChatBox">
@@ -82,7 +112,7 @@ const Chat = () => {
           <div className="ChatRightContents">
             <div className="ChatFriendList">
               <ChattingFriendList
-                friends={friendsList} 
+                friends={friendsList}
                 onFriendClick={handleFriendClick}
                 onChatClick={handleChatClick}
               />
@@ -91,14 +121,19 @@ const Chat = () => {
             <div className="ChatDetail">
               {selectedFriend ? (
                 <div className="ChatDetailInner">
-                  {view === 'profile' ? (
+                  {view === 'profile' && (
                     <ChattingFriendProfile friend={selectedFriendInfo} onDelete={handleDeleteFriend} />
-                  ) : view === 'chat' ? (
+                  )}
+                  {view === 'chat' && (
                     <ChatWindow roomId={selectedFriend.friendId} />
-                  ) : (
-                    <Creature 
-                      creature={{ id: creatureId, name: creatureName, daysTogether: togetherDay, level: level, exp: exp, image: image }} 
+                  )}
+                  {view === 'creature' && (
+                    <Creature
+                      creature={{ id: creatureId, name: creatureName, daysTogether: togetherDay, level: level, exp: exp, image: image }}
                     />
+                  )}
+                  {view === 'creatureChat' && (
+                    <ChatCreature /> 
                   )}
                 </div>
               ) : (
@@ -109,7 +144,7 @@ const Chat = () => {
           <Search />
         </div>
       </div>
-              
+
       {isModalOpen && (
         <div className="ChatModal">
           <div className="ChatModalContent">
