@@ -158,10 +158,8 @@ const TodoMainList = ({ date }) => {
   const handleIncreaseDate = () => {
     const IncreaseDate = new Date(currentDate);
     IncreaseDate.setDate(currentDate.getDate() + 1);    
-    if (new Date() >= IncreaseDate) {
-      setCurrentDate(IncreaseDate);
-      console.log('날짜 증가:', IncreaseDate);
-    }
+    setCurrentDate(IncreaseDate);
+    console.log('날짜 증가:', IncreaseDate);
   };
 
   // 날짜 감소
@@ -199,6 +197,7 @@ const TodoMainList = ({ date }) => {
             params: {
               content: newTodo,
               categoryId: currentCategoryIndex,
+              todoDay : currentDate.toISOString().split('T')[0]
             },
           }
         );
