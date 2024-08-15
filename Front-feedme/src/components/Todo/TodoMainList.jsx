@@ -6,6 +6,7 @@ const TodoMainList = ({ date }) => {
   const [todoMission, setTodoMission] = useState([]);
   const [currentDate, setCurrentDate] = useState(new Date());
   const [isLoading, setIsLoading] = useState(false);
+  const [diaryButton, setDiaryButton] = useState(false); // 여기서 diaryButton과 setDiaryButton을 정의합니다.
 
   useEffect(() => {
     const updateDateAndFetchCategories = async () => {
@@ -16,7 +17,6 @@ const TodoMainList = ({ date }) => {
         newDate = new Date(date);
       }
 
-      // 날짜를 명확하게 비교하기 위해 getTime을 사용해 8월 13일 데이터만 불러오도록 함
       if (newDate.getTime() !== new Date().getTime()) {
         setCurrentDate(newDate);
       } else {
@@ -79,7 +79,7 @@ const TodoMainList = ({ date }) => {
 
       if (diaryPossible.status === 200) {
         const diary = diaryPossible.data;
-        setDiaryButton(diary);
+        setDiaryButton(diary); // setDiaryButton을 여기서 사용
       }
 
       clearCategoryItems();
@@ -180,4 +180,3 @@ const TodoMainList = ({ date }) => {
 };
 
 export default TodoMainList;
-
