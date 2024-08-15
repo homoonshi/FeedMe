@@ -19,6 +19,7 @@ const TodoMainList = ({ date }) => {
   const [editedTodo, setEditedTodo] = useState('');
   const [currentCategoryIndex, setCurrentCategoryIndex] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [diaryButton, setDiaryButton] = useState(false);
 
   // 처음 컴포넌트가 열렸을 때 category 불러옴
   useEffect(() => {
@@ -85,6 +86,18 @@ useEffect(() => {
     setIsLoading(true);
 
     try {
+      const diaryPossible = await axios.get(`http://localhost:8080/dayoff/${currentDate}`,{
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': sessionStorage.getItem('accessToken'),
+        },
+      });
+
+      if(diaryPossible.status === 200){
+        const diary = diaryPossible.data;
+        setDiaryButton(diary);
+      }
+
       clearCategoryItems();
       const response = await axios.get(`http://localhost:8080/todos/calendar/daily`, {
         headers: {
@@ -383,7 +396,7 @@ useEffect(() => {
       </div>
 
       <div className="TodoActions">
-        {(isSameDay(currentDate, today) || isSameDay(currentDate, yesterday)) && (
+        {(isSameDay(currentDate, today) || isSameDay(currentDate, yesterday)) || diaryButton && (
           <button className="CreateDrawingButton" onClick={() => setDrawingModalIsOpen(true)}>
             <FaPen className="DrawingIcon" />
             그림일기 생성
