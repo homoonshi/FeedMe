@@ -3,6 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
     calendarTodos: [],
     currentMonth: null,
+    dailyTodos: [],
+    currentDate: new Date(),
 
 };
 
@@ -20,6 +22,12 @@ const todoSlice = createSlice({
         },
         setCurrentMonth: (state, action) => {
             state.currentMonth = action.payload;
+        },
+        setDailyTodos: (state, action) => {
+            state.dailyTodos = action.payload;
+        },
+        setCurrentDate: (state, action) => {
+            state.currentDate = action.payload;
         }
     }
 });
@@ -28,6 +36,8 @@ export const {
     setCalendarTodos,
     addCalendarTodos,
     setCurrentMonth,
+    setDailyTodos,
+    setCurrentDate,
     
 } = todoSlice.actions;
 
