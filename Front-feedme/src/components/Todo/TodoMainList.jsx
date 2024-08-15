@@ -328,6 +328,8 @@ const TodoMainList = ({ date }) => {
         if (todoToUpdate) {
           todoToUpdate.isCompleted = updatedTodo.isCompleted;
           setCategories(updatedCategories);
+
+          document.dispatchEvent(new CustomEvent('toggleTodo', { detail: { categoryIndex, todoIndex } }));
         }
       } else {
         console.log('할일 완료/미완료 토글 실패:', response);
