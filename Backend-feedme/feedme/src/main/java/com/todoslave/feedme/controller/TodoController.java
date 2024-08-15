@@ -59,10 +59,12 @@ public class TodoController {
   // 투두 생성
   @PostMapping
   public ResponseEntity<TodoResponseDTO> createTodo(@RequestParam("content")String content,
-                                                    @RequestParam("categoryId")int categoryId){
+                                                    @RequestParam("categoryId")int categoryId,
+                                                    @RequestParam("todoDay")LocalDate date){
     TodoCreateRequestDTO todo = new TodoCreateRequestDTO();
     todo.setContent(content);
     todo.setCategoryId(categoryId);
+    todo.setTodoDay(date);
     return ResponseEntity.ok(todoService.insertTodo(todo));
   }
 

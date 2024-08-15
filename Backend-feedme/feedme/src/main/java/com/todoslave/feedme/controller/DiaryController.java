@@ -1,4 +1,3 @@
-
 package com.todoslave.feedme.controller;
 
 import com.todoslave.feedme.DTO.DiaryRequestDTO;
@@ -31,4 +30,5 @@ public class DiaryController {
 
         return ResponseEntity.ok(diaryPage);
     }
+
 }

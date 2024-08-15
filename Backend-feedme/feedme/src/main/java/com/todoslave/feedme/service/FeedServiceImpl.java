@@ -123,7 +123,7 @@ public class FeedServiceImpl implements FeedService{
                 .collect(Collectors.toList());
     }
 
-    private FeedDTO convertToFeedDTO(Feed feed) {
+    private FeedDTO convertToFeedDTO(Feed feed) { // 피드를 피드 DTO로 바꿔주는거
         FeedDTO feedDTO = new FeedDTO();
 
         FeedLike existingFeedLike = feedLikeRepository.findByMemberAndFeed(SecurityUtil.getCurrentMember(), feed);
@@ -138,7 +138,9 @@ public class FeedServiceImpl implements FeedService{
         feedDTO.setFeedId(feed.getId());
         feedDTO.setNickname(feed.getNickname());
 
+        //그림일기 이미지!!!
         feedDTO.setImg(flaskClientUtil.getCreatureDiaryAsByteArray(feed.getMember().getNickname(),feed.getUpdatedAt().toLocalDate()));
+
         feedDTO.setCreatureImg(flaskClientUtil.getCreatureImageAsByteArray(feed.getMember().getNickname(),feed.getMember().getCreature().getId(),feed.getMember().getCreature().getLevel()));
 
         feedDTO.setCaption(feed.getContent());

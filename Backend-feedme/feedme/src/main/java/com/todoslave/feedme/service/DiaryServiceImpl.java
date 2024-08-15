@@ -26,7 +26,7 @@ public class DiaryServiceImpl implements DiaryService {
     @Override
     public Page<DiaryResponseDTO> getDiaryList(Pageable pageable) {
         return diaryRepository.findAll(pageable)
-                .map(this::convertToDTO);
+                .map(this::convertToDTO); // 이렇게 하면 Page<DiaryResponseDTO>가 반환됩니다.
     }
 
     private DiaryResponseDTO convertToDTO(PictureDiary diary) {

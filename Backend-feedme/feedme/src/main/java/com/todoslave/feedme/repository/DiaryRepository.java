@@ -12,4 +12,6 @@ public interface DiaryRepository extends JpaRepository<PictureDiary, Integer> {
 
     // Example: Find all PictureDiaries created on a specific date
     List<PictureDiary> findByCreatedAt(LocalDate createdAt);
+
+
 }
