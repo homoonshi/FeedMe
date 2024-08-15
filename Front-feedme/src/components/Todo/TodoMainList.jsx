@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef  } from 'react';
 import { FaAngleLeft, FaAngleRight, FaEllipsisH, FaPlus, FaPen } from 'react-icons/fa';
 import Modal from 'react-modal';
 import './TodoMainList.css';
@@ -21,6 +21,8 @@ const TodoMainList = ({ date }) => {
   const [currentCategoryIndex, setCurrentCategoryIndex] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [diaryButton, setDiaryButton] = useState(false);
+
+  const isInitialRender = useRef(true);
 
   // 처음 컴포넌트가 열렸을 때 category 불러옴
   useEffect(() => {
