@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import '../pages/Intro.css';
 import '../assets/font/Font.css';
 
 const Intro = () => {
   const [redirectPath, setRedirectPath] = useState('/Login');
+  const navigate = useNavigate();
 
   const handleClick = () => {
     const token = sessionStorage.getItem('accessToken');
@@ -14,7 +15,7 @@ const Intro = () => {
       try {
         const payload = JSON.parse(atob(token.split('.')[1]));
         console.log('토큰 페이로드:', payload);
-        
+
         const currentTime = Math.floor(Date.now() / 1000);
         console.log('현재 시간:', currentTime);
         console.log('토큰 만료 시간:', payload.exp);
@@ -38,16 +39,18 @@ const Intro = () => {
     }
   };
 
+  useEffect(() => {
+    navigate(redirectPath);
+  }, [redirectPath, navigate]);
+
   return (
     <div className="Intro">
       <div className="IntroChild">
         <h1 className="IntroLogo">Feed Me</h1>
         <div className="IntroClickWrapper">
-          <Link to={redirectPath}>
-            <button className="w-btn w-btn-gra1" onClick={handleClick}>
-              Click
-            </button>
-          </Link>
+          <button className="w-btn w-btn-gra1" onClick={handleClick}>
+            Click
+          </button>
         </div>
       </div>
     </div>
