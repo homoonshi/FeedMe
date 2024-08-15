@@ -10,6 +10,10 @@ const ChattingFriendProfile = ({ friend, onDelete }) => {
   const dispatch = useDispatch();
   const token = useSelector((state) => state.auth.token);
 
+  useEffect(() => {
+    console.log('Friend Info:', friend); // friend 객체의 값이 올바르게 설정되었는지 확인합니다.
+  }, [friend]);
+  
   const handleDeleteClick = () => {
     dispatch(deleteFriend({ token, counterpartNickname: friend.nickname }))
       .then(() => {
