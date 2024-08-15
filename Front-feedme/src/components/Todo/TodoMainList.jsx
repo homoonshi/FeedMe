@@ -206,6 +206,8 @@ const TodoMainList = ({ date }) => {
         if (missionToUpdate) {
           missionToUpdate.isCompleted = missionData.isCompleted;
           setTodoMission(updateMission);
+
+          document.dispatchEvent(new CustomEvent('toggleTodo', { detail: { mission, missionIndex } }));
         }
       } else {
         console.log('할일 완료/미완료 토글 실패:', response);

@@ -1,6 +1,9 @@
 import React, { useEffect, useState  } from 'react';
+import test from '../../assets/images/test1.png';
 import RingImage from '../../assets/images/ring.gif';
 import PopImage from '../../assets/images/pop.gif';
+import star from '../../assets/images/star.gif';
+import flower from '../../assets/images/flower.gif';
 import '../../assets/font/Font.css' 
 import './TodoCreature.css'
 import { useDispatch, useSelector } from 'react-redux';
@@ -30,7 +33,7 @@ const TodoCreature = () => {
   useEffect(() => {
     const handleToggleTodo = () => {
       // 할일 토글 시 랜덤 이미지 선택
-      const images = [ RingImage, PopImage ];
+      const images = [ RingImage, PopImage, star, flower ];
       const randomImage = images[Math.floor(Math.random() * images.length)];
       setEffectImage(randomImage);
       
@@ -67,7 +70,8 @@ const TodoCreature = () => {
   return (
     <div className="TodoCreatureA">
       <p className="TodoCreatureAName">Lv. {level}</p> 
-      <img src={`data:image/gif;base64,${image}`} alt="creature" />
+      {/* <img src={`data:image/gif;base64,${image}`} alt="creature" /> */}
+      <img src={test} alt="creature" />
       {effectImage && <img src={effectImage} alt="effect" className="TodoCreatureEffect" />}
       <div className="TodoCreatureAInfo">
         <div className="TodoCreatureAExp">
