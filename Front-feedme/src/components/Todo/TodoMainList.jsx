@@ -22,19 +22,30 @@ const TodoMainList = ({ date }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [diaryButton, setDiaryButton] = useState(false);
 
-  // 처음 컴포넌트가 열렸을 때 category 불러옴
-  // 날짜가 변경되면 categoryRequest 및 todoRequest를 호출
+  // 날짜 설정 및 카테고리 요청 로직
   useEffect(() => {
+    console.log('input date : ', date);
+
+    let newDate = new Date();
     if (date) {
-      const newDate = new Date(date);
+      newDate = new Date(date);
       if (newDate.toDateString() !== new Date().toDateString()) {
         setCurrentDate(newDate);
+        console.log('newDate : ', newDate);
       } else {
         console.warn('유효하지 않은 날짜입니다:', date);
       }
     } else {
       setCurrentDate(new Date());
+      newDate = new Date();
     }
+
+    // 다음 작업을 현재 newDate가 설정된 후에 실행되도록 설정
+    setTimeout(() => {
+      console.log('currentDate1 : ', newDate);
+      console.log('currentDate2 :', currentDate);  // currentDate는 여기서 이전 상태를 유지하고 있을 가능성이 큽니다
+    }, 0);
+
   }, [date]);
 
   // currentDate가 변경되었을 때 categoryRequest 호출
