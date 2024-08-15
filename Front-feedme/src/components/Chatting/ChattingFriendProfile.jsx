@@ -34,7 +34,7 @@ const ChattingFriendProfile = ({ friend, onDelete }) => {
   };
   
   const maxExp = getMaxExpForLevel(friend.level);
-
+  console.log(friend)
   return (
     <div className="CFProfile">
       <FontAwesomeIcon 
@@ -47,7 +47,7 @@ const ChattingFriendProfile = ({ friend, onDelete }) => {
       <p className="CFProfileName">{friend.creatureNickname}</p>
       <p className="CFProfileterm">🤍 {friend.join}일째 함께하는 중</p>
       
-      <img src={`data:image/gif;,${friend.creatureImg}`} alt={friend.nickname} className="CFProfileImage" /> 
+      <img src={`data:image/gif;base64,${friend.creatureImg}`} alt={friend.nickname} className="CFProfileImage" /> 
       <div className="CFProfileInfo">
         <p className="CFProfileLv">Lv. {friend.level}</p>
         <div className="CFProfileExp">
