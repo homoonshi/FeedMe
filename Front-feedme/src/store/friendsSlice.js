@@ -33,22 +33,22 @@ const friendsSlice = createSlice({
     error: null,
   },
   reducers: {
-    // 새로운 채팅 데이터로 친구 목록 업데이트
+    // 임시로 새로운 친구 목록 추가
+    addTemporaryFriend: (state, action) => {
+      const newFriend = action.payload;
+      state.list.push(newFriend);
+    },
+    // 기존 친구 목록 업데이트
     updateFriendsList: (state, action) => {
-      const newChat = action.payload;
-      const index = state.list.findIndex(f => f.friendId === newChat.friendId);
-  
+      const updatedFriend = action.payload;
+      const index = state.list.findIndex(f => f.friendId === updatedFriend.friendId);
+
       if (index !== -1) {
         // 이미 존재하는 친구라면 목록에서 제거하고 가장 뒤로 이동
-        const updatedFriend = {
+        state.list[index] = {
           ...state.list[index],
-          ...newChat,
+          ...updatedFriend,
         };
-        state.list.splice(index, 1);  // 기존 위치에서 제거
-        state.list.push(updatedFriend);  // 가장 뒤로 추가
-      } else {
-        // 새로운 친구라면 뒤에 추가
-        state.list.push(newChat);
       }
     }
   },
@@ -69,5 +69,5 @@ const friendsSlice = createSlice({
 });
 
 // 액션과 리듀서를 내보내기
-export const { updateFriendsList } = friendsSlice.actions;
+export const { addTemporaryFriend, updateFriendsList } = friendsSlice.actions;
 export default friendsSlice.reducer;
