@@ -57,7 +57,7 @@
 .CreatureCreateFormNicknameContainer {
   display: flex;
   align-items: center;
-  margin-bottom: 7%;
+  margin-bottom: 5%;
 }
 
 .CreatureCreateFormNickname {
@@ -167,4 +167,13 @@
   text-decoration: none;
   font-size: 1em;
   z-index: 10;
+}
+
+.errorPic{
+  text-align: center;
+  font-size: 1.2rem;
+  margin-bottom: 3%;
+  color: red;
+  font-family: 'PretendardB';
+
 }

@@ -96,7 +96,7 @@ const ChatCreature = ({ user }) => {
           placeholder="질문을 입력하세요..."
           disabled={loading} 
         />
-        <button onClick={handleSend} disabled={loading}>Send</button>
+        <button onClick={handleSend} disabled={loading}>보내기</button>
       </div>
     </div>
   );
