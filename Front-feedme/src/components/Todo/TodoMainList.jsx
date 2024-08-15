@@ -70,11 +70,22 @@ const TodoMainList = ({ date }) => {
 }, [date]);
 
 useEffect(() => {
+
+  const clearCategoryItems = () => {
+    setCategories(prevCategories => {
+      return prevCategories.map(category => ({
+        ...category,
+        items: [] // 각 category의 items를 빈 배열로 초기화
+      }));
+    });
+  };
+
   const todoRequest = async () => {
     if (isLoading) return;  // 이미 로딩 중이면 실행하지 않음
     setIsLoading(true);
 
     try {
+      clearCategoryItems();
       const response = await axios.get(`http://localhost:8080/todos/calendar/daily`, {
         headers: {
           'Content-Type': 'application/json',
@@ -124,7 +135,6 @@ useEffect(() => {
   // 날짜 증가
   const handleIncreaseDate = () => {
     const d = new Date(currentDate.setDate(currentDate.getDate() + 1));
-    const today = new Date();
     if (d.getTime() <= today.getTime()) {
       setCurrentDate(d);
       console.log('날짜 증가:', d);
