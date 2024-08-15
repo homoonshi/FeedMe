@@ -46,7 +46,6 @@ public class CreatureTodoServiceImpl implements CreatureTodoService{
             return null; // 오늘의 미션이 이미 생성되었으면 null 반환
         }
 
-
         List<Mission> missions = missionRepository.findByWeatherCondition(weather);
 
         if (missions.isEmpty()) {
@@ -171,4 +170,7 @@ public class CreatureTodoServiceImpl implements CreatureTodoService{
 
         return responseDTOList;
     }
+
+
+
 }
