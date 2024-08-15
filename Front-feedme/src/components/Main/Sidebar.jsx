@@ -41,6 +41,7 @@ const Sidebar = () => {
           icon={FormatListBulletedIcon}
           des="/Todo"
           link="할 일 목록"
+          date = ""
         />
         <Menu
           isActive={active === '/Diary'}

@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Sidebar from '../Main/Sidebar';
 import Search from '../Main/Search';
 import TodoMainList from './TodoMainList';
 import TodoCreature from './TodoCreature';
 import './Todo.css'
- 
-const Todo = () => {
+
+
+const Todo = (date) => {
+
   return (
     <div className="TodoBack">
       <div className="TodoContainer">
@@ -13,7 +15,9 @@ const Todo = () => {
         <div className="TodoMain">
           <div className="TodoDashboard">
             <div className="TodoList">
-              <TodoMainList />
+              <TodoMainList
+                date = {date}
+              />
             </div>
             <div className="TodoCreatures">
               <TodoCreature />

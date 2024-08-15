@@ -18,12 +18,13 @@ const TodoMainList = ({ date }) => {
   const [newTodo, setNewTodo] = useState('');
   const [editedTodo, setEditedTodo] = useState('');
   const [currentCategoryIndex, setCurrentCategoryIndex] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   // 처음 컴포넌트가 열렸을 때 category 불러옴
   useEffect(() => {
     const categoryRequest = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/category', {
+        const response = await axios.get(`http://localhost:8080/category`, {
           headers: {
             'Content-Type': 'application/json',
             'Authorization': sessionStorage.getItem('accessToken'),
@@ -37,7 +38,7 @@ const TodoMainList = ({ date }) => {
             categoryName: category.name,
             items: []
           }));
-
+          
           setCategories(datas);
         } else {
           console.log('카테고리 불러오기 실패:', response);
@@ -68,36 +69,28 @@ const TodoMainList = ({ date }) => {
     }
 }, [date]);
 
-  // currentDate 날짜가 바뀌면 category 안에 있는 todo를 싹 다 날리고 서버에서 다시 받음
-  useEffect(() => {
-    const clearCategoryItems = () => {
-      setCategories(prevCategories => {
-        return prevCategories.map(category => ({
-          ...category,
-          items: [] // 각 category의 items를 빈 배열로 초기화
-        }));
+useEffect(() => {
+  const todoRequest = async () => {
+    if (isLoading) return;  // 이미 로딩 중이면 실행하지 않음
+    setIsLoading(true);
+
+    try {
+      const response = await axios.get(`http://localhost:8080/todos/calendar/daily`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': sessionStorage.getItem('accessToken'),
+        },
+        params: {
+          date: currentDate.toISOString().split('T')[0] // date를 YYYY-MM-DD 형식으로 변환
+        }
       });
-    };
 
-    clearCategoryItems();
+      if (response.status === 200) {
+        console.log('할일 불러오기 성공:', response.data);
+        const todosData = response.data;
 
-    const todoRequest = async () => {
-      try {
-        const response = await axios.get('http://localhost:8080/todos/calendar/daily', {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': sessionStorage.getItem('accessToken'),
-          },
-          params: {
-            date: currentDate.toISOString().split('T')[0] // date를 YYYY-MM-DD 형식으로 변환
-          }
-        });
-
-        if (response.status === 200) {
-          console.log('할일 불러오기 성공:', response.data);
-          const todosData = response.data;
-          const updatedCategories = [...categories];
-
+        setCategories(prevCategories => {
+          const updatedCategories = [...prevCategories];
           todosData.forEach(todo => {
             const { id, categoryId, content, createdAt, isCompleted } = todo;
 
@@ -112,17 +105,21 @@ const TodoMainList = ({ date }) => {
             }
           });
 
-          setCategories(updatedCategories);
-        } else {
-          console.log('할일 불러오기 실패:', response);
-        }
-      } catch (error) {
-        console.error('할일 요청 중 오류 발생:', error);
+          return updatedCategories;
+        });
+      } else {
+        console.log('할일 불러오기 실패:', response);
       }
-    };
+    } catch (error) {
+      console.error('할일 요청 중 오류 발생:', error);
+    } finally {
+      setIsLoading(false);  // 로딩 상태 초기화
+    }
+  };
 
-    todoRequest();
-  }, [currentDate]);
+  todoRequest();
+}, [currentDate]);
+  
 
   // 날짜 증가
   const handleIncreaseDate = () => {
@@ -156,15 +153,22 @@ const TodoMainList = ({ date }) => {
   const handleAddTodoSubmit = async () => {
     if (newTodo) {
       try {
-        const response = await axios.post('http://localhost:8080/todos', {
-          content: newTodo,
-          categoryId: currentCategoryIndex,
-        }, {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': sessionStorage.getItem('accessToken'),
-          },
-        });
+        console.log("현재 카테고리 아이디",currentCategoryIndex);
+        const response = await axios.post(
+          `http://localhost:8080/todos`,
+          null,  // POST 요청의 본문이 없는 경우 null을 사용합니다.
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': sessionStorage.getItem('accessToken'),
+            },
+            params: {
+              content: newTodo,
+              categoryId: currentCategoryIndex,
+            },
+          }
+        );
+        
 
         if (response.status === 200) {
           console.log('할일 추가 성공:', response.data);
@@ -192,15 +196,19 @@ const TodoMainList = ({ date }) => {
   const handleEditTodo = async (categoryIndex, todoIndex) => {
     if (editedTodo) {
       try {
-        const response = await axios.patch('http://localhost:8080/todos', {
-          id: todoIndex,
-          content: editedTodo,
-        }, {
+        const response = await axios.patch(`http://localhost:8080/todos`, 
+          null,
+        {
           headers: {
             'Content-Type': 'application/json',
             'Authorization': sessionStorage.getItem('accessToken'),
           },
-        });
+          params : {
+            id: todoIndex,
+            content: editedTodo,
+          },
+        }
+        );
 
         if (response.status === 200) {
           console.log('할일 수정 성공:', response.data);
@@ -237,7 +245,7 @@ const TodoMainList = ({ date }) => {
         },
       });
 
-      if (response.status === 200) {
+      if (response.status === 204) {
         console.log('할일 삭제 성공:', response.data);
         const updatedCategories = [...categories];
         const items = updatedCategories[categoryIndex].items;
@@ -246,10 +254,11 @@ const TodoMainList = ({ date }) => {
 
         if (todoToDeleteIndex !== -1) {
           items.splice(todoToDeleteIndex, 1);
-          setCategories(updatedCategories);
         }
+        setCategories(updatedCategories);
         setSelectedTodo({ categoryIndex: null, todoIndex: null });
         setTodoModalIsOpen(false);
+        setEditedTodo('');
       }
     } catch (error) {
       console.error('할일 삭제 중 오류 발생:', error);
@@ -265,8 +274,9 @@ const TodoMainList = ({ date }) => {
 
   // 할일 완료/미완료 버튼
   const toggleTodoComplete = async (categoryIndex, todoIndex) => {
+    console.log(todoIndex);
     try {
-      const response = await axios.post(`http://localhost:8080/category/complete/${todoIndex}`, null, {
+      const response = await axios.post(`http://localhost:8080/todos/complete/${todoIndex}`, null, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem('accessToken'),
@@ -297,7 +307,7 @@ const TodoMainList = ({ date }) => {
   const handleCategoryModalSubmit = async () => {
     if (newCategoryTitle) {
       try {
-        const response = await axios.post('http://localhost:8080/category', { name: newCategoryTitle }, {
+        const response = await axios.post(`http://localhost:8080/category/${newCategoryTitle}`, null,{
           headers: {
             'Authorization': sessionStorage.getItem('accessToken'),
           }
@@ -345,15 +355,15 @@ const TodoMainList = ({ date }) => {
             <div className="TodoSectionHeader">
               <h4>{category.categoryName}</h4>
               {category.categoryName !== '일일 미션' && (
-                <FaPlus className="AddTodoButton" onClick={() => handleAddTodo(categoryIndex)} />
+                <FaPlus className="AddTodoButton" onClick={() => handleAddTodo(category.categoryId)} />
               )}
             </div>
             <ul>
               {category.items.map((item, todoIndex) => (
                 <li key={todoIndex} className="TodoItem">
                   <div className="TodoItemContent">
-                    <input type="checkbox" checked={item.isCompleted} onChange={() => toggleTodoComplete(categoryIndex, todoIndex)} /> {item.content}
-                    <FaEllipsisH className="TodoOptionsButton" onClick={() => toggleOptions(categoryIndex, todoIndex, item.content)} />
+                    <input type="checkbox" checked={item.isCompleted} onChange={() => toggleTodoComplete(categoryIndex, item.id)} /> {item.content}
+                    <FaEllipsisH className="TodoOptionsButton" onClick={() => toggleOptions(categoryIndex, item.id, item.content)} />
                   </div>
                 </li>
               ))}
