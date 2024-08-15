@@ -22,8 +22,8 @@ const Chat = () => {
 
   const token = useSelector((state) => state.auth.token);
   const user = useSelector((state) => state.user);
-  const friendsList = useSelector((state) => state.friends.list);
-  const friendsStatus = useSelector((state) => state.friends.status);
+  const friendsList = useSelector((state) => state.friends?.list || []); // 안전하게 접근
+  const friendsStatus = useSelector((state) => state.friends?.status || 'idle'); // 안전하게 접근
   const selectedFriendInfo = useSelector((state) => state.friendInfo);
 
   const { creatureId, creatureName, exp, level, image, togetherDay } = user;
@@ -64,7 +64,7 @@ const Chat = () => {
     if (token) {
       const eventSource = new EventSourcePolyfill('https://i11b104.p.ssafy.io/api/alarms/subscribe/chat', {
         headers: {
-          'Authorization': sessionStorage.getItem('accessToken'),
+          'Authorization': `Bearer ${token}`,
         },
       });
 
