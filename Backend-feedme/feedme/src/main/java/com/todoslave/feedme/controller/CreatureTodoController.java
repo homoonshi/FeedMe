@@ -24,8 +24,7 @@ public class CreatureTodoController {
     // 크리쳐 투두 생성
     @Operation(summary = "크리쳐 투두 생성 / 있으면 생성 X")
     @GetMapping("/{weather}")
-    public ResponseEntity<List<CreatureTodoResponseDTO>> createTodo(@PathVariable String weather) {
-        System.out.println("이거 맞아?");
+    public ResponseEntity<List<CreatureTodoResponseDTO>> createTodo(@PathVariable("weather") String weather) {
         List<CreatureTodoResponseDTO> list = new ArrayList<>();
         list = creatureTodoService.insertTodo(weather);
         return ResponseEntity.ok(list);
@@ -34,7 +33,7 @@ public class CreatureTodoController {
     // 투두 완료
     @PostMapping("/complete/{id}")
     @Operation(summary = "투두 일정 하나 완료/취소")
-    public ResponseEntity<CreatureTodoResponseDTO> completeTodo(@PathVariable int id){
+    public ResponseEntity<CreatureTodoResponseDTO> completeTodo(@PathVariable("id") int id){
         return ResponseEntity.ok(creatureTodoService.completeTodo(id));
     }
 

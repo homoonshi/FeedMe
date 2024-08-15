@@ -68,7 +68,7 @@ public class TodoController {
 
   // 투두 삭제
   @DeleteMapping("/{id}")
-  public ResponseEntity<Void> removeTodo(@PathVariable int id){
+  public ResponseEntity<Void> removeTodo(@PathVariable("id") int id){
     todoService.deleteTodo(id);
     return ResponseEntity.noContent().build();
   }
@@ -84,7 +84,7 @@ public class TodoController {
 
   // 투두 완료
   @PostMapping("/complete/{id}")
-  public ResponseEntity<TodoResponseDTO> completeTodo(@PathVariable int id){
+  public ResponseEntity<TodoResponseDTO> completeTodo(@PathVariable("id") int id){
     return ResponseEntity.ok(todoService.completeTodo(id));
   }
 
