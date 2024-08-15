@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { setToken } from '../../store/slice';
 import { fetchUserData } from '../../store/userSlice';
-import { fetchFriendsList, updateFriendsList } from '../../store/friendsSlice'; // updateFriendsList 추가
+import { fetchFriendsList, updateFriendsList } from '../../store/friendsSlice';
 import { fetchFriendInfo } from '../../store/friendInfoSlice';
 import Sidebar from '../Main/Sidebar';
 import Search from '../Main/Search';
@@ -11,6 +11,7 @@ import ChattingFriendList from './ChattingFriendList';
 import ChattingFriendProfile from './ChattingFriendProfile';
 import ChatWindow from './ChatWindow';
 import Creature from '../Mypage/Creature';
+import ChatCreature from './ChatCreature';
 import './Chat.css';
 import '../../assets/font/Font.css';
 import { EventSourcePolyfill } from 'event-source-polyfill';
@@ -44,7 +45,7 @@ const Chat = () => {
 
   useEffect(() => {
     if (token) {
-      const eventSource = new EventSourcePolyfill('http://localhost:8080/alarms/subscribe/chat', {
+      const eventSource = new EventSourcePolyfill('https://i11b104.p.ssafy.io/api/alarms/subscribe/chat', {
         headers: {
           'Authorization': sessionStorage.getItem('accessToken'),
         },
@@ -52,10 +53,9 @@ const Chat = () => {
 
       eventSource.addEventListener('chattingRoom', (event) => {
         const newChat = JSON.parse(event.data);
-        dispatch(updateFriendsList(newChat)); // Redux 상태 업데이트
+        dispatch(updateFriendsList(newChat));
       });
-
-      // Cleanup
+      
       return () => {
         eventSource.close();
       };
@@ -69,8 +69,8 @@ const Chat = () => {
 
   const handleFriendClick = (friend) => {
     setSelectedFriend(friend);
-    setView(friend.id === 'my-avatar' ? 'creature' : 'profile');
-    if (friend.id !== 'my-avatar') {
+    setView(friend.isCreature ? 'creatureChat' : friend.id === 'my-avatar' ? 'creature' : 'profile');
+    if (friend.id !== 'my-avatar' && !friend.isCreature) {
       dispatch(fetchFriendInfo({ token, counterpartNickname: friend.counterpartNickname }));
     }
   };
@@ -131,6 +131,9 @@ const Chat = () => {
                     <Creature
                       creature={{ id: creatureId, name: creatureName, daysTogether: togetherDay, level: level, exp: exp, image: image }}
                     />
+                  )}
+                  {view === 'creatureChat' && (
+                    <ChatCreature /> 
                   )}
                 </div>
               ) : (
