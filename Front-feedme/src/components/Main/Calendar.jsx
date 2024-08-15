@@ -18,7 +18,7 @@ function ReactCalendar() {
   const { calendarTodos, dailyTodos } = useSelector((state) => state.todo);
 
   const handleMonthChange = ({ activeStartDate }) => {
-    const date = activeStartDate.toISOString().split('T')[0];
+    const date = new Date(activeStartDate);
     onChange(date);
   };
 
