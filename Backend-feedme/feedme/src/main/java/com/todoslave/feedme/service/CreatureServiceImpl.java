@@ -44,14 +44,12 @@ public class CreatureServiceImpl implements CreatureService {
 
         //멤버 가져오고
         Member member = SecurityUtil.getCurrentMember();
-        //크리쳐 만들고
-        Creature creature = new Creature();
+        //크리쳐 가져오고
+        Creature creature = creatureRepository.findByMemberId(member.getId());
         //이름 설정하고
         creature.setCreatureName(creatureName);
         //키워드 저장
         creature.setCreatureKeyword(keyword);
-        //멤버와 매핑 시켜주고
-        creature.setMember(member);
 
         //경험치와 레벨은 자동 0으로 설정
 

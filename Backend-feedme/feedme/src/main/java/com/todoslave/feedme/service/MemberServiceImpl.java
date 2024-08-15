@@ -7,6 +7,7 @@ import com.todoslave.feedme.domain.entity.avatar.Creature;
 import com.todoslave.feedme.domain.entity.communication.FriendRequest;
 import com.todoslave.feedme.domain.entity.membership.Member;
 import com.todoslave.feedme.login.util.SecurityUtil;
+import com.todoslave.feedme.repository.CreatureRepository;
 import com.todoslave.feedme.repository.FriendRepository;
 import com.todoslave.feedme.repository.FriendRequestRepository;
 import com.todoslave.feedme.repository.MemberRepository;
@@ -37,6 +38,7 @@ public class MemberServiceImpl implements MemberService {
 
     private final FriendRequestRepository friendRequestRepository;
     private final FlaskClientUtil flaskClientUtil;
+    private final CreatureRepository creatureRepository;
 
     @Override
     public Member findById(int userId) {
@@ -62,6 +64,10 @@ public class MemberServiceImpl implements MemberService {
         member.setBirthday(memberSignupRequestDTO.getBirthday());
         member.setNickname(memberSignupRequestDTO.getNickname());
         member.setUserRole(memberSignupRequestDTO.getUserRole());
+
+        Creature creature = new Creature();
+        creature.setMember(member);
+        creatureRepository.save(creature);
 
         return memberRepository.save(member);
     }
