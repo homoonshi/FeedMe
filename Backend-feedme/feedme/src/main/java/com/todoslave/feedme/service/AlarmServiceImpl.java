@@ -21,6 +21,7 @@ import jakarta.transaction.Transactional;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -136,7 +137,8 @@ public class AlarmServiceImpl implements AlarmService{
   @Scheduled(cron = "0 0 0 * * *")
   public void congratsBirthday() throws IOException {
 
-    LocalDate date = LocalDate.now();
+//    LocalDate date = LocalDate.now();
+    LocalDate date = LocalDate.now(ZoneId.of("Asia/Seoul"));
     List<Member> birthdayPerson = memberRepository.findAllByBirthday(date);
 
     Alarm alarm = new Alarm();

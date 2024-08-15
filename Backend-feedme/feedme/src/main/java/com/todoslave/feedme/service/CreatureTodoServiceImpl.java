@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -39,8 +40,8 @@ public class CreatureTodoServiceImpl implements CreatureTodoService{
     public List<CreatureTodoResponseDTO> insertTodo(String weather) {
 
         int memberId = SecurityUtil.getCurrentMember().getId();
-
-        LocalDate today = LocalDate.now();
+        LocalDate today = LocalDate.now(ZoneId.of("Asia/Seoul"));
+//        LocalDate today = LocalDate.now();
 
         List<CreatureTodo> todayTodos = creatureTodoRepository.findByMemberIdAndCreatedAt(memberId, today);
 
@@ -129,7 +130,8 @@ public class CreatureTodoServiceImpl implements CreatureTodoService{
     //오늘 안한것만 당겨오게
     @Override
     public List<CreatureTodoResponseDTO> getCreatureTodoMainDaily() {
-        LocalDate today = LocalDate.now();
+//        LocalDate today = LocalDate.now();
+        LocalDate today = LocalDate.now(ZoneId.of("Asia/Seoul"));
         int memberId = SecurityUtil.getCurrentMember().getId();
         List<CreatureTodo> todayTodos = creatureTodoRepository.findByMemberIdAndCreatedAt(memberId, today);
 
