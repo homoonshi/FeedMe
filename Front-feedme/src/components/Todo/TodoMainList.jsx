@@ -268,39 +268,33 @@ const TodoMainList = ({ date }) => {
     }
   };
 
-  const handleDeleteTodo = async (categoryIndex, todoId) => {
-    try {
-      // 비동기 요청 처리
-      const response = await axios.delete(`https://i11b104.p.ssafy.io/api/todos/${todoId}`, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': sessionStorage.getItem('accessToken'),
-        },
-      });
-  
-      if (response.status === 204) {
-        console.log('할일 삭제 성공:', response.status);
-  
-        // 카테고리 업데이트
-        setCategories(prevCategories => {
-          const updatedCategories = [...prevCategories];
-          const items = updatedCategories[categoryIndex].items;
-          
-          // 할일 삭제
-          const todoToDeleteIndex = items.findIndex(item => item.id === todoId);
-          if (todoToDeleteIndex !== -1) {
-            items.splice(todoToDeleteIndex, 1);
+  const handleAddCategorySubmit = async () => {
+    if (newCategoryTitle) {
+      try {
+        const response = await axios.post(`https://i11b104.p.ssafy.io/api/category/${newCategoryTitle}`, null, {
+          headers: {
+            'Authorization': sessionStorage.getItem('accessToken'),
           }
-  
-          return updatedCategories;
         });
-      } else {
-        console.log('할일 삭제 실패:', response);
+  
+        if (response.status === 200) {
+          console.log('카테고리 생성 성공:', response.data);
+          const newCategory = response.data;
+          const newCategories = [...categories];
+  
+          newCategories.push({ categoryId: newCategory.id, categoryName: newCategory.name, items: [] });
+          setCategories(newCategories);
+          setNewCategoryTitle('');
+          setCategoryModalIsOpen(false);
+        } else {
+          console.error('카테고리 생성 실패:', response);
+        }
+      } catch (error) {
+        console.error('카테고리 생성 중 오류 발생:', error);
       }
-    } catch (error) {
-      console.error('할일 삭제 중 오류 발생:', error);
     }
   };
+  
   
   
     const handleOpenDrawingModal = () => {
