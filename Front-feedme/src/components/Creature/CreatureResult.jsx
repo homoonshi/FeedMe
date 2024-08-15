@@ -1,16 +1,24 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleLeft, faRotate } from '@fortawesome/free-solid-svg-icons';
 import './CreatureResult.css';
 import '../../assets/font/Font.css';
-import { useDispatch, useSelector } from 'react-redux';
-import catImage from '../../assets/images/test3.png';
+import catImage from '../../assets/images/rain_16.png';
+import { logout, setToken } from '../../store/slice';
+import { fetchUserData } from '../../store/userSlice';
 
 const CreatureResult = () => {
+  const dispatch = useDispatch();
+
+  
+  const token = useSelector((state) => state.auth.token);
+  const user = useSelector((state) => state.user);
 
   const { creatureName, photo } = useSelector((state) => state.auth);
-
+  
+  console.log(user)
   return (
     <div className="CreatureResultMain">
       <div className="CreatureResultContainer">
