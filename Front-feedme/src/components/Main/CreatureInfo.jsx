@@ -5,8 +5,10 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUserData } from '../../store/userSlice';
 import { setToken } from '../../store/slice';
+import snowyGif from '../../assets/images/snowy.gif'; 
+import rainyGif from '../../assets/images/rainy.gif'; 
 
-const CreatureInfo = () => {
+const CreatureInfo = ({weatherCategory}) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const token = useSelector((state) => state.auth.token);
@@ -34,6 +36,21 @@ const CreatureInfo = () => {
 
   return (
     <div className='CreatureInfo'>
+      {weatherCategory === 'snowy' && (
+        <img 
+          src={snowyGif} 
+          alt="snowy weather" 
+          className="WeatherOverlay" 
+        />
+      )}
+      {weatherCategory === 'rainy' && (
+        <img 
+          src={rainyGif} 
+          alt="rainy weather" 
+          className="WeatherOverlay" 
+        />
+      )}
+
       <h2>{creatureName}</h2>
       <img 
         className='CreatureInfoPhoto' 
