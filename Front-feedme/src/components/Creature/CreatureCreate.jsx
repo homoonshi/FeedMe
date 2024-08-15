@@ -13,6 +13,7 @@ const CreatureCreate = () => {
   const dispatch = useDispatch();
   const { creatureName, keyword, token } = useSelector((state) => state.auth);
   const [photo, setPhoto] = useState(null); // local state로 photo 관리
+  const [nicknameError, setNicknameError] = useState(null);
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
@@ -119,9 +120,13 @@ const CreatureCreate = () => {
         console.log('크리쳐 생성 실패', response.data);
       }
     } catch (error) {
+      if(error.response&&error.response.status===409){
+        setNicknameError('중복된 닉네임 입니다.')
+        console.log("닉넴 중복")
+      }
       console.error('서버 요청 중 오류 발생', error);
     }
-
+  
     // // 서버에 JSON 형식으로 데이터 보내기
     // try {
     //   const response = await axios.post('https://i11b104.p.ssafy.io/api/creature', {
@@ -164,6 +169,9 @@ const CreatureCreate = () => {
               onChange={(e) => dispatch(setCreatureName(e.target.value))}
             />
           </div>
+
+          {nicknameError && <div className="Signuperror">{nicknameError}</div>}
+          <p className="errorPic">너무 큰 사진을 넣지 마세요</p>
 
           <div className="CreatureCreateFormImageUploadContainer">
             <label htmlFor="imageUpload" className="CreatureCreateFormImageUploadLabel">사ㅤ진</label>

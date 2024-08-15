@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleLeft } from '@fortawesome/free-solid-svg-icons';
@@ -13,6 +13,7 @@ const Signup = () => {
   const { nickname, email, birthday } = useSelector((state) => state.auth);
   const location = useLocation();
   const navigate = useNavigate();
+  const [nicknameError, setNicknameError] = useState(null);
 
   const params = new URLSearchParams(location.search);
   const urlEmail = params.get('email');
@@ -41,6 +42,10 @@ const Signup = () => {
         console.log('회원 등록 실패', response.data);
       }
     } catch (error) {
+      if(error.response&&error.response.status===409){
+        setNicknameError('중복된 닉네임 입니다.')
+        console.log("닉넴 중복")
+      }
       console.error('서버 요청 중 오류 발생', error);
     }
   };
@@ -62,6 +67,8 @@ const Signup = () => {
               onChange={(e) => dispatch(setNickname(e.target.value))}
             />
           </div>
+
+          {nicknameError && <div className="Signuperror">{nicknameError}</div>}
 
           <div className="LoginInfoEmailContainer">
             <label htmlFor="email" className="LoginInfoEmail">이메일</label>
