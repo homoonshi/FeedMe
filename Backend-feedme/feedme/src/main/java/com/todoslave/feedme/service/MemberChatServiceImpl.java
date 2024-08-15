@@ -15,6 +15,7 @@ import com.todoslave.feedme.repository.MemberChatMessageRepository;
 import com.todoslave.feedme.repository.MemberChatRoomCheckedRepository;
 import com.todoslave.feedme.repository.MemberChatRoomRepository;
 import com.todoslave.feedme.repository.MemberRepository;
+import com.todoslave.feedme.util.FlaskClientUtil;
 import jakarta.transaction.Transactional;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -48,6 +49,7 @@ public class MemberChatServiceImpl implements MemberChatService{
   private final CreatureRepository creatureRepository;
 
   private final MessageMapper messageMapper;
+  private final FlaskClientUtil flaskClientUtil;
 
   Map<String, int[]> rooms = new HashMap<>();
 
@@ -81,10 +83,10 @@ public class MemberChatServiceImpl implements MemberChatService{
       String nickname = memberRepository.findById(counterPartId).orElseThrow().getNickname();
       chatResponse.setCounterpartNickname(nickname);
       Creature creature = creatureRepository.findByMemberId(counterPartId);
-
+      Member counterpart = memberRepository.findById(counterPartId).orElseThrow();
 
       chatResponse.setAvatar(
-              "http://localhost:8080/image/creature/"+creature.getMember().getId()+"_"+creature.getLevel());
+          flaskClientUtil.getCreatureImageAsByteArray(counterpart.getNickname(), creature.getId(), creature.getLevel()));
 
 
       MemberChatRoomChecked checked = memberChatRoomCheckedRepository.findByMemberChatRoomIdAndMemberId(room.getId(),memberId);
@@ -131,8 +133,9 @@ public class MemberChatServiceImpl implements MemberChatService{
     MemberChatListResponseDTO memberChatListResponseDTO = new MemberChatListResponseDTO();
     memberChatListResponseDTO.setFriendId(room.getId());
     memberChatListResponseDTO.setCounterpartNickname(countpart.getNickname());
-    memberChatListResponseDTO.setAvatar(
-            "http://localhost:8080/image/creature/"+creature.getMember().getId()+"_"+creature.getLevel());
+    memberChatListResponseDTO.setAvatar(flaskClientUtil.getCreatureImageAsByteArray(
+        countpart.getNickname(), creature.getId(), creature.getLevel()
+    ));
     memberChatListResponseDTO.setIsChecked(1);
     memberChatListResponseDTO.setReceiveTime(room.getReceiveTime());
 
@@ -215,7 +218,9 @@ public class MemberChatServiceImpl implements MemberChatService{
     memberChatListResponseDTO.setCounterpartNickname(counterpartNickname);
     Creature creature = creatureRepository.findByMemberId(counterPartId);
 
-    memberChatListResponseDTO.setAvatar("http://localhost:8080/image/creature/"+creature.getMember().getId()+"_"+creature.getLevel());
+    memberChatListResponseDTO.setAvatar(flaskClientUtil.getCreatureImageAsByteArray(
+        counterpartNickname, creature.getId(), creature.getLevel()
+    ));
 
     // 채팅방 갱신 (나)
     alarmService.renewChattingRoom(memberChatListResponseDTO, memberId,1);
@@ -223,7 +228,9 @@ public class MemberChatServiceImpl implements MemberChatService{
     memberChatListResponseDTO.setCounterpartNickname(member.getNickname());
     creature = creatureRepository.findByMemberId(memberId);
 
-    memberChatListResponseDTO.setAvatar("http://localhost:8080/image/creature/"+creature.getMember().getId()+"_"+creature.getLevel());
+    memberChatListResponseDTO.setAvatar(flaskClientUtil.getCreatureImageAsByteArray(
+        member.getNickname(), creature.getId(), creature.getLevel()
+    ));
 
     // 채팅방 갱신 (상대)
     alarmService.renewChattingRoom(memberChatListResponseDTO, counterPartId, 0);
