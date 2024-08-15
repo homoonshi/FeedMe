@@ -53,7 +53,6 @@ public class CreatureTodoServiceImpl implements CreatureTodoService{
             missions = missionRepository.findByWeatherCondition("default");
         }
 
-        System.out.println(missions.size()+"감자테");
         Mission selectedMission = missions.get(random.nextInt(missions.size()));
 
         List<Mission> Dmissions= missionRepository.findByWeatherCondition("default");
