@@ -39,16 +39,19 @@ const Main = () => {
             } else {
               console.error('날씨 정보 가져오기 실패:', data);
               setWeatherCategory('notknow');
+              postWeatherCategory('notknow');
             }
           },
           (error) => {
             console.error("위치 정보 가져오기 실패:", error);
             setWeatherCategory('notknow');
+            postWeatherCategory('notknow');
           }
         );
       } catch (error) {
         console.error("날씨 정보 가져오는 중 오류 발생:", error);
         setWeatherCategory('notknow');
+        postWeatherCategory('notknow'); 
       }
     };
 
