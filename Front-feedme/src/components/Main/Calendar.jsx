@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import '../Main/Calendar.css';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-import { useState } from 'react';
+import { useState, useNavigate } from 'react';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCalendarTodos, addCalendarTodos } from '../../store/todoSlice';
@@ -20,7 +20,7 @@ function ReactCalendar() {
     const date = value.toISOString().split('T')[0];
     console.log('value : ', date);
 
-    axios.get(`https://i11b104.p.ssafy.io/api/todos/calendar?date=${date}`,
+    axios.get(`http://localhost:8080/todos/calendar?date=${date}`,
       {
         headers: { Authorization: sessionStorage.getItem('accessToken'), },
       }
