@@ -117,7 +117,7 @@ public class FlaskClientUtil {
             url = String.format("http://flask:33333/store/default_creature_image/%s", username);
         } else {
             // 일반적인 경우
-            url = String.format("http://flask:33333/store/creature_data/%s/%d/%d", username, creatureId, level);
+            url = String.format("http://flask:33333/store/%s/%d/%d", username, creatureId, level);
         }
 
         ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
