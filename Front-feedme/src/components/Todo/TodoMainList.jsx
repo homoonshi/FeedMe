@@ -52,10 +52,19 @@ const TodoMainList = ({ date }) => {
 
   // 부모 컴포넌트에서 props로 date 받으면 currentDate 다시 설정 
   useEffect(() => {
-    const newDate = new Date(date);
-    setCurrentDate(newDate);
-    console.log('currentDate 설정됨:', newDate);
-  }, [date]);
+    console.log(date);
+    if(date === ""){
+        const newDate = new Date();
+        const formattedDate = newDate.toLocaleDateString();
+        console.log('currentDate 설정됨:', formattedDate);
+        setCurrentDate(formattedDate);
+    } else {
+        const newDate = new Date(date);
+        setCurrentDate(newDate.toLocaleDateString());
+        console.log('currentDate 설정됨:', newDate);
+    }
+}, [date]);
+
 
   // currentDate 날짜가 바뀌면 category 안에 있는 todo를 싹 다 날리고 서버에서 다시 받음
   useEffect(() => {

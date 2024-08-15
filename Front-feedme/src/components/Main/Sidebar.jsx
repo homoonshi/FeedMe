@@ -41,11 +41,6 @@ const Sidebar = () => {
           icon={FormatListBulletedIcon}
           des="/Todo"
           link="할 일 목록"
-          date = {new Date().toLocaleDateString('ko-KR', {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-          }).replace(/\. /g, '-').replace(/\./g, '')} 
         />
         <Menu
           isActive={active === '/Diary'}
