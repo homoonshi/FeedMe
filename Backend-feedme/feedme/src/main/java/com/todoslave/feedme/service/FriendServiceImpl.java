@@ -200,7 +200,7 @@ public class FriendServiceImpl implements FriendService{
         Friend friend = new Friend();
 
         Member member = SecurityUtil.getCurrentMember();
-        Member counterpart = friendRequest.getMember();
+        Member counterpart = friendRequest.getCounterpartId();
 
         friend.setMember(member);
         friend.setCounterpart(counterpart);
