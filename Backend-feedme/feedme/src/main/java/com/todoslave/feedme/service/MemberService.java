@@ -140,7 +140,7 @@ public class MemberService {
             Creature creature = member.getCreature();
             int creatureLevel = creature.getLevel();
             int creatureId = creature.getId();
-            return "https://i11b104.p.ssafy.io/api/image/creature/" + creatureId + "_" +creatureLevel;
+            return "http://localhost:8080/image/creature/" + creatureId + "_" +creatureLevel;
     }
 
     public MypageResponseDTO getMyPage() {

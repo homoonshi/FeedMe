@@ -18,6 +18,23 @@ const ChattingFriendProfile = ({ friend, onDelete }) => {
       });
   };
 
+  const getMaxExpForLevel = (level) => {
+    switch (level) {
+      case 0:
+        return 10;
+      case 1:
+        return 30;
+      case 2:
+        return 100;
+      case 3:
+        return 3000;
+      default:
+        return 3000;
+    }
+  };
+  
+  const maxExp = getMaxExpForLevel(friend.level);
+
   return (
     <div className="CFProfile">
       <FontAwesomeIcon 
@@ -34,7 +51,7 @@ const ChattingFriendProfile = ({ friend, onDelete }) => {
         <p className="CFProfileLv">Lv. {friend.level}</p>
         <div className="CFProfileExp">
           <p>EXP</p>
-          <progress value={friend.exp}  max="100"></progress>
+          <progress value={friend.exp}  max={maxExp}></progress>
         </div>
       </div>
     </div>
