@@ -109,16 +109,16 @@ public class FlaskClientUtil {
         String url;
 
         // URL 생성: username을 creatureId로 간주하여 사용
-        if (creatureId == null || creatureId == 0 || level == null || level == 0) {
-            // creatureId나 level이 null 또는 0인 경우, 기본 이미지를 요청
-            String numberString = username.replaceAll("[^0-9]", "");
-            int number = Integer.parseInt(numberString);
+        // if (creatureId == null || creatureId == 0 || level == null || level == 0) {
+        //     // creatureId나 level이 null 또는 0인 경우, 기본 이미지를 요청
+        //     String numberString = username.replaceAll("[^0-9]", "");
+        //     int number = Integer.parseInt(numberString);
 
-            url = String.format("http://flask:33333/store/egg/0/%d", number%4);
-        } else {
+        //     url = String.format("http://flask:33333/store/egg/0/%d", number%4);
+        // } else {
             // 일반적인 경우
             url = String.format("http://flask:33333/store/%s/%d/%d", username, creatureId, level);
-        }
+        // }
 
         ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
 
