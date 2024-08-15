@@ -26,12 +26,13 @@ const CreatureResult = () => {
   }, [dispatch, token]);
   
   const { creatureName, photo } = useSelector((state) => state.auth);
-  const getRandomEggImage = () => {
-    const eggImages = [eg1, eg2, eg3, eg4, eg5];
-    return eggImages[Math.floor(Math.random() * eggImages.length)];
-  };
+  
+  // const getRandomEggImage = () => {
+  //   const eggImages = [eg1, eg2, eg3, eg4, eg5];
+  //   return eggImages[Math.floor(Math.random() * eggImages.length)];
+  // };
 
-  const displayImage = photo ? `data:image/gif;base64,${photo}` : getRandomEggImage();
+  // const displayImage = photo ? `data:image/gif;base64,${photo}` : getRandomEggImage();
   
   return (
     <div className="CreatureResultMain">
@@ -43,7 +44,8 @@ const CreatureResult = () => {
           <div className="CreatureResultName">{creatureName}</div>
         </div>
         <div className="CreatureResultHeader">
-          <img src={displayImage} alt="Creature" className="CreatureResultImage" />
+          <img src={`data:image/gif;base64,${photo}`} alt="Creature" className="CreatureResultImage" />
+          {/* <img src={displayImage} alt="Creature" className="CreatureResultImage" /> */}
         </div>
         <Link to="/Main">
           <button type="submit" className="CreatureResultStartButton">Start</button>
