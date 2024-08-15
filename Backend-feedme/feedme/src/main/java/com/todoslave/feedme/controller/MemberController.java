@@ -99,10 +99,10 @@ public class MemberController {
     @GetMapping("/holder/test")
     public Member getCurrentMember() {
 
-        LocalDateTime t = LocalDateTime.now();
-        System.out.println(t);
-        LocalDate today = LocalDate.now(ZoneId.of("Asia/Seoul")); // 또는 사용자의 시간대
-        System.out.println("현재 날짜: " + today);
+//        LocalDateTime t = LocalDateTime.now();
+//        System.out.println(t);
+//        LocalDate today = LocalDate.now(ZoneId.of("Asia/Seoul")); // 또는 사용자의 시간대
+//        System.out.println("현재 날짜: " + today);
 
 
         return SecurityUtil.getCurrentMember();
