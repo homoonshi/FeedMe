@@ -40,7 +40,7 @@ public class CreatureTodoServiceImpl implements CreatureTodoService{
     public List<CreatureTodoResponseDTO> insertTodo(String weather) {
 
         int memberId = SecurityUtil.getCurrentMember().getId();
-        LocalDate today = LocalDate.now(ZoneId.of("Asia/Seoul"));
+        LocalDate today = LocalDate.now(ZoneId.of("Asia/Seoul")); //오늘 감지
 //        LocalDate today = LocalDate.now();
 
         List<CreatureTodo> todayTodos = creatureTodoRepository.findByMemberIdAndCreatedAt(memberId, today);
@@ -63,10 +63,12 @@ public class CreatureTodoServiceImpl implements CreatureTodoService{
         CreatureTodo creatureTodo1 = new CreatureTodo();
         creatureTodo1.setContent(selectedMission.getMission());
         creatureTodo1.setMember(SecurityUtil.getCurrentMember());
+        creatureTodo1.setCreatedAt(today);
 
         CreatureTodo creatureTodo2 = new CreatureTodo();
         creatureTodo2.setContent(selectedDMission.getMission());
         creatureTodo2.setMember(SecurityUtil.getCurrentMember());
+        creatureTodo2.setCreatedAt(today);
 
         creatureTodoRepository.save(creatureTodo1);
         creatureTodoRepository.save(creatureTodo2);

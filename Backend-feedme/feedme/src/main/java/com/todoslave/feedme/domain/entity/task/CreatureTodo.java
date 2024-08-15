@@ -8,6 +8,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.ZoneId;
 
 
 @Entity
@@ -29,6 +30,7 @@ public class CreatureTodo {
     // 내용
     @Column(name = "content", nullable = false, length = 255)
     private String content;
+
 
     // 생성일자
     @CreationTimestamp
