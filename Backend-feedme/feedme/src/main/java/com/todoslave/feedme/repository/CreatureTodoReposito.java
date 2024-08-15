@@ -19,4 +19,12 @@ public interface CreatureTodoReposito extends JpaRepository<CreatureTodo,Integer
     long countByCreatedAtAndIsCompleted(LocalDate createdAt, int isCompleted);
 
     List<CreatureTodo> findByMemberId(int id);
+
+    // 특정 회원 ID, 날짜, 완료 여부로 CreatureTodo를 찾는 메서드
+    List<CreatureTodo> findByMemberIdAndCreatedAtAndIsCompleted(int memberId, LocalDate createdAt, int isCompleted);
+
+    // 특정 회원 ID, 날짜, 완료 여부로 CreatureTodo의 개수를 계산하는 메서드
+    long countByMemberIdAndCreatedAtAndIsCompleted(int memberId, LocalDate createdAt, int isCompleted);
+
+
 }

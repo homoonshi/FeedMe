@@ -172,7 +172,7 @@ public class MemberServiceImpl implements MemberService {
         LocalDate joinDate = member.getJoinDate().toLocalDate();
         int daysSinceJoin = Period.between(joinDate, currentDate).getDays();
 
-        myPage.setTogetherDay(daysSinceJoin);
+        myPage.setTogetherDay(daysSinceJoin+1);
 
         return myPage;
     }

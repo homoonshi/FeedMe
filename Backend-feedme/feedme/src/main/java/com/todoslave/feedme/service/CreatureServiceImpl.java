@@ -159,7 +159,7 @@ public class CreatureServiceImpl implements CreatureService {
         int daysSinceJoin = Period.between(joinDate, currentDate).getDays();
 
         // day 설정
-        creatureInfoResponseDTO.setDay(daysSinceJoin);
+        creatureInfoResponseDTO.setDay(daysSinceJoin+1);
 
         return creatureInfoResponseDTO;
     }
