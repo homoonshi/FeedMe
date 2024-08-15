@@ -33,7 +33,7 @@ public class CreatureTodo {
 
 
     // 생성일자
-    @CreationTimestamp
+//    @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDate createdAt;
 
