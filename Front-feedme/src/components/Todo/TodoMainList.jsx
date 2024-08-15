@@ -24,39 +24,30 @@ const TodoMainList = ({ date }) => {
 
   // 처음 컴포넌트가 열렸을 때 category 불러옴
   useEffect(() => {
-    const updateDateAndFetchCategories = () => {
-      console.log('input date : ', date);
-      if (date) {
-        // `date` 값이 있을 때 `currentDate`를 설정
-        const newDate = new Date(date);
-        if (newDate.getTime() !== new Date().getTime()) {
-          console.log('newDate : ', newDate);
-          setCurrentDate(newDate);
-        } else {
-          console.warn('유효하지 않은 날짜입니다:', date);
-        }
+    console.log('input date : ', date);
+    if (date) {
+      // date 값이 있을 때 currentDate를 설정
+      const newDate = new Date(date);
+      if (newDate !== new Date()) {
+        console.log('newDate : ', newDate);
+        setCurrentDate(newDate);
+        console.log('currentDate1 : ', currentDate);
       } else {
-        // `date` 값이 없을 때 현재 날짜를 설정
-        setCurrentDate(new Date());
+        console.warn('유효하지 않은 날짜입니다:', date);
       }
-    };
-  
-    updateDateAndFetchCategories();
-  }, [date]);
-  
-  useEffect(() => {
-    if (currentDate) {
-      console.log('currentDate changed:', currentDate);
-      categoryRequest();
+    } else {
+      // date 값이 없을 때 현재 날짜를 설정
+      setCurrentDate(new Date());
     }
-  }, [currentDate]);
-  
+    console.log('currentDate2 :', currentDate);
+    categoryRequest();
+  }, []);
 
   const categoryRequest = async () => {
     console.log('categoryRequest');
     console.log('currentDate3 : ', currentDate);
     try {
-      const response = await axios.get(`https://i11b104.p.ssafy.io/api/category`, {
+      const response = await axios.get(https://i11b104.p.ssafy.io/api/category, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem('accessToken'),
@@ -105,7 +96,7 @@ const TodoMainList = ({ date }) => {
     setIsLoading(true);
 
     try {
-      const diaryPossible = await axios.get(`https://i11b104.p.ssafy.io/api/dayoff/${currentDate}`, {
+      const diaryPossible = await axios.get(https://i11b104.p.ssafy.io/api/dayoff/${currentDate}, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem('accessToken'),
@@ -119,7 +110,7 @@ const TodoMainList = ({ date }) => {
 
       clearCategoryItems();
 
-      const response = await axios.get(`https://i11b104.p.ssafy.io/api/todos/calendar/daily`, {
+      const response = await axios.get(https://i11b104.p.ssafy.io/api/todos/calendar/daily, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem('accessToken'),
@@ -162,7 +153,7 @@ const TodoMainList = ({ date }) => {
 
     // 크리쳐 미션 종료
     try {
-      const mission = await axios.get(`https://i11b104.p.ssafy.io/api/creatureTodo/calendar/daily`, {
+      const mission = await axios.get(https://i11b104.p.ssafy.io/api/creatureTodo/calendar/daily, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem('accessToken'),
@@ -199,7 +190,7 @@ const TodoMainList = ({ date }) => {
   // 크리쳐 미션 완료
   const toggleMissionComplete = async (mission, missionIndex) => {
     try {
-      const response = await axios.post(`https://i11b104.p.ssafy.io/api/creatureTodo/complete/${mission}`, null, {
+      const response = await axios.post(https://i11b104.p.ssafy.io/api/creatureTodo/complete/${mission}, null, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem('accessToken'),
@@ -257,7 +248,7 @@ const TodoMainList = ({ date }) => {
       try {
         console.log("현재 카테고리 아이디", currentCategoryIndex);
         const response = await axios.post(
-          `https://i11b104.p.ssafy.io/api/todos`,
+          https://i11b104.p.ssafy.io/api/todos,
           null,  // POST 요청의 본문이 없는 경우 null을 사용합니다.
           {
             headers: {
@@ -298,7 +289,7 @@ const TodoMainList = ({ date }) => {
   const handleEditTodo = async (categoryIndex, todoIndex) => {
     if (editedTodo) {
       try {
-        const response = await axios.patch(`https://i11b104.p.ssafy.io/api/todos`,
+        const response = await axios.patch(https://i11b104.p.ssafy.io/api/todos,
           null,
           {
             headers: {
@@ -340,7 +331,7 @@ const TodoMainList = ({ date }) => {
   // 할일 삭제
   const handleDeleteTodo = async (categoryIndex, todoIndex) => {
     try {
-      const response = await axios.delete(`https://i11b104.p.ssafy.io/api/todos/${todoIndex}`, {
+      const response = await axios.delete(https://i11b104.p.ssafy.io/api/todos/${todoIndex}, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem('accessToken'),
@@ -378,7 +369,7 @@ const TodoMainList = ({ date }) => {
   const toggleTodoComplete = async (categoryIndex, todoIndex) => {
     console.log(todoIndex);
     try {
-      const response = await axios.post(`https://i11b104.p.ssafy.io/api/todos/complete/${todoIndex}`, null, {
+      const response = await axios.post(https://i11b104.p.ssafy.io/api/todos/complete/${todoIndex}, null, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem('accessToken'),
@@ -411,7 +402,7 @@ const TodoMainList = ({ date }) => {
   const handleCategoryModalSubmit = async () => {
     if (newCategoryTitle) {
       try {
-        const response = await axios.post(`https://i11b104.p.ssafy.io/api/category/${newCategoryTitle}`, null, {
+        const response = await axios.post(https://i11b104.p.ssafy.io/api/category/${newCategoryTitle}, null, {
           headers: {
             'Authorization': sessionStorage.getItem('accessToken'),
           }
