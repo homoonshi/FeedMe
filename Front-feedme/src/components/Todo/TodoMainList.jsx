@@ -174,7 +174,141 @@ const TodoMainList = ({ date }) => {
 
   return (
     <div className="TodoMainListContainer">
-      {/* UI 요소들 */}
+      <div className="TodoHeader">
+        <FaAngleLeft className="TodoArrow" onClick={handleDecreaseDate} />
+        <h3>{currentDate.toISOString().split('T')[0]}</h3>
+        <FaAngleRight className="TodoArrow" onClick={handleIncreaseDate} />
+      </div>
+
+      <div className="TodoSections">
+        {categories.map((category, categoryIndex) => (
+          <div className="TodoSection" key={categoryIndex}>
+            <div className="TodoSectionHeader">
+              <h4>{category.categoryName}</h4>
+              {category.categoryName !== '일일 미션' && (
+                <FaPlus className="AddTodoButton" onClick={() => handleAddTodo(category.categoryId)} />
+              )}
+            </div>
+            <ul>
+              {category.items.map((item, todoIndex) => (
+                <li key={todoIndex} className="TodoItem">
+                  <div className="TodoItemContent">
+                    <input type="checkbox" checked={item.isCompleted} onChange={() => toggleTodoComplete(categoryIndex, item.id)} /> {item.content}
+                    <FaEllipsisH className="TodoOptionsButton" onClick={() => toggleOptions(categoryIndex, item.id, item.content)} />
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+        <div className="TodoSection">
+          <div className="TodoSectionHeader">
+            <h4>일일 미션</h4>
+          </div>
+          <ul>
+            {todoMission.map((mission, missionIndex) => (
+              <li key={missionIndex} className="missionItem">
+                <div className="missionContent">
+                  <input type="checkbox" checked={mission.isCompleted} onChange={() => toggleMissionComplete(mission.id, missionIndex)} /> {mission.content}
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      <div className="TodoActions">
+        {(isSameDay(currentDate, today) || isSameDay(currentDate, yesterday)) && diaryButton && (
+          <button className="CreateDrawingButton" onClick={() => setDrawingModalIsOpen(true)}>
+            <FaPen className="DrawingIcon" />
+            그림일기 생성
+          </button>
+        )}
+        <FaEllipsisH className="MoreOptionsButton" onClick={handleAddCategory} />
+      </div>
+
+      {/* 카테고리 추가 모달 */}
+      <Modal
+        isOpen={categoryModalIsOpen}
+        onRequestClose={() => setCategoryModalIsOpen(false)}
+        contentLabel="새로운 카테고리 추가"
+        className="TodoMainModal"
+        overlayClassName="TodoMainOverlay"
+      >
+        <h2 className="TodoMainModalTitle">새로운 카테고리 추가</h2>
+        <input
+          type="text"
+          value={newCategoryTitle}
+          onChange={(e) => setNewCategoryTitle(e.target.value)}
+          placeholder="카테고리를 입력하세요"
+          className="TodoMainModalInput"
+        />
+        <div className="TodoMainModalButtons">
+          <button className="TodoMainModalButton" onClick={() => setCategoryModalIsOpen(false)}>취소</button>
+          <button className="TodoMainModalButton" onClick={handleCategoryModalSubmit}>추가</button>
+        </div>
+      </Modal>
+
+      {/* 할일 추가 모달 */}
+      <Modal
+        isOpen={addTodoModalIsOpen}
+        onRequestClose={() => setAddTodoModalIsOpen(false)}
+        contentLabel="새로운 할 일 추가"
+        className="TodoMainModal"
+        overlayClassName="TodoMainOverlay"
+      >
+        <h2 className="TodoMainModalTitle">Todo 추가</h2>
+        <input
+          type="text"
+          value={newTodo}
+          onChange={(e) => setNewTodo(e.target.value)}
+          placeholder="할 일을 입력하세요"
+          className="TodoMainModalInput"
+        />
+        <div className="TodoMainModalButtons">
+          <button className="TodoMainModalButton" onClick={() => setAddTodoModalIsOpen(false)}>취소</button>
+          <button className="TodoMainModalButton" onClick={handleAddTodoSubmit}>추가</button>
+        </div>
+      </Modal>
+
+      {/* 할일 수정/삭제 모달 */}
+      <Modal
+        isOpen={todoModalIsOpen}
+        onRequestClose={() => setTodoModalIsOpen(false)}
+        contentLabel="Todo 옵션"
+        className="TodoMainModal"
+        overlayClassName="TodoMainOverlay"
+      >
+        <h2 className="TodoMainModalTitle">Todo 옵션</h2>
+        <input
+          type="text"
+          value={editedTodo}
+          onChange={(e) => setEditedTodo(e.target.value)}
+          placeholder="할 일을 수정하세요"
+          className="TodoMainModalInput"
+        />
+        <div className="TodoMainModalButtons">
+          <button className="TodoMainModalButton" onClick={() => handleDeleteTodo(selectedTodo.categoryIndex, selectedTodo.todoIndex)}>삭제</button>
+          <button className="TodoMainModalButton" onClick={() => handleEditTodo(selectedTodo.categoryIndex, selectedTodo.todoIndex)}>수정</button>
+        </div>
+      </Modal>
+
+      {/* 그림일기 생성 모달 */}
+      <Modal
+        isOpen={drawingModalIsOpen}
+        onRequestClose={() => setDrawingModalIsOpen(false)}
+        contentLabel="그림일기 생성"
+        className="TodoMainModalD"
+        overlayClassName="TodoMainOverlay"
+      >
+        <h2 className="TodoMainModalTitle">그림일기 생성</h2>
+        <img src={diary} alt="그림일기 이미지" className="TodoMainModalDImage" />
+        <div className="TodoMainModalButtons">
+          <button className="TodoMainModalButton" onClick={() => setDrawingModalIsOpen(false)}>취소</button>
+          <button className="TodoMainModalButton">생성</button>
+        </div>
+      </Modal>
+
     </div>
   );
 };
