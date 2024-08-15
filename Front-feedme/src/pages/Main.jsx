@@ -28,8 +28,10 @@ const Main = () => {
       try {
         navigator.geolocation.getCurrentPosition(
           async (position) => {
-            const lat = position.coords.latitude;
-            const lon = position.coords.longitude;
+            // const lat = position.coords.latitude;
+            const lat = 0;
+            // const lon = position.coords.longitude;
+            const lon = 0;
             const apiKey = process.env.REACT_APP_API_KEY;
             const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}`);
             const data = await response.json();
