@@ -45,7 +45,7 @@ const Chat = () => {
 
   useEffect(() => {
     if (token) {
-      const eventSource = new EventSourcePolyfill('https://i11b104.p.ssafy.io/api/alarms/subscribe/chat', {
+      const eventSource = new EventSourcePolyfill('http://localhost:8080/alarms/subscribe/chat', {
         headers: {
           'Authorization': sessionStorage.getItem('accessToken'),
         },
@@ -133,7 +133,9 @@ const Chat = () => {
                     />
                   )}
                   {view === 'creatureChat' && (
-                    <ChatCreature /> 
+                    <ChatCreature 
+                      user={user}
+                    /> 
                   )}
                 </div>
               ) : (
