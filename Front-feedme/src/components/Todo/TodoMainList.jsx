@@ -7,7 +7,8 @@ import diary from '../../assets/images/test2.png';
 import axios from 'axios';
 
 const TodoMainList = ({ date }) => {
-  const [categories, setCategories] = useState([]);  // 빈 배열로 초기화
+  const [categories, setCategories] = useState([]);  // 빈 배열로 초기화, 투두
+  const [todoMission, setTodoMission] = useState([]); // 일일 미션
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedTodo, setSelectedTodo] = useState({ categoryIndex: null, todoIndex: null });
   const [categoryModalIsOpen, setCategoryModalIsOpen] = useState(false);
@@ -74,7 +75,6 @@ const TodoMainList = ({ date }) => {
     todoRequest();
   }, [currentDate]);
 
-  // useEffect(() => {
   const clearCategoryItems = () => {
     console.log('clearCategoryItems');
 
@@ -85,7 +85,7 @@ const TodoMainList = ({ date }) => {
       }));
     });
 
-    // window.location.reload();
+    setTodoMission([]);
   };
 
   const todoRequest = async () => {
@@ -96,19 +96,20 @@ const TodoMainList = ({ date }) => {
     setIsLoading(true);
 
     try {
-      const diaryPossible = await axios.get(`https://i11b104.p.ssafy.io/api/dayoff/${currentDate}`,{
+      const diaryPossible = await axios.get(`https://i11b104.p.ssafy.io/api/dayoff/${currentDate}`, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem('accessToken'),
         },
       });
 
-      if(diaryPossible.status === 200){
+      if (diaryPossible.status === 200) {
         const diary = diaryPossible.data;
         setDiaryButton(diary);
       }
 
       clearCategoryItems();
+
       const response = await axios.get(`https://i11b104.p.ssafy.io/api/todos/calendar/daily`, {
         headers: {
           'Content-Type': 'application/json',
@@ -149,15 +150,75 @@ const TodoMainList = ({ date }) => {
     } finally {
       setIsLoading(false);  // 로딩 상태 초기화
     }
+
+    // 크리쳐 미션 종료
+    try {
+      const mission = await axios.get(`https://i11b104.p.ssafy.io/api/creatureTodo/calendar/daily`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': sessionStorage.getItem('accessToken'),
+        },
+        params: {
+          date: currentDate.toISOString().split('T')[0] // date를 YYYY-MM-DD 형식으로 변환
+        }
+      });
+
+      if (mission.status === 200) {
+        console.log('할일 불러오기 성공:', mission.data);
+        const missionData = mission.data;
+        const updateMission = [];
+        missionData.forEach(mission => {
+          const { id, content, createdAt, isCompleted } = mission;
+          updateMission.push({
+            id,
+            content,
+            createdAt,
+            isCompleted
+          });
+        });
+        setTodoMission(updateMission);
+      } else {
+        console.log('할일 불러오기 실패:', mission);
+      }
+    } catch (error) {
+      console.error('할일 요청 중 오류 발생:', error);
+    } finally {
+      setIsLoading(false);  // 로딩 상태 초기화
+    }
   };
 
-  // }, [currentDate]);
+  // 크리쳐 미션 완료
+  const toggleMissionComplete = async (mission, missionIndex) => {
+    try {
+      const response = await axios.post(`https://i11b104.p.ssafy.io/api/creatureTodo/complete/${mission}`, null, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': sessionStorage.getItem('accessToken'),
+        }
+      });
+      if (response.status === 200) {
+        console.log('할일 완료/미완료 토글 성공:', response.data);
+        const missionData = response.data;
+        const updateMission = [...todoMission];
 
+        const missionToUpdate = updateMission[missionIndex];
+
+        if (missionToUpdate) {
+          missionToUpdate.isCompleted = missionData.isCompleted;
+          setTodoMission(updateMission);
+        }
+      } else {
+        console.log('할일 완료/미완료 토글 실패:', response);
+      }
+    } catch (error) {
+      console.error('할일 완료/미완료 토글 중 오류 발생:', error);
+    }
+  };
 
   // 날짜 증가
   const handleIncreaseDate = () => {
     const IncreaseDate = new Date(currentDate);
-    IncreaseDate.setDate(currentDate.getDate() + 1);    
+    IncreaseDate.setDate(currentDate.getDate() + 1);
     setCurrentDate(IncreaseDate);
     console.log('날짜 증가:', IncreaseDate);
   };
@@ -165,7 +226,7 @@ const TodoMainList = ({ date }) => {
   // 날짜 감소
   const handleDecreaseDate = () => {
     const decreaseDate = new Date(currentDate);
-    decreaseDate.setDate(currentDate.getDate() - 1);    
+    decreaseDate.setDate(currentDate.getDate() - 1);
     setCurrentDate(decreaseDate);
     console.log('날짜 감소:', decreaseDate);
   };
@@ -197,11 +258,10 @@ const TodoMainList = ({ date }) => {
             params: {
               content: newTodo,
               categoryId: currentCategoryIndex,
-              todoDay : currentDate.toISOString().split('T')[0]
+              todoDay: currentDate.toISOString().split('T')[0]
             },
           }
         );
-
 
         if (response.status === 200) {
           console.log('할일 추가 성공:', response.data);
@@ -403,6 +463,20 @@ const TodoMainList = ({ date }) => {
             </ul>
           </div>
         ))}
+        <div className="TodoSection">
+          <div className="TodoSectionHeader">
+            <h4>일일 미션</h4>
+          </div>
+          <ul>
+            {todoMission.map((mission, missionIndex) => (
+              <li key={missionIndex} className="missionItem">
+                <div className="missionContent">
+                  <input type="checkbox" checked={mission.isCompleted} onChange={() => toggleMissionComplete(mission.id, missionIndex)} /> {mission.content}
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
 
       <div className="TodoActions">
