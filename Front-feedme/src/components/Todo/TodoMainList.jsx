@@ -7,8 +7,8 @@ import diary from '../../assets/images/test2.png';
 import axios from 'axios';
 
 const TodoMainList = ({ date }) => {
-  const [categories, setCategories] = useState([]);
-  const [todoMission, setTodoMission] = useState([]);
+  const [categories, setCategories] = useState([]);  // 빈 배열로 초기화, 투두
+  const [todoMission, setTodoMission] = useState([]); // 일일 미션
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedTodo, setSelectedTodo] = useState({ categoryIndex: null, todoIndex: null });
   const [categoryModalIsOpen, setCategoryModalIsOpen] = useState(false);
