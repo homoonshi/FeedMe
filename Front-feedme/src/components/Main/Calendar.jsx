@@ -7,9 +7,11 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCalendarTodos, addCalendarTodos } from '../../store/todoSlice';
+import { useNavigate } from 'react-router-dom';
 
 function ReactCalendar() {
   const dispatch = useDispatch();
+  const navigate = useNavigate // useNavigate 훅을 사용하여 페이지 이동
   const [value, onChange] = useState(new Date()); // 초기값은 현재 날짜
   const { token } = useSelector((state) => state.auth);
   const { calendarTodos } = useSelector((state) => state.todo);
@@ -61,11 +63,11 @@ function ReactCalendar() {
     return null;
   };
   
-  // // 날짜 클릭 시 다른 페이지로 이동하는 함수
-  // const handleDateClick = (date) => {
-  //   const formattedDate = date.toISOString().split('T')[0];
-  //   navigate('/Todo', { state: { selectedDate: formattedDate } });
-  // };
+  // 날짜 클릭 시 다른 페이지로 이동하는 함수
+  const handleDateClick = (date) => {
+    const formattedDate = date.toISOString().split('T')[0];
+    navigate('/Todo', { state: { selectedDate: formattedDate } });
+  };
 
   return (
     <div className='Calendar'>
@@ -73,7 +75,7 @@ function ReactCalendar() {
         onChange={onChange}
         value={value}
         tileContent={tileContent}
-        // onClickDay = {handleDateClick}
+        onClickDay = {handleDateClick}
       />
     </div>
   );

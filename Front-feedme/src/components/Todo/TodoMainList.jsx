@@ -50,21 +50,23 @@ const TodoMainList = ({ date }) => {
     categoryRequest();
   }, []);
 
-  // 부모 컴포넌트에서 props로 date 받으면 currentDate 다시 설정 
   useEffect(() => {
     console.log(date);
-    if(date === ""){
+
+    if (!date) {
         const newDate = new Date();
-        const formattedDate = newDate.toDateString();
-        console.log('currentDate 설정됨:', formattedDate);
-        setCurrentDate(formattedDate);
+        console.log('currentDate 설정됨:', newDate);
+        setCurrentDate(newDate);
     } else {
         const newDate = new Date(date);
-        setCurrentDate(newDate.toDateString());
-        console.log('currentDate 설정됨:', newDate);
+        if (isNaN(newDate.getTime())) {
+            console.warn('유효하지 않은 날짜입니다:', date);
+        } else {
+            setCurrentDate(newDate);
+            console.log('currentDate 설정됨:', newDate);
+        }
     }
 }, [date]);
-
 
   // currentDate 날짜가 바뀌면 category 안에 있는 todo를 싹 다 날리고 서버에서 다시 받음
   useEffect(() => {
@@ -333,7 +335,7 @@ const TodoMainList = ({ date }) => {
     <div className="TodoMainListContainer">
       <div className="TodoHeader">
         <FaAngleLeft className="TodoArrow" onClick={handleDecreaseDate} /> 
-        <h3>{currentDate.toDateString()}</h3>
+        <h3>{currentDate.toISOString().split('T')[0]}</h3>
         <FaAngleRight className="TodoArrow" onClick={handleIncreaseDate} />
       </div>
 
