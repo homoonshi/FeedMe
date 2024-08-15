@@ -43,18 +43,22 @@ public class CreatureChatServiceImpl implements CreatureChatService {
         // 멤버의 모든 Todo 리스트 가져오기
         List<Todo> todoList = todoRepository.findByMemberId(memberId);
         for (Todo todo : todoList) {
+            LocalDate date = todo.getCreatedAt();
             if (todo.getIsCompleted() == 1) {
-                LocalDate date = todo.getCreatedAt();
-                groupedData.computeIfAbsent(date, k -> new ArrayList<>()).add(todo.getContent());
+                groupedData.computeIfAbsent(date, k -> new ArrayList<>()).add(todo.getContent()+" 계획하고 수행함");
+            }else{
+                groupedData.computeIfAbsent(date, k -> new ArrayList<>()).add(todo.getContent()+" 계획했지만 수행 못함");
             }
         }
 
         // 멤버의 모든 CreatureTodo 리스트 가져오기
         List<CreatureTodo> creatureTodoList = creatureTodoReposito.findByMemberId(memberId);
         for (CreatureTodo creatureTodo : creatureTodoList) {
+            LocalDate date = creatureTodo.getCreatedAt();
             if (creatureTodo.getIsCompleted() == 1) {
-                LocalDate date = creatureTodo.getCreatedAt();
-                groupedData.computeIfAbsent(date, k -> new ArrayList<>()).add(creatureTodo.getContent());
+                groupedData.computeIfAbsent(date, k -> new ArrayList<>()).add(creatureTodo.getContent()+" 계획하고 수행함");
+            }else{
+                groupedData.computeIfAbsent(date, k -> new ArrayList<>()).add(creatureTodo.getContent()+" 계획하고 수행 못함");
             }
         }
 

@@ -7,8 +7,6 @@ import com.todoslave.feedme.domain.entity.avatar.Creature;
 import com.todoslave.feedme.domain.entity.membership.Member;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.swing.*;
-
 
 public interface CreatureService {
 
@@ -22,6 +20,5 @@ public interface CreatureService {
     //크리쳐 경험치 올리기
     void expUp(int toDoCnt);
 
-
-
+    boolean checkNickname(String creatureName);
 }

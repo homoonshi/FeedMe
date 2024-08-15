@@ -30,6 +30,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
@@ -95,6 +98,13 @@ public class MemberController {
     @Operation(summary = "맴버 정보 가져오기 (테스트용)")
     @GetMapping("/holder/test")
     public Member getCurrentMember() {
+
+        LocalDateTime t = LocalDateTime.now();
+        System.out.println(t);
+        LocalDate today = LocalDate.now(ZoneId.of("Asia/Seoul")); // 또는 사용자의 시간대
+        System.out.println("현재 날짜: " + today);
+
+
         return SecurityUtil.getCurrentMember();
     }
 

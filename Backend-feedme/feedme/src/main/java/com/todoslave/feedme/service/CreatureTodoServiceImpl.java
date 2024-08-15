@@ -39,7 +39,9 @@ public class CreatureTodoServiceImpl implements CreatureTodoService{
     public List<CreatureTodoResponseDTO> insertTodo(String weather) {
 
         int memberId = SecurityUtil.getCurrentMember().getId();
+
         LocalDate today = LocalDate.now();
+
         List<CreatureTodo> todayTodos = creatureTodoRepository.findByMemberIdAndCreatedAt(memberId, today);
 
         if (!todayTodos.isEmpty()) {
@@ -151,12 +153,12 @@ public class CreatureTodoServiceImpl implements CreatureTodoService{
         //멤버
         int memberId = SecurityUtil.getCurrentUserId();
 
-        //누른 버튼
-        if(creatureTodoDailyRequestDTO.getNext() < 0 ){ //-1 일때
-            date.minusDays(1);
-        }else{
-            date.plusDays(1);
-        }
+//        //누른 버튼
+//        if(creatureTodoDailyRequestDTO.getNext() < 0 ){ //-1 일때
+//            date.minusDays(1);
+//        }else{
+//            date.plusDays(1);
+//        }
 
 
         //크리쳐 투두 내가 만들거 싹 가져와!!

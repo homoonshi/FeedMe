@@ -7,6 +7,8 @@ import com.todoslave.feedme.DTO.CreatureMakeRequestDTO;
 import com.todoslave.feedme.domain.entity.avatar.Creature;
 import com.todoslave.feedme.domain.entity.membership.Member;
 import com.todoslave.feedme.login.util.SecurityUtil;
+import com.todoslave.feedme.repository.CreatureRepository;
+import com.todoslave.feedme.repository.CreatureTodoReposito;
 import com.todoslave.feedme.service.CreatureService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +30,7 @@ public class CreatureController {
 
     private final RestTemplate restTemplate = new RestTemplate();
 
+    private final CreatureRepository creatureRepository;
 //    @Operation(summary = "크리쳐 생성")
 //    @PostMapping
 //    public ResponseEntity<?> createCreature(@RequestBody CreatureMakeRequestDTO request,@RequestPart, @RequestHeader("Authorization") final String accessToken) {
@@ -50,6 +53,12 @@ public class CreatureController {
 
         // 파일 저장 로직 또는 처리
         // 예를 들어, 파일을 저장하거나 처리하는 로직
+
+        // 닉네임 중복 체크
+        if (creatureService.checkNickname(creatureName)){
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body("Nickname already exists");
+        }
 
         // 서비스 호출 예시
         Creature creature = creatureService.createFristCreature(keyword, file, creatureName);

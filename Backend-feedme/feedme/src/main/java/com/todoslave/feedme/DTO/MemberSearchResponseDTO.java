@@ -4,10 +4,11 @@ import lombok.Data;
 
 @Data
 public class MemberSearchResponseDTO {
-    String nickname;
 
+    String nickname;
     boolean isFriend;
     boolean isRequested;
+
 ////    String creatureImg;
 //    byte[] creatureImg;
 
