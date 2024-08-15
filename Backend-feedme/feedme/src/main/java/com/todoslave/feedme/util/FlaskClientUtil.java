@@ -153,55 +153,55 @@ public class FlaskClientUtil {
      * @param date     그림일기를 요청하는 날짜 (LocalDate 형식)
      * @return Flask 서버로부터 받은 그림일기 데이터 (byte[])
      */
-//    //크리쳐 다이어리 가져오기
-//    public byte[] getCreatureDiaryAsByteArray(String username, LocalDate date) {
-//        // 날짜를 문자열 형식으로 변환 (yyyy-MM-dd)
-//        String formattedDate = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-//
-//        // URL 생성 (날짜는 쿼리 파라미터로 전송)
-//        String url = String.format("http://flask:33333/store/creature_diary/%s/%s", username, formattedDate);
-//
-//        // GET 요청을 통해 Flask 서버로부터 그림일기 데이터 받기
-//        ResponseEntity<ByteArrayResource> response = restTemplate.getForEntity(url, ByteArrayResource.class);
-//
-//        // 요청이 성공했는지 확인하고, 성공하지 않았으면 예외를 던짐
-//        if (response.getStatusCode().is2xxSuccessful()) {
-//            return toByteArray(response.getBody()); // byte[] 형태로 변환하여 반환
-//        } else {
-//            throw new RuntimeException("Failed to retrieve diary from Flask server.");
-//        }
-//    }
-
-    public File getCreatureDiaryAsFile(String username, LocalDate date) {
+    //크리쳐 다이어리 가져오기
+    public byte[] getCreatureDiaryAsByteArray(String username, LocalDate date) {
         // 날짜를 문자열 형식으로 변환 (yyyy-MM-dd)
         String formattedDate = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
-        // URL 생성
+        // URL 생성 (날짜는 쿼리 파라미터로 전송)
         String url = String.format("http://flask:33333/store/creature_diary/%s/%s", username, formattedDate);
 
         // GET 요청을 통해 Flask 서버로부터 그림일기 데이터 받기
-        ResponseEntity<Resource> response = restTemplate.getForEntity(url, Resource.class);
+        ResponseEntity<ByteArrayResource> response = restTemplate.getForEntity(url, ByteArrayResource.class);
 
         // 요청이 성공했는지 확인하고, 성공하지 않았으면 예외를 던짐
-        if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
-            return resourceToFile(response.getBody(), "creature_diary_" + formattedDate + ".png"); // 파일로 변환하여 반환
+        if (response.getStatusCode().is2xxSuccessful()) {
+            return toByteArray(response.getBody()); // byte[] 형태로 변환하여 반환
         } else {
             throw new RuntimeException("Failed to retrieve diary from Flask server.");
         }
     }
 
-
-    private File resourceToFile(Resource resource, String fileName) {
-        try (InputStream inputStream = resource.getInputStream()) {
-            File file = new File(fileName);
-            try (OutputStream outputStream = new FileOutputStream(file)) {
-                IOUtils.copy(inputStream, outputStream);
-            }
-            return file;
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to convert resource to file", e);
-        }
-    }
+//    public File getCreatureDiaryAsFile(String username, LocalDate date) {
+//        // 날짜를 문자열 형식으로 변환 (yyyy-MM-dd)
+//        String formattedDate = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+//
+//        // URL 생성
+//        String url = String.format("http://flask:33333/store/creature_diary/%s/%s", username, formattedDate);
+//
+//        // GET 요청을 통해 Flask 서버로부터 그림일기 데이터 받기
+//        ResponseEntity<Resource> response = restTemplate.getForEntity(url, Resource.class);
+//
+//        // 요청이 성공했는지 확인하고, 성공하지 않았으면 예외를 던짐
+//        if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
+//            return resourceToFile(response.getBody(), "creature_diary_" + formattedDate + ".png"); // 파일로 변환하여 반환
+//        } else {
+//            throw new RuntimeException("Failed to retrieve diary from Flask server.");
+//        }
+//    }
+//
+//
+//    private File resourceToFile(Resource resource, String fileName) {
+//        try (InputStream inputStream = resource.getInputStream()) {
+//            File file = new File(fileName);
+//            try (OutputStream outputStream = new FileOutputStream(file)) {
+//                IOUtils.copy(inputStream, outputStream);
+//            }
+//            return file;
+//        } catch (IOException e) {
+//            throw new RuntimeException("Failed to convert resource to file", e);
+//        }
+//    }
 
 
 //    /**
@@ -210,12 +210,12 @@ public class FlaskClientUtil {
 //     * @return byte[] 형태로 변환된 데이터
 //     */
 //
-//    private byte[] toByteArray(Resource resource) {
-//        try (InputStream inputStream = resource.getInputStream()) {
-//            return IOUtils.toByteArray(inputStream);
-//        } catch (IOException e) {
-//            throw new RuntimeException("Failed to convert resource to byte array", e);
-//        }
-//    }
+    private byte[] toByteArray(Resource resource) {
+        try (InputStream inputStream = resource.getInputStream()) {
+            return IOUtils.toByteArray(inputStream);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to convert resource to byte array", e);
+        }
+    }
 }
 
