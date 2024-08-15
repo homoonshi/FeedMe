@@ -110,14 +110,8 @@ public class MemberServiceImpl implements MemberService {
             MemberSearchResponseDTO mem = new MemberSearchResponseDTO();
             mem.setNickname(member.getNickname());
 
-            if (member.getCreature() != null) {
-                mem.setCreatureImg(flaskClientUtil.getCreatureImageAsByteArray(member.getNickname(), member.getCreature().getId(), member.getCreature().getLevel()));
-            } else {
-                //알 사진
-                mem.setCreatureImg(flaskClientUtil.getCreatureImageAsByteArray(member.getNickname(), 0, 0));
+//            mem.setCreatureImg(flaskClientUtil.getCreatureImageAsByteArray(member.getNickname(), member.getCreature().getId(), member.getCreature().getLevel()));
 
-
-            }
 
             if (member.getId() == SecurityUtil.getCurrentUserId()) {
                 continue;

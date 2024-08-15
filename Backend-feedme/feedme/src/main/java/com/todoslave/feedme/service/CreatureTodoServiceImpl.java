@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -39,13 +40,14 @@ public class CreatureTodoServiceImpl implements CreatureTodoService{
     public List<CreatureTodoResponseDTO> insertTodo(String weather) {
 
         int memberId = SecurityUtil.getCurrentMember().getId();
-        LocalDate today = LocalDate.now();
+        LocalDate today = LocalDate.now(ZoneId.of("Asia/Seoul")); //오늘 감지
+//        LocalDate today = LocalDate.now();
+
         List<CreatureTodo> todayTodos = creatureTodoRepository.findByMemberIdAndCreatedAt(memberId, today);
 
         if (!todayTodos.isEmpty()) {
             return null; // 오늘의 미션이 이미 생성되었으면 null 반환
         }
-
 
         List<Mission> missions = missionRepository.findByWeatherCondition(weather);
 
@@ -61,10 +63,12 @@ public class CreatureTodoServiceImpl implements CreatureTodoService{
         CreatureTodo creatureTodo1 = new CreatureTodo();
         creatureTodo1.setContent(selectedMission.getMission());
         creatureTodo1.setMember(SecurityUtil.getCurrentMember());
+        creatureTodo1.setCreatedAt(today);
 
         CreatureTodo creatureTodo2 = new CreatureTodo();
         creatureTodo2.setContent(selectedDMission.getMission());
         creatureTodo2.setMember(SecurityUtil.getCurrentMember());
+        creatureTodo2.setCreatedAt(today);
 
         creatureTodoRepository.save(creatureTodo1);
         creatureTodoRepository.save(creatureTodo2);
@@ -128,7 +132,8 @@ public class CreatureTodoServiceImpl implements CreatureTodoService{
     //오늘 안한것만 당겨오게
     @Override
     public List<CreatureTodoResponseDTO> getCreatureTodoMainDaily() {
-        LocalDate today = LocalDate.now();
+//        LocalDate today = LocalDate.now();
+        LocalDate today = LocalDate.now(ZoneId.of("Asia/Seoul"));
         int memberId = SecurityUtil.getCurrentMember().getId();
         List<CreatureTodo> todayTodos = creatureTodoRepository.findByMemberIdAndCreatedAt(memberId, today);
 
@@ -152,12 +157,12 @@ public class CreatureTodoServiceImpl implements CreatureTodoService{
         //멤버
         int memberId = SecurityUtil.getCurrentUserId();
 
-        //누른 버튼
-        if(creatureTodoDailyRequestDTO.getNext() < 0 ){ //-1 일때
-            date.minusDays(1);
-        }else{
-            date.plusDays(1);
-        }
+//        //누른 버튼
+//        if(creatureTodoDailyRequestDTO.getNext() < 0 ){ //-1 일때
+//            date.minusDays(1);
+//        }else{
+//            date.plusDays(1);
+//        }
 
 
         //크리쳐 투두 내가 만들거 싹 가져와!!
@@ -171,4 +176,7 @@ public class CreatureTodoServiceImpl implements CreatureTodoService{
 
         return responseDTOList;
     }
+
+
+
 }

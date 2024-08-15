@@ -10,9 +10,7 @@ import com.todoslave.feedme.repository.MemberRepository;
 import com.todoslave.feedme.util.FlaskClientUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -24,7 +22,6 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 
-import javax.swing.*;
 import java.time.LocalDate;
 import java.time.Period;
 
@@ -70,20 +67,14 @@ public class CreatureServiceImpl implements CreatureService {
     private void sendPhotoToAIServer(int creatureId, String keyword, MultipartFile photo, String nickname) { //POST로 전송한다.
 //        String flaskUrl = "http://127.0.0.1:33333/yolo";
         String flaskUrl = "http://flask:33333/yolo";
+
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
         body.add("creatureId", Integer.toString(creatureId)); // int형 creatureId를 String으로 변환
-//        body.add("keyword", keyword);
         body.add("username", nickname); // 멤버의 닉네임 추가
-//        body.add("image", new ByteArrayResource(photo.getBytes()) {
-//            @Override
-//            public String getFilename() {
-//                return photo.getOriginalFilename();
-//            }
-//        });
-        body.add("image", photo.getResource());    //--> 사진파일을 어떻게 줄꺼니?
+        body.add("image", photo.getResource());
 
 
         HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
@@ -224,5 +215,11 @@ public class CreatureServiceImpl implements CreatureService {
         }
         creatureRepository.save(creature);
     }
+
+    @Override
+    public boolean checkNickname(String creatureName) {
+        return creatureRepository.findBycreatureName(creatureName).isPresent();
+    }
+
 
 }

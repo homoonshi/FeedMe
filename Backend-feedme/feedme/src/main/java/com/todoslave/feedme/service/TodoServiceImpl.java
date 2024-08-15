@@ -1,5 +1,6 @@
 package com.todoslave.feedme.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.todoslave.feedme.DTO.TodoCalendarResponseDTO;
 import com.todoslave.feedme.DTO.TodoCreateRequestDTO;
 import com.todoslave.feedme.DTO.TodoDailyRequestDTO;
@@ -27,12 +28,19 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
 @Service
@@ -54,6 +62,8 @@ public class TodoServiceImpl implements TodoService {
   private DiaryRepository diaryRepository;
   @Autowired
   private FlaskClientUtil flaskClientUtil;
+  @Autowired
+  private final RestTemplate restTemplate = new RestTemplate();
 
   // 할일 목록에서 일정(일) 불러오기
   @Override
@@ -194,6 +204,7 @@ public class TodoServiceImpl implements TodoService {
     todo.setMember(SecurityUtil.getCurrentMember());
     todo.setTodoCategory(todoCategoryRepository.findById(todoCreateRequestDTO.getCategoryId()).orElseThrow());
     todo.setContent(todoCreateRequestDTO.getContent());
+    todo.setCreatedAt(todoCreateRequestDTO.getTodoDay());
     todo = todoRepository.save(todo);
 
     TodoResponseDTO todoResponseDTO = new TodoResponseDTO();
@@ -256,13 +267,14 @@ public class TodoServiceImpl implements TodoService {
 
   @Override
   public boolean AllcompleteTodo(TodoRequestDTO todoRequestDTO) {
+
+    //끝내는 날자 입력
     LocalDate date = todoRequestDTO.getDate();
 
     //만약에 완료를 이미 했다면
     if(!dayOffService.isActionAllowed(SecurityUtil.getCurrentUserId(),date)){
       return false;
     }
-
 
     //일정 끝내기
     List<Todo> todoList = todoRepository.findByMemberIdAndCreatedAt(SecurityUtil.getCurrentUserId(),date);
@@ -275,10 +287,13 @@ public class TodoServiceImpl implements TodoService {
     int completedTodos = 0;
     int completedCreatureTodos = 0;
 
+    List<String> todolist = new ArrayList<>();
+
     for (Todo todo : todoList) {
       if (todo.getIsCompleted() == 1) {
         todoAllBuilder.append(todo.getTodoCategory().getName()).append(" - ").append(todo.getContent()).append("\n");
         completedTodos++;
+        todolist.add(todo.getContent());
       }
     }
 
@@ -286,6 +301,7 @@ public class TodoServiceImpl implements TodoService {
       if (creatureTodo.getIsCompleted() == 1) {
         todoAllBuilder.append(creatureTodo.getContent()).append("\n");
         completedCreatureTodos++;
+        todolist.add(creatureTodo.getContent());
       }
     }
 
@@ -298,8 +314,7 @@ public class TodoServiceImpl implements TodoService {
     Diary.setContent(generatedDiaryEntry);
     Diary.setCreatedAt(date);
     Diary.setMember(SecurityUtil.getCurrentMember());
-    diaryRepository.save(Diary);
-
+    diaryRepository.save(Diary); //다이어리 만들어줘
 
     //완료처리
     DayOff dayOff = new DayOff();
@@ -307,52 +322,89 @@ public class TodoServiceImpl implements TodoService {
     dayOff.setMember(SecurityUtil.getCurrentMember());
     dayOffService.saveDayOff(dayOff);
 
-
     // 그림일기 요청 추가 (Flask 서버로 전송)
-    createPictureDiary(date);
+    createPictureDiary(date, todolist);
 
-
+    //그림일기 창, feed에서 불러옵니다.
 
     //경험치 올리기
     creatureService.expUp(completedTodos+completedCreatureTodos);
-
-
 
     //예본 해
       return true;
     }
 
 
-  private void createPictureDiary(LocalDate date) {
+//  private void createPictureDiary(LocalDate date) {
+//
+//    Member member = SecurityUtil.getCurrentMember();
+//    String keyword = member.getCreature().getCreatureKeyword();
+//    String nickname = member.getNickname();
+//    // 날짜를 문자열 형식으로 변환 (yyyy-MM-dd)
+//    String formattedDate = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+//
+//    // URL 생성 - 키워드와 날짜를 쿼리 파라미터로 추가
+//    String url = String.format("http://localhost:3333/yolo?name=%s&keyword=%s&date=%s",
+//            nickname, keyword, formattedDate);
+//
+//    // Flask 서버에 GET 요청 보내기
+//    ResponseEntity<ByteArrayResource> response = template.getForEntity(url, ByteArrayResource.class);
+//
+//    // 요청이 성공했는지 확인하고, 성공하지 않았으면 예외를 던짐
+//    if (!response.getStatusCode().is2xxSuccessful()) {
+//      throw new RuntimeException("Failed to create picture diary on Flask server.");
+//    }
+//
+//    // Flask 서버로부터 받은 그림일기 데이터를 활용할 수 있습니다.
+//  }
+
+  @SneakyThrows
+  private void createPictureDiary(LocalDate date, List<String> todolist) {
+    // Flask 서버 URL 설정
+    String flaskUrl = "http://flask:33333/story";
+
+    // HTTP 헤더 설정
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 
     Member member = SecurityUtil.getCurrentMember();
     String keyword = member.getCreature().getCreatureKeyword();
     String nickname = member.getNickname();
+
     // 날짜를 문자열 형식으로 변환 (yyyy-MM-dd)
     String formattedDate = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
-    // URL 생성 - 키워드와 날짜를 쿼리 파라미터로 추가
-    String url = String.format("http://localhost:3333/yolo?name=%s&keyword=%s&date=%s",
-            nickname, keyword, formattedDate);
+    // ObjectMapper를 사용해 todolist를 JSON 문자열로 변환
+    ObjectMapper objectMapper = new ObjectMapper();
+    String todolistJson = objectMapper.writeValueAsString(todolist);
 
-    // Flask 서버에 GET 요청 보내기
-    ResponseEntity<ByteArrayResource> response = template.getForEntity(url, ByteArrayResource.class);
+    // 요청 본문 설정
+    MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+    body.add("username", nickname);
+    body.add("date", formattedDate);
+    body.add("todolist", todolistJson);
 
+    // 요청 엔티티 생성
+    HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
+
+    // Flask 서버에 POST 요청 보내기 (응답이 필요할 때)
+    // ResponseEntity<ByteArrayResource> response = restTemplate.postForEntity(flaskUrl, requestEntity, ByteArrayResource.class);
     // 요청이 성공했는지 확인하고, 성공하지 않았으면 예외를 던짐
-    if (!response.getStatusCode().is2xxSuccessful()) {
-      throw new RuntimeException("Failed to create picture diary on Flask server.");
-    }
+    // if (!response.getStatusCode().is2xxSuccessful()) {
+    // throw new RuntimeException("Failed to create picture diary on Flask server.");
+    // }
 
-    // Flask 서버로부터 받은 그림일기 데이터를 활용할 수 있습니다.
+
+    //응답이 필요하지 않을 때
+    restTemplate.postForEntity(flaskUrl, requestEntity, Void.class);
+
+
   }
-
-
 
 
   // GPT API 호출을 통해 일기를 생성하는 메서드
   @Value("${openai.api.url}")
   private String apiURL;
-
   private String generateDiaryEntry(String todoAll) {
     String prompt = "다음 항목들을 바탕으로 한글로 일기를 작성해주세요. 150자 이내로 없는 얘기를 꾸며쓰지는말고, 자연스럽게 요약해 주세요:\n" + todoAll;
 
@@ -378,6 +430,8 @@ public class TodoServiceImpl implements TodoService {
     // 기본 응답 또는 오류 처리
     return "일기 작성에 실패했습니다.";
   }
+
+
 
   //만약에 150자가 넘어간다면
   private String truncateToNearestSentence(String text, int maxLength) {
