@@ -76,7 +76,7 @@ public class CreatureServiceImpl implements CreatureService {
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
         body.add("creatureId", Integer.toString(creatureId)); // int형 creatureId를 String으로 변환
 //        body.add("keyword", keyword);
-        body.add("nickname", nickname); // 멤버의 닉네임 추가
+        body.add("username", nickname); // 멤버의 닉네임 추가
 //        body.add("image", new ByteArrayResource(photo.getBytes()) {
 //            @Override
 //            public String getFilename() {
