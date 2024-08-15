@@ -241,7 +241,16 @@
                   <>
                     <div className="commentHeader">
                       <span className="commentAuthor">{comment.nickname}</span>
-                      <span className="commentTime">{comment.time}</span>
+                      <span className="commentTime">
+                      {new Date(comment.time).toLocaleString('ko-KR', {
+                          year: 'numeric',
+                          month: '2-digit',
+                          day: '2-digit',
+                          hour: '2-digit',
+                          minute: '2-digit',
+                          second: '2-digit',
+                        }).replace(/\. /g, '. ')}
+                      </span>
                     </div>
                     <div className="commentBody">
                       <span className="commentText">{comment.comment}</span>
