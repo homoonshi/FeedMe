@@ -199,7 +199,7 @@ public class FriendServiceImpl implements FriendService{
 
         Friend friend = new Friend();
 
-        Member member = SecurityUtil.getCurrentMember();
+        Member member = friendRequest.getMember();
         Member counterpart = friendRequest.getCounterpartId();
 
         friend.setMember(member);
@@ -208,10 +208,12 @@ public class FriendServiceImpl implements FriendService{
         // 친구 추가
         friendRepository.save(friend);
 
-        friend.setMember(counterpart);
-        friend.setCounterpart(member);
+        Friend friend2 = new Friend();
 
-        friendRepository.save(friend);
+        friend2.setMember(counterpart);
+        friend2.setCounterpart(member);
+
+        friendRepository.save(friend2);
 
         friendRequestRepository.deleteById(requestId);
 
