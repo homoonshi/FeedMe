@@ -31,6 +31,7 @@ const TodoMainList = ({ date }) => {
       if (newDate !== new Date()) {
         console.log('newDate : ', newDate);
         setCurrentDate(newDate);
+        todoRequest(new Date(date));
         console.log('currentDate1 : ', currentDate);
       } else {
         console.warn('유효하지 않은 날짜입니다:', date);
@@ -38,6 +39,7 @@ const TodoMainList = ({ date }) => {
     } else {
       // `date` 값이 없을 때 현재 날짜를 설정
       setCurrentDate(new Date());
+      todoRequest(new Date());
     }
     console.log('currentDate2 :', currentDate);
     categoryRequest();
@@ -72,7 +74,7 @@ const TodoMainList = ({ date }) => {
   };
 
   useEffect(() => {
-    todoRequest();
+    todoRequest(currentDate);
   }, [currentDate]);
 
   const clearCategoryItems = () => {
@@ -88,7 +90,7 @@ const TodoMainList = ({ date }) => {
     setTodoMission([]);
   };
 
-  const todoRequest = async () => {
+  const todoRequest = async (currentDate) => {
     console.log('todoRequest');
     console.log("현재 날짜:", currentDate);
 
