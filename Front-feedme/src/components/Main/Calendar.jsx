@@ -25,6 +25,7 @@ function ReactCalendar() {
 
   const calendarTodo = (month) => {
     const date = month.toISOString().split('T')[0];
+    console.log(date);
     axios.get(`https://i11b104.p.ssafy.io/api/todos/calendar?date=${date}`,
       {
         headers: { Authorization: sessionStorage.getItem('accessToken'), },
