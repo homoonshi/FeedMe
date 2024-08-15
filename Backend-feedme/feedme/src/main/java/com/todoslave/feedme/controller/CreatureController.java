@@ -39,44 +39,24 @@ public class CreatureController {
 //        return ResponseEntity.ok(Map.of("creatureId", creature.getId(), "message", "크리쳐가 성공적으로 생성되었습니다."));
 //    }
 //
+
+
     @Operation(summary = "크리쳐 생성")
     @PostMapping
     public ResponseEntity<?> createCreature(
-            @RequestPart("data") String requestData,
-            @RequestPart("file") MultipartFile file) {
+            @RequestParam("creatureName") String creatureName,
+            @RequestParam("keyword") String keyword,
+            @RequestParam("file") MultipartFile file,
+            @RequestHeader("Authorization") final String accessToken) {
 
-        // JSON 문자열을 DTO로 변환
-        ObjectMapper objectMapper = new ObjectMapper();
-        CreatureMakeRequestDTO request;
-        try {
-            request = objectMapper.readValue(requestData, CreatureMakeRequestDTO.class);
-        } catch (JsonProcessingException e) {
-            return ResponseEntity.badRequest().body("Invalid JSON data");
-        }
-
-        // 파일 저장 로직이 필요하다면 여기에 추가
+        // 파일 저장 로직 또는 처리
         // 예를 들어, 파일을 저장하거나 처리하는 로직
 
-        // DTO에 파일 이름을 설정하거나 처리 후, 서비스에 전달
-        Creature creature = creatureService.createFristCreature(request.getKeyword(), file, request.getCreatureName());
+        // 서비스 호출 예시
+        Creature creature = creatureService.createFristCreature(keyword, file, creatureName);
 
         return ResponseEntity.ok(Map.of("creatureId", creature.getId(), "message", "크리쳐가 성공적으로 생성되었습니다."));
     }
-
-
-//    @Operation(summary = "크리쳐 생성") 이거는!!! 나중에 파일 전송시에!
-//    @PostMapping("/creature")
-//    public ResponseEntity<?> createCreature(@ModelAttribute CreatureMakeRequestDTO request,
-//                                            @RequestHeader("Authorization") final String accessToken) {
-//        Member member = SecurityUtil.getCurrentMember();
-//
-//        Creature creature = creatureService.createFristCreature(request.getKeyword(),
-//                request.getPhoto(),
-//                request.getCreatureName());
-//
-//        return ResponseEntity.ok(Map.of("creatureId", creature.getId(), "message", "크리쳐가 성공적으로 생성되었습니다."));
-//    }
-
 
     @Operation(summary = "크리쳐 보기")
     @GetMapping

@@ -9,7 +9,7 @@ public class CreatureInfoResponseDTO {
 
     private String name;
 //    private String img;
-private byte[] img;
+    private byte[] img;
     private int level;
     private int exp;
     private int day;
