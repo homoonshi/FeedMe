@@ -30,8 +30,8 @@ const TodoMainList = ({ date }) => {
     if (date) {
       newDate = new Date(date);
       if (newDate.toDateString() !== new Date().toDateString()) {
-        setCurrentDate(newDate);
-        console.log('newDate : ', newDate);
+        setCurrentDate(date);
+        console.log('newDate : ', date);
       } else {
         console.warn('유효하지 않은 날짜입니다:', date);
       }
