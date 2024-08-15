@@ -35,7 +35,7 @@ const CreatureResult = () => {
           <div className="CreatureResultName">{creatureName}</div>
         </div>
         <div className="CreatureResultHeader">
-          <img src={photo} alt="Cat" className="CreatureResultImage" />
+          <img src={`data:image/gif;base64,${photo}`} alt="Cat" className="CreatureResultImage" />
         </div>
         <Link to="/Main">
           <button type="submit" className="CreatureResultStartButton">Start</button>
