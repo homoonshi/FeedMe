@@ -5,6 +5,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteFriend } from '../../store/friendInfoSlice';
+import eg1 from '../../assets/images/1.gif'
+import eg2 from '../../assets/images/2.gif'
+import eg3 from '../../assets/images/3.gif'
+import eg4 from '../../assets/images/4.gif'
+import eg5 from '../../assets/images/5.gif'
 
 const ChattingFriendProfile = ({ friend, onDelete }) => {
   const dispatch = useDispatch();
@@ -20,6 +25,11 @@ const ChattingFriendProfile = ({ friend, onDelete }) => {
         onDelete(friend); // 성공 시 onDelete 콜백 호출
         window.location.reload();
       });
+  };
+
+  const getRandomEggImage = () => {
+    const eggImages = [eg1, eg2, eg3, eg4, eg5];
+    return eggImages[Math.floor(Math.random() * eggImages.length)];
   };
 
   const getMaxExpForLevel = (level) => {
@@ -51,7 +61,7 @@ const ChattingFriendProfile = ({ friend, onDelete }) => {
       <p className="CFProfileName">{friend.creatureNickname}</p>
       <p className="CFProfileterm">🤍 {friend.join}일째 함께하는 중</p>
       
-      <img src={`data:image/gif;base64,${friend.creatureImg}`} alt={friend.nickname} className="CFProfileImage" /> 
+      <img src={friend.creatureImg ? `data:image/gif;base64,${friend.creatureImg}` : getRandomEggImage()} alt={friend.nickname} className="CFProfileImage" /> 
       <div className="CFProfileInfo">
         <p className="CFProfileLv">Lv. {friend.level}</p>
         <div className="CFProfileExp">

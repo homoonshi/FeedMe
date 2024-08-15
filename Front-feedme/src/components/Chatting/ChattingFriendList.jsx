@@ -5,6 +5,11 @@ import { faMessage } from '@fortawesome/free-solid-svg-icons';
 import { fetchFriendsList } from '../../store/friendsSlice'; 
 import './ChattingFriendList.css';
 import '../../assets/font/Font.css';
+import eg1 from '../../assets/images/1.gif'
+import eg2 from '../../assets/images/2.gif'
+import eg3 from '../../assets/images/3.gif'
+import eg4 from '../../assets/images/4.gif'
+import eg5 from '../../assets/images/5.gif'
 
 const ChattingFriendList = ({ friends: initialFriends, onFriendClick, onChatClick }) => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -19,6 +24,13 @@ const ChattingFriendList = ({ friends: initialFriends, onFriendClick, onChatClic
     console.log("Initial friends updated:", initialFriends);
     setFriends(initialFriends || []);
   }, [initialFriends]);
+
+  
+  const getRandomEggImage = () => {
+    const eggImages = [eg1, eg2, eg3, eg4, eg5];
+    return eggImages[Math.floor(Math.random() * eggImages.length)];
+  };
+  
 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
@@ -73,7 +85,7 @@ const ChattingFriendList = ({ friends: initialFriends, onFriendClick, onChatClic
           .sort((a, b) => new Date(b.receiveTime) - new Date(a.receiveTime))
           .map(friend => (
             <div key={friend.friendId} className="ChatFriendItem">
-              <img src={`data:image/gif;base64,${friend.avatar}`} alt={friend.counterpartNickname} className="ChatFriendAvatar" />
+              <img src={friend.avatar ? `data:image/gif;base64,${friend.avatar}` : getRandomEggImage()} alt={friend.counterpartNickname} className="ChatFriendAvatar" />
               <div className="ChatFriendInfo">
                 <span onClick={() => onFriendClick(friend)} className="ChatFriendName">
                   {friend.counterpartNickname}
