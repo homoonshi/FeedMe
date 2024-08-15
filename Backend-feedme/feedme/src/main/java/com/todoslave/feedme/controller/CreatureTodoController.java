@@ -26,7 +26,13 @@ public class CreatureTodoController {
     @GetMapping("/{weather}")
     public ResponseEntity<List<CreatureTodoResponseDTO>> createTodo(@PathVariable("weather") String weather) {
         List<CreatureTodoResponseDTO> list = new ArrayList<>();
-        list = creatureTodoService.insertTodo(weather);
+
+        if(weather==null){
+            list = creatureTodoService.insertTodo("default");
+        }else {
+            list = creatureTodoService.insertTodo(weather);
+        }
+
         return ResponseEntity.ok(list);
     }
 
@@ -58,11 +64,10 @@ public class CreatureTodoController {
     // 할일 목록에서 일정(일) 불러오기
     @Operation(summary = "할일 목록에서 일정(일) 불러오기 - 다음날 이동 가능하게")
     @GetMapping("/todolist/daily")
-    public ResponseEntity<List<CreatureTodoResponseDTO>> findDailyCreatureTodoList(@RequestParam("date") LocalDate date,
-                                                                                   @RequestParam("next") int next){
+    public ResponseEntity<List<CreatureTodoResponseDTO>> findDailyCreatureTodoList(@RequestParam("date") LocalDate date){
         CreatureTodoDailyRequestDTO creatureTodoDailyRequestDTO = new CreatureTodoDailyRequestDTO();
         creatureTodoDailyRequestDTO.setDate(date);
-        creatureTodoDailyRequestDTO.setNext(next);
+
         return ResponseEntity.ok(creatureTodoService.getCreatureTodoListDaily(creatureTodoDailyRequestDTO));
     }
 

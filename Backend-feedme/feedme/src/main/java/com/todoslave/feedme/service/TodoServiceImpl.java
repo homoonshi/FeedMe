@@ -320,7 +320,7 @@ public class TodoServiceImpl implements TodoService {
     dayOffService.saveDayOff(dayOff);
 
     // 그림일기 요청 추가 (Flask 서버로 전송)
-    createPictureDiary(date,todolist);
+    createPictureDiary(date, todolist);
 
     //그림일기 창, feed에서 불러옵니다.
 
@@ -384,13 +384,17 @@ public class TodoServiceImpl implements TodoService {
     // 요청 엔티티 생성
     HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
 
-    // Flask 서버에 POST 요청 보내기
-    ResponseEntity<ByteArrayResource> response = restTemplate.postForEntity(flaskUrl, requestEntity, ByteArrayResource.class);
-
+    // Flask 서버에 POST 요청 보내기 (응답이 필요할 때)
+    // ResponseEntity<ByteArrayResource> response = restTemplate.postForEntity(flaskUrl, requestEntity, ByteArrayResource.class);
     // 요청이 성공했는지 확인하고, 성공하지 않았으면 예외를 던짐
-    if (!response.getStatusCode().is2xxSuccessful()) {
-      throw new RuntimeException("Failed to create picture diary on Flask server.");
-    }
+    // if (!response.getStatusCode().is2xxSuccessful()) {
+    // throw new RuntimeException("Failed to create picture diary on Flask server.");
+    // }
+
+
+    //응답이 필요하지 않을 때
+    restTemplate.postForEntity(flaskUrl, requestEntity, Void.class);
+
 
   }
 
@@ -423,17 +427,6 @@ public class TodoServiceImpl implements TodoService {
     // 기본 응답 또는 오류 처리
     return "일기 작성에 실패했습니다.";
   }
-
-
-
-
-
-
-
-
-
-
-
 
 
 

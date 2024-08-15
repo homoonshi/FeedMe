@@ -8,6 +8,6 @@ import java.time.LocalDate;
 public class CreatureTodoDailyRequestDTO {
 
     private LocalDate date;
-    private int next;
+//    private int next;
 
 }
