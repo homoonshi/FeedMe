@@ -182,7 +182,8 @@ const ChatWindow = ({ roomId }) => {
         destination: `/chat/loadMessages/${roomId}`,
         body: JSON.stringify({
           'skip': skip,
-          'limit': limit
+          'limit': limit,
+          'memberId' : sendId
         })
       });
     }
