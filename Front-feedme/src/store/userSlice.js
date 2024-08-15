@@ -7,7 +7,7 @@ export const fetchUserData = createAsyncThunk(
     try {
       const response = await axios.get('https://i11b104.p.ssafy.io/api/users/mypage', {
         headers: {
-          Authorization: `${token}`,
+          Authorization: sessionStorage.getItem('accessToken'),
         },
       });
       return response.data;

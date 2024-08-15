@@ -126,7 +126,7 @@ const MyPage = () => {
     fetch(`https://i11b104.p.ssafy.io/api/users`, { 
       method: 'PATCH',
       headers: {
-        'Authorization': `${token}`,
+        'Authorization': sessionStorage.getItem('accessToken'),
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
@@ -154,7 +154,7 @@ const MyPage = () => {
     fetch(`https://i11b104.p.ssafy.io/api/creature`, {
       method: 'DELETE',
       headers: {
-        'Authorization': `${token}`, 
+        'Authorization': sessionStorage.getItem('accessToken'), 
       },
     })
       .then(response => {
