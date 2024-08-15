@@ -44,9 +44,9 @@ public class CreatureServiceImpl implements CreatureService {
     //크리쳐 만들기
     @Override
     public Creature createFristCreature(String keyword, MultipartFile photo, String creatureName) {
+
         //멤버 가져오고
         Member member = SecurityUtil.getCurrentMember();
-
         //크리쳐 만들고
         Creature creature = new Creature();
         //이름 설정하고
@@ -68,22 +68,22 @@ public class CreatureServiceImpl implements CreatureService {
 
     @SneakyThrows
     private void sendPhotoToAIServer(int creatureId, String keyword, MultipartFile photo, String nickname) { //POST로 전송한다.
-        String flaskUrl = "http://localhost:3333/yolo";
+        String flaskUrl = "http://localhost:33333/yolo";
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
         body.add("creatureId", Integer.toString(creatureId)); // int형 creatureId를 String으로 변환
-        body.add("keyword", keyword);
+//        body.add("keyword", keyword);
         body.add("nickname", nickname); // 멤버의 닉네임 추가
-        body.add("photo", new ByteArrayResource(photo.getBytes()) {
-            @Override
-            public String getFilename() {
-                return photo.getOriginalFilename();
-            }
-        });
-//        body.add("photo", photo.getResource());    --> 사진파일을 어떻게 줄꺼니?
+//        body.add("image", new ByteArrayResource(photo.getBytes()) {
+//            @Override
+//            public String getFilename() {
+//                return photo.getOriginalFilename();
+//            }
+//        });
+        body.add("image", photo.getResource());    //--> 사진파일을 어떻게 줄꺼니?
 
 
         HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
