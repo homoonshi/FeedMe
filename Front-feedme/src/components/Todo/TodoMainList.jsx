@@ -147,18 +147,20 @@ useEffect(() => {
 
   // 날짜 증가
   const handleIncreaseDate = () => {
-    const d = new Date(currentDate.setDate(currentDate.getDate() + 1));
-    if (d.getTime() <= today.getTime()) {
-      setCurrentDate(d);
-      console.log('날짜 증가:', d);
+    const IncreaseDate = new Date(currentDate);
+    IncreaseDate.setDate(currentDate.getDate() + 1);    
+    if (new Date() >= IncreaseDate) {
+      setCurrentDate(IncreaseDate);
+      console.log('날짜 증가:', IncreaseDate);
     }
   };
 
   // 날짜 감소
   const handleDecreaseDate = () => {
-    const d = new Date(currentDate.setDate(currentDate.getDate() - 1));
-    setCurrentDate(d);
-    console.log('날짜 감소:', d);
+    const decreaseDate = new Date(currentDate);
+    decreaseDate.setDate(currentDate.getDate() - 1);    
+    setCurrentDate(decreaseDate);
+    console.log('날짜 감소:', decreaseDate);
   };
 
   // 카테고리 추가 창 열림
