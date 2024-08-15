@@ -6,11 +6,9 @@ import '../../assets/font/Font.css';
 import diary from '../../assets/images/test2.png';
 import axios from 'axios';
 
-const TodoMainList = (date) => {
-  const [categories, setCategories] = useState({});
-
+const TodoMainList = ({ date }) => {
+  const [categories, setCategories] = useState([]);  // 빈 배열로 초기화
   const [currentDate, setCurrentDate] = useState(new Date());
-
   const [selectedTodo, setSelectedTodo] = useState({ categoryIndex: null, todoIndex: null });
   const [categoryModalIsOpen, setCategoryModalIsOpen] = useState(false);
   const [todoModalIsOpen, setTodoModalIsOpen] = useState(false);
@@ -24,47 +22,43 @@ const TodoMainList = (date) => {
   // 처음 컴포넌트가 열렸을 때 category 불러옴
   useEffect(() => {
     const categoryRequest = async () => {
-      const response = await axios.get('https://i11b104.p.ssafy.io/api/category', {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': sessionStorage.getItem('accessToken'),
+      try {
+        const response = await axios.get('https://i11b104.p.ssafy.io/api/category', {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': sessionStorage.getItem('accessToken'),
+          }
+        });
+
+        if (response.status === 200) {
+          console.log('카테고리 불러오기 성공:', response.data);
+          const datas = response.data.map(category => ({
+            categoryId: category.id,
+            categoryName: category.name,
+            items: []
+          }));
+
+          setCategories(datas);
+        } else {
+          console.log('카테고리 불러오기 실패:', response);
         }
-      });
-      if (response.status === 200) {
-        
-        const datas = response.data;
-
-        datas.forEach(category => {
-          
-          const { id, name } = category;
-
-          const newCategories = { ...categories };
-          newCategories.push({ categoryId : id, categoryName : name, items : [] });
-
-          setCategories(newCategories);
-
-        })
-
-      } else {
-        console.log('불러오기 실패', response);
+      } catch (error) {
+        console.error('카테고리 요청 중 오류 발생:', error);
       }
-    }
+    };
 
     categoryRequest();
-
   }, []);
 
   // 부모 컴포넌트에서 props로 date 받으면 currentDate 다시 설정 
   useEffect(() => {
-    // date를 기반으로 currentDate를 설정
-    const newDate = new Date(currentDate);
-    newDate.setDate(date);
+    const newDate = new Date(date);
     setCurrentDate(newDate);
+    console.log('currentDate 설정됨:', newDate);
   }, [date]);
 
   // currentDate 날짜가 바뀌면 category 안에 있는 todo를 싹 다 날리고 서버에서 다시 받음
   useEffect(() => {
-      
     const clearCategoryItems = () => {
       setCategories(prevCategories => {
         return prevCategories.map(category => ({
@@ -84,18 +78,18 @@ const TodoMainList = (date) => {
             'Authorization': sessionStorage.getItem('accessToken'),
           },
           params: {
-            date: currentDate
+            date: currentDate.toISOString().split('T')[0] // date를 YYYY-MM-DD 형식으로 변환
           }
-        });        
-  
+        });
+
         if (response.status === 200) {
+          console.log('할일 불러오기 성공:', response.data);
           const todosData = response.data;
           const updatedCategories = [...categories];
-          
+
           todosData.forEach(todo => {
             const { id, categoryId, content, createdAt, isCompleted } = todo;
 
-            // categoryId에 해당하는 카테고리를 찾아 items에 todo를 추가
             const categoryIndex = updatedCategories.findIndex(category => category.categoryId === categoryId);
             if (categoryIndex !== -1) {
               updatedCategories[categoryIndex].items.push({
@@ -109,34 +103,31 @@ const TodoMainList = (date) => {
 
           setCategories(updatedCategories);
         } else {
-          console.log('불러오기 실패', response);
+          console.log('할일 불러오기 실패:', response);
         }
       } catch (error) {
-        console.error('서버 요청 중 오류 발생', error);
+        console.error('할일 요청 중 오류 발생:', error);
       }
     };
 
     todoRequest();
+  }, [currentDate]);
 
-  }, [currentDate])
-
-
+  // 날짜 증가
   const handleIncreaseDate = () => {
     const d = new Date(currentDate.setDate(currentDate.getDate() + 1));
-  
-    // 오늘 날짜와 비교
     const today = new Date();
-  
-    // 타임스탬프(숫자)로 비교
     if (d.getTime() <= today.getTime()) {
       setCurrentDate(d);
+      console.log('날짜 증가:', d);
     }
   };
 
-
   // 날짜 감소
   const handleDecreaseDate = () => {
-    setCurrentDate(new Date(currentDate.setDate(currentDate.getDate() - 1)));
+    const d = new Date(currentDate.setDate(currentDate.getDate() - 1));
+    setCurrentDate(d);
+    console.log('날짜 감소:', d);
   };
 
   // 카테고리 추가 창 열림
@@ -154,130 +145,105 @@ const TodoMainList = (date) => {
   const handleAddTodoSubmit = async () => {
     if (newTodo) {
       try {
-        const response = await axios.post(`https://i11b104.p.ssafy.io/api/todos`, {
+        const response = await axios.post('https://i11b104.p.ssafy.io/api/todos', {
+          content: newTodo,
+          categoryId: currentCategoryIndex,
+        }, {
           headers: {
             'Content-Type': 'application/json',
             'Authorization': sessionStorage.getItem('accessToken'),
           },
-          params: {
-            content: newTodo,
-            categoryId: currentCategoryIndex,
-          },
         });
-  
+
         if (response.status === 200) {
-          const todosData = response.data;
+          console.log('할일 추가 성공:', response.data);
+          const newTodoItem = response.data;
           const updatedCategories = [...categories];
-  
-          todosData.forEach((todo) => {
-            const { id, categoryId, content, createdAt, isCompleted } = todo;
-  
-            // categoryId에 해당하는 카테고리를 찾아 items에 todo를 추가
-            const categoryIndex = updatedCategories.findIndex(
-              (category) => category.categoryId === categoryId
-            );
-            if (categoryIndex !== -1) {
-              updatedCategories[categoryIndex].items.push({
-                id,
-                content,
-                createdAt,
-                isCompleted,
-              });
-            }
-          });
-  
+
+          const categoryIndex = updatedCategories.findIndex(category => category.categoryId === newTodoItem.categoryId);
+          if (categoryIndex !== -1) {
+            updatedCategories[categoryIndex].items.push(newTodoItem);
+          }
+
           setCategories(updatedCategories);
           setNewTodo('');
           setAddTodoModalIsOpen(false);
         } else {
-          console.log('불러오기 실패', response);
+          console.log('할일 추가 실패:', response);
         }
       } catch (error) {
-        console.error('서버 요청 중 오류 발생', error);
+        console.error('할일 추가 중 오류 발생:', error);
       }
     }
   };
-  
 
-    // 할일 수정
-    const handleEditTodo = async (categoryIndex, todoIndex) => {
-      if (editedTodo) {
-        try {
-          const response = await axios.patch(`https://i11b104.p.ssafy.io/api/todos`, {
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': sessionStorage.getItem('accessToken'),
-            },
-            params: {
-              id: todoIndex,
-              content: editedTodo,
-            },
-          });
-    
-          if (response.status === 200) {
-
-            const todoData = response.data;
-            const updatedCategories = [...categories];
-    
-            const { id, categoryId, content, createdAt, isCompleted } = todoData;
-
-            if (categoryIndex !== -1) {
-              const items = updatedCategories[categoryIndex].items;
-          
-              // 해당 id의 todo를 찾기
-              const todoIndex = items.findIndex((item) => item.id === id);
-          
-              if (todoIndex !== -1) {
-                // 기존의 todo를 수정
-                items[todoIndex] = {
-                  id,
-                  content,
-                  createdAt,
-                  isCompleted,
-                };
-              }
-            }
-    
-            setCategories(updatedCategories);
-            setSelectedTodo({ categoryIndex: null, todoIndex: null });
-            setEditedTodo('');
-            setTodoModalIsOpen(false);
-          } else {
-            console.log('불러오기 실패', response);
-          }
-        } catch (error) {
-          console.error('서버 요청 중 오류 발생', error);
-        }
-      }
-    };
-
-    const handleDeleteTodo = async (categoryIndex, todoIndex) => {
+  // 할일 수정
+  const handleEditTodo = async (categoryIndex, todoIndex) => {
+    if (editedTodo) {
       try {
-        const response = await axios.delete(`https://i11b104.p.ssafy.io/api/todos/${todoIndex}`, {
+        const response = await axios.patch('https://i11b104.p.ssafy.io/api/todos', {
+          id: todoIndex,
+          content: editedTodo,
+        }, {
           headers: {
             'Content-Type': 'application/json',
             'Authorization': sessionStorage.getItem('accessToken'),
           },
         });
-    
+
         if (response.status === 200) {
+          console.log('할일 수정 성공:', response.data);
           const updatedCategories = [...categories];
+          const todoData = response.data;
+
           const items = updatedCategories[categoryIndex].items;
-    
-          // todoIndex에 해당하는 todo를 찾고 삭제
-          const todoToDeleteIndex = items.findIndex((item) => item.id === todoIndex);
-    
-          if (todoToDeleteIndex !== -1) {
-            items.splice(todoToDeleteIndex, 1); // 해당 인덱스에서 1개 요소 삭제
-            setCategories(updatedCategories); // 상태 업데이트
+          const todoIdx = items.findIndex(item => item.id === todoData.id);
+
+          if (todoIdx !== -1) {
+            items[todoIdx] = todoData;
           }
+
+          setCategories(updatedCategories);
           setSelectedTodo({ categoryIndex: null, todoIndex: null });
+          setEditedTodo('');
           setTodoModalIsOpen(false);
+        } else {
+          console.log('할일 수정 실패:', response);
         }
       } catch (error) {
-        console.error('Error deleting todo:', error);
+        console.error('할일 수정 중 오류 발생:', error);
       }
     }
+  };
+
+  // 할일 삭제
+  const handleDeleteTodo = async (categoryIndex, todoIndex) => {
+    try {
+      const response = await axios.delete(`https://i11b104.p.ssafy.io/api/todos/${todoIndex}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': sessionStorage.getItem('accessToken'),
+        },
+      });
+
+      if (response.status === 200) {
+        console.log('할일 삭제 성공:', response.data);
+        const updatedCategories = [...categories];
+        const items = updatedCategories[categoryIndex].items;
+
+        const todoToDeleteIndex = items.findIndex(item => item.id === todoIndex);
+
+        if (todoToDeleteIndex !== -1) {
+          items.splice(todoToDeleteIndex, 1);
+          setCategories(updatedCategories);
+        }
+        setSelectedTodo({ categoryIndex: null, todoIndex: null });
+        setTodoModalIsOpen(false);
+      }
+    } catch (error) {
+      console.error('할일 삭제 중 오류 발생:', error);
+    }
+  };
 
   // 할일 수정/삭제 옵션 열림
   const toggleOptions = (categoryIndex, todoIndex, content) => {
@@ -289,36 +255,30 @@ const TodoMainList = (date) => {
   // 할일 완료/미완료 버튼
   const toggleTodoComplete = async (categoryIndex, todoIndex) => {
     try {
-      // 서버로 POST 요청 보내기
       const response = await axios.post(`https://i11b104.p.ssafy.io/api/category/complete/${todoIndex}`, null, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem('accessToken'),
         }
       });
-  
+
       if (response.status === 200) {
+        console.log('할일 완료/미완료 토글 성공:', response.data);
         const updatedTodo = response.data;
-  
-        // 상태 업데이트: categories의 items 안에 있는 todos를 찾아서 상태 변경
-        const updatedCategories = [...categories]; // 카테고리 복사
-  
-        // 카테고리에서 해당 카테고리와 todo를 찾아 업데이트
+        const updatedCategories = [...categories];
+
         const categoryToUpdate = updatedCategories[categoryIndex];
         const todoToUpdate = categoryToUpdate.items.find(todo => todo.id === updatedTodo.id);
-  
+
         if (todoToUpdate) {
-          // isCompleted 상태 변경
           todoToUpdate.isCompleted = updatedTodo.isCompleted;
-  
-          // 새로운 상태로 업데이트
           setCategories(updatedCategories);
         }
       } else {
-        console.log('불러오기 실패', response);
+        console.log('할일 완료/미완료 토글 실패:', response);
       }
     } catch (error) {
-      console.error('서버 요청 중 오류 발생', error);
+      console.error('할일 완료/미완료 토글 중 오류 발생:', error);
     }
   };
 
@@ -326,29 +286,30 @@ const TodoMainList = (date) => {
   const handleCategoryModalSubmit = async () => {
     if (newCategoryTitle) {
       try {
-        const response = await axios.post(`https://i11b104.p.ssafy.io/api/category/${newCategoryTitle}`, {}, {
+        const response = await axios.post('https://i11b104.p.ssafy.io/api/category', { name: newCategoryTitle }, {
           headers: {
             'Authorization': sessionStorage.getItem('accessToken'),
           }
         });
-  
+
         if (response.status === 200) {
-          const newCategory = response.data; 
-          const { id, name } = newCategory;
-          const newCategories = { ...categories };
-          
-          newCategories.push({ categoryId : id, categoryName : name, items : [] });
+          console.log('카테고리 생성 성공:', response.data);
+          const newCategory = response.data;
+          const newCategories = [...categories];
+
+          newCategories.push({ categoryId: newCategory.id, categoryName: newCategory.name, items: [] });
           setCategories(newCategories);
           setNewCategoryTitle('');
           setCategoryModalIsOpen(false);
         } else {
-          console.error('카테고리 생성 실패', response);
+          console.error('카테고리 생성 실패:', response);
         }
       } catch (error) {
-        console.error('서버 요청 중 오류 발생', error);
+        console.error('카테고리 생성 중 오류 발생:', error);
       }
     }
   };
+
   const isSameDay = (date1, date2) => {
     return date1.getFullYear() === date2.getFullYear() &&
            date1.getMonth() === date2.getMonth() &&
@@ -363,32 +324,32 @@ const TodoMainList = (date) => {
     <div className="TodoMainListContainer">
       <div className="TodoHeader">
         <FaAngleLeft className="TodoArrow" onClick={handleDecreaseDate} /> 
-        <h3>{currentDate}</h3>
+        <h3>{currentDate.toDateString()}</h3>
         <FaAngleRight className="TodoArrow" onClick={handleIncreaseDate} />
       </div>
 
       <div className="TodoSections">
-      {categories.map((category, categoryIndex) => (
-        <div className="TodoSection" key={categoryIndex}>
-          <div className="TodoSectionHeader">
-            <h4>{category.categoryName}</h4>
-            {category.categoryName !== '일일 미션' && (
-              <FaPlus className="AddTodoButton" onClick={() => handleAddTodo(categoryIndex)} />
-            )}
+        {categories.map((category, categoryIndex) => (
+          <div className="TodoSection" key={categoryIndex}>
+            <div className="TodoSectionHeader">
+              <h4>{category.categoryName}</h4>
+              {category.categoryName !== '일일 미션' && (
+                <FaPlus className="AddTodoButton" onClick={() => handleAddTodo(categoryIndex)} />
+              )}
+            </div>
+            <ul>
+              {category.items.map((item, todoIndex) => (
+                <li key={todoIndex} className="TodoItem">
+                  <div className="TodoItemContent">
+                    <input type="checkbox" checked={item.isCompleted} onChange={() => toggleTodoComplete(categoryIndex, todoIndex)} /> {item.content}
+                    <FaEllipsisH className="TodoOptionsButton" onClick={() => toggleOptions(categoryIndex, todoIndex, item.content)} />
+                  </div>
+                </li>
+              ))}
+            </ul>
           </div>
-          <ul>
-            {category.items.map((item, todoIndex) => (
-              <li key={todoIndex} className="TodoItem">
-                <div className="TodoItemContent">
-                  <input type="checkbox" checked={item.isCompleted} onChange={() => toggleTodoComplete(categoryIndex, todoIndex)} /> {item.content}
-                  <FaEllipsisH className="TodoOptionsButton" onClick={() => toggleOptions(categoryIndex, todoIndex, item.content)} />
-                </div>
-              </li>
-            ))}
-          </ul>
-        </div>
-      ))}
-    </div>
+        ))}
+      </div>
 
       <div className="TodoActions">
         {(isSameDay(currentDate, today) || isSameDay(currentDate, yesterday)) && (
@@ -400,6 +361,7 @@ const TodoMainList = (date) => {
         <FaEllipsisH className="MoreOptionsButton" onClick={handleAddCategory} />
       </div>
 
+      {/* 카테고리 추가 모달 */}
       <Modal
         isOpen={categoryModalIsOpen}
         onRequestClose={() => setCategoryModalIsOpen(false)}
@@ -421,6 +383,7 @@ const TodoMainList = (date) => {
         </div>
       </Modal>
 
+      {/* 할일 추가 모달 */}
       <Modal
         isOpen={addTodoModalIsOpen}
         onRequestClose={() => setAddTodoModalIsOpen(false)}
@@ -442,6 +405,7 @@ const TodoMainList = (date) => {
         </div>
       </Modal>
 
+      {/* 할일 수정/삭제 모달 */}
       <Modal
         isOpen={todoModalIsOpen}
         onRequestClose={() => setTodoModalIsOpen(false)}
@@ -463,6 +427,7 @@ const TodoMainList = (date) => {
         </div>
       </Modal>
 
+      {/* 그림일기 생성 모달 */}
       <Modal
         isOpen={drawingModalIsOpen}
         onRequestClose={() => setDrawingModalIsOpen(false)}
@@ -481,6 +446,5 @@ const TodoMainList = (date) => {
     </div>
   );
 };
-
 
 export default TodoMainList;
