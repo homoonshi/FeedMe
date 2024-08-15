@@ -8,7 +8,7 @@ export const fetchFriendsList = createAsyncThunk(
     try {
       const response = await axios.get('https://i11b104.p.ssafy.io/api/friends/chats', {
         headers: {
-          Authorization: `${token}`, // Bearer 추가 여부 확인 필요
+          Authorization: `${token}`, // Bearer 추가
         },
       });
       
@@ -20,7 +20,7 @@ export const fetchFriendsList = createAsyncThunk(
         receiveTime : friend.receiveTime,
       }));
     } catch (error) {
-      return rejectWithValue(error.response?.data || 'Something went wrong');
+      return rejectWithValue(error.response?.data || 'Failed to fetch friends list');
     }
   }
 );
@@ -29,7 +29,7 @@ const friendsSlice = createSlice({
   name: 'friends',
   initialState: {
     list: [],
-    status: 'idle',
+    status: 'idle', // 초기 상태는 idle
     error: null,
   },
   reducers: {
