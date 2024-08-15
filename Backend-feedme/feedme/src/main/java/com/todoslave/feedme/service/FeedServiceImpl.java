@@ -72,7 +72,7 @@ public class FeedServiceImpl implements FeedService{
     private String diaryImgPath(Feed feed) {
         int id = feed.getMember().getId();
         String day = String.valueOf(feed.getDiaryDay());
-        return "http://localhost:8080/image/pictureDiary/" + id + "_" + day;
+        return "https://i11b104.p.ssafy.io/api/image/pictureDiary/" + id + "_" + day;
     }
 
 //    // Feed 엔티티를 FeedResponseDTO로 변환하는 메서드
