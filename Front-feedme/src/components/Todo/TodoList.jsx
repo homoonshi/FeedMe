@@ -22,9 +22,36 @@ const ToDoList = ({onClick}) => {
         } else {
           console.log('불러오기 실패', response);
         }
+
+        const creatureRes = await axios.get(`https://i11b104.p.ssafy.io/api/creatureTodo/main/daily`,{
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': sessionStorage.getItem('accessToken'),
+          }
+        });
+
+        if(creatureRes.status === 200){
+          const updatedIncompletedTodo = [...incompletedTodos];
+          const IncompletedMission = creatureRes.data;
+          
+          IncompletedMission.forEach(mission => {
+            const { id, content, createdAt, isCompleted } = mission;
+            updatedIncompletedTodo.push({
+              id,
+              content,
+              createdAt,
+              isCompleted
+            });
+          });
+
+          setIncompletedTodos(updatedIncompletedTodo);
+        }else{
+          console.log("일일 미션 안한거 추가 실패", IncompletedMission);
+        }
       } catch (error) {
         console.error('서버 요청 중 오류 발생', error);
       }
+
     };
   
     fetchData();
@@ -46,7 +73,6 @@ const ToDoList = ({onClick}) => {
         {incompletedTodos && incompletedTodos.length > 0 ? (
           incompletedTodos.map((todo, index) => (
             <li key={index}>
-              <input type="checkbox" />
               <label htmlFor={`todo-${index}`}> {todo.content}</label>
             </li>
           ))
