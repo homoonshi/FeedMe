@@ -97,7 +97,7 @@ const Main = () => {
         <div className='MainRight'>
           <SearchBar />
           <div className='MainRightContents'>
-            <CreatureInfo />
+            <CreatureInfo weatherCategory={weatherCategory}/>
             <Calendar />
           </div>
         </div>
