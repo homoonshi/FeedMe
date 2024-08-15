@@ -323,7 +323,7 @@ public class TodoServiceImpl implements TodoService {
     dayOffService.saveDayOff(dayOff);
 
     // 그림일기 요청 추가 (Flask 서버로 전송)
-    createPictureDiary(date, todolist);
+//    createPictureDiary(date, todolist);  // 나중에 구현
 
     //그림일기 창, feed에서 불러옵니다.
 
