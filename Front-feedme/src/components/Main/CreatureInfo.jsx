@@ -7,6 +7,11 @@ import { fetchUserData } from '../../store/userSlice';
 import { setToken } from '../../store/slice';
 import snowyGif from '../../assets/images/snowy.gif'; 
 import rainyGif from '../../assets/images/rainy.gif'; 
+import eg1 from '../../assets/images/1.gif'
+import eg2 from '../../assets/images/2.gif'
+import eg3 from '../../assets/images/3.gif'
+import eg4 from '../../assets/images/4.gif'
+import eg5 from '../../assets/images/5.gif'
 
 const CreatureInfo = ({weatherCategory}) => {
   const navigate = useNavigate();
@@ -34,6 +39,13 @@ const CreatureInfo = ({weatherCategory}) => {
     navigate(path);
   };
 
+  const getRandomEggImage = () => {
+    const eggImages = [eg1, eg2, eg3, eg4, eg5];
+    return eggImages[Math.floor(Math.random() * eggImages.length)];
+  };
+  
+  const displayImage = image ? `data:image/gif;base64,${image}` : getRandomEggImage();
+
   return (
     <div className='CreatureInfo'>
       {weatherCategory === 'snowy' && (
@@ -54,7 +66,7 @@ const CreatureInfo = ({weatherCategory}) => {
       <h2>{creatureName}</h2>
       <img 
         className='CreatureInfoPhoto' 
-        src={`data:image/gif;base64,${image}`} 
+        src={displayImage} 
         alt="creature" 
         onClick={() => MoveTo('/MyPage')} 
       />
