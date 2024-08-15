@@ -173,6 +173,29 @@ const MyPage = () => {
       });
   };
   
+  // const handleUserDel = () =>{
+  //   fetch(`https://i11b104.p.ssafy.io/api/users`, {
+  //     method: 'DELETE',
+  //     headers: {
+  //       'Authorization': `${token}`, 
+  //     },
+  //   })
+  //     .then(response => {
+  //       if (response.ok) {
+  //         console.log(`유저 삭제 성공`);
+  //         navigate('/Login');
+  //       } else {
+  //         console.error('삭제 실패');
+  //       }
+  //     })
+  //     .catch(error => {
+  //       console.error('Error:', error);
+  //     })
+  //     .finally(() => {
+  //       setReleaseModalOpen(false); 
+  //     });
+  // }
+
   return (
     <div className="MyPageBack">
       <div className="MyPageMain">
@@ -197,6 +220,7 @@ const MyPage = () => {
                 <div className="MyPageInfoBox">{brithday}</div> 
               </label>
               <div className='MyPageButtons'>
+                {/* <button className="MyPgaeUserDel" onClick={handleUserDel}>회원 탈퇴</button> */}
                 <button className="MyPageButtonLogout" onClick={handleLogoutClick}>로그아웃</button>
                 <button className="MyPageButton" onClick={handleEditClick}>정보 수정</button>
               </div>
