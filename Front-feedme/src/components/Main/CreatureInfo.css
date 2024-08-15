@@ -55,13 +55,13 @@
 }
 
 .WeatherOverlay {
-    position: absolute; /* 부모 요소에 상대적인 위치 */
-    top: 30%; /* 부모 요소의 50% 위치에서 시작하여 */
-    left: 50%; /* 부모 요소의 50% 위치에서 시작하여 */
-    width: 150px; /* CreatureInfoPhoto와 같은 크기 */
-    height: 150px; /* CreatureInfoPhoto와 같은 크기 */
-    transform: translate(-50%, -50%); /* 정확히 가운데로 맞추기 위해 사용 */
-    z-index: 1; /* Creature 이미지보다 뒤에 오도록 설정 */
+    position: absolute; 
+    top: 30%; 
+    left: 50%; 
+    width: 150px; 
+    height: 150px; 
+    transform: translate(-50%, -50%); 
+    z-index: 3;
     border-radius: 50%;
-    pointer-events: none; /* 이미지가 클릭을 방해하지 않도록 설정 */
+    pointer-events: none; 
 }
