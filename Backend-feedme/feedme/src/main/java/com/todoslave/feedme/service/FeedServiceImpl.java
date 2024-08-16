@@ -139,9 +139,9 @@ public class FeedServiceImpl implements FeedService{
         feedDTO.setNickname(feed.getNickname());
 
         //그림일기 이미지!!!
-        feedDTO.setImg(flaskClientUtil.getCreatureDiaryAsByteArray(feed.getMember().getNickname(),feed.getUpdatedAt().toLocalDate()));
+//        feedDTO.setImg(flaskClientUtil.getCreatureDiaryAsByteArray(feed.getMember().getNickname(),feed.getUpdatedAt().toLocalDate()));
 
-        feedDTO.setCreatureImg(flaskClientUtil.getCreatureImageAsByteArray(feed.getMember().getNickname(),feed.getMember().getCreature().getId(),feed.getMember().getCreature().getLevel()));
+//        feedDTO.setCreatureImg(flaskClientUtil.getCreatureImageAsByteArray(feed.getMember().getNickname(),feed.getMember().getCreature().getId(),feed.getMember().getCreature().getLevel()));
 
         feedDTO.setCaption(feed.getContent());
         feedDTO.setLastCreateTime(feed.getUpdatedAt());
@@ -167,7 +167,7 @@ public class FeedServiceImpl implements FeedService{
     public FeedResponseDTO convertToDTO(Feed feed) {
         FeedResponseDTO dto = new FeedResponseDTO();
         dto.setId(feed.getId());
-        dto.setImg(flaskClientUtil.getCreatureImageAsByteArray(feed.getMember().getNickname(),feed.getMember().getCreature().getId(),feed.getMember().getCreature().getLevel())); // 이미지 URL이 엔티티에 없다면 필요에 따라 설정
+//        dto.setImg(flaskClientUtil.getCreatureImageAsByteArray(feed.getMember().getNickname(),feed.getMember().getCreature().getId(),feed.getMember().getCreature().getLevel())); // 이미지 URL이 엔티티에 없다면 필요에 따라 설정
         dto.setContent(feed.getContent());
         dto.setAuthor(feed.getNickname());
         dto.setLikeCnt(String.valueOf(feed.getLikeCount()));
