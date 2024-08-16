@@ -20,19 +20,6 @@ const Chat = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const token = useSelector((state) => state.auth.token);
-  const user = useSelector((state) => state.user);
-  const friendsList = useSelector((state) => state.friends.list || []); // friends.list로 접근해야 함
-  const friendsStatus = useSelector((state) => state.friends.status || 'idle'); // status 필드 접근 추가
-  const selectedFriendInfo = useSelector((state) => state.friendInfo);
-
-  const { creatureId, creatureName, exp, level, image, togetherDay } = user;
-
-  const [selectedFriend, setSelectedFriend] = useState(null);
-  const [view, setView] = useState('profile');
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [friendToDelete, setFriendToDelete] = useState(null);
-
   useEffect(() => {
     const sessionToken = sessionStorage.getItem('accessToken');
     if (sessionToken) {
@@ -41,6 +28,15 @@ const Chat = () => {
       navigate('/login');
     }
   }, [dispatch, navigate]);
+
+  const token = useSelector((state) => state.auth.token);
+  const user = useSelector((state) => state.user);
+  const friendsList = useSelector((state) => state.friends.list);
+  const friendsStatus = useSelector((state) => state.friends.status);
+
+  const selectedFriendInfo = useSelector((state) => state.friendInfo);
+
+  const { creatureId, creatureName, exp, level, image, togetherDay, error } = user;
 
   useEffect(() => {
     if (token) {
@@ -57,14 +53,15 @@ const Chat = () => {
 
   useEffect(() => {
     console.log('Current friends list:', friendsList);
-    console.log('Current friends status:', friendsStatus); // friendsStatus로 상태를 로그에 출력
+    console.log('Current friends status:', friendsStatus);
   }, [friendsList, friendsStatus]);
+  
 
   useEffect(() => {
     if (token) {
       const eventSource = new EventSourcePolyfill('https://i11b104.p.ssafy.io/api/alarms/subscribe/chat', {
         headers: {
-          'Authorization': `${token}`,
+          'Authorization': sessionStorage.getItem('accessToken'),
         },
       });
 
@@ -72,12 +69,17 @@ const Chat = () => {
         const newChat = JSON.parse(event.data);
         dispatch(updateFriendsList(newChat));
       });
-
+      
       return () => {
         eventSource.close();
       };
     }
   }, [dispatch, token]);
+
+  const [selectedFriend, setSelectedFriend] = useState(null);
+  const [view, setView] = useState('profile');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [friendToDelete, setFriendToDelete] = useState(null);
 
   const handleFriendClick = (friend) => {
     setSelectedFriend(friend);
@@ -91,7 +93,7 @@ const Chat = () => {
     if (selectedFriend && selectedFriend.friendId === friend.friendId && view === 'chat') {
       return;
     }
-
+    
     setSelectedFriend(null);
     setView(null);
 
@@ -141,7 +143,7 @@ const Chat = () => {
                   )}
                   {view === 'creature' && (
                     <Creature
-                      creature={{ id: creatureId, name: creatureName, daysTogether: togetherDay, level, exp, image }}
+                      creature={{ id: creatureId, name: creatureName, daysTogether: togetherDay, level: level, exp: exp, image: image }}
                     />
                   )}
                   {view === 'creatureChat' && (
