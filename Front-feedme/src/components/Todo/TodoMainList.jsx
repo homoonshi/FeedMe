@@ -3,7 +3,7 @@ import { FaAngleLeft, FaAngleRight, FaEllipsisH, FaPlus, FaPen } from 'react-ico
 import Modal from 'react-modal';
 import './TodoMainList.css';
 import '../../assets/font/Font.css';
-import diary from '../../assets/images/test2.png';
+import diary from '../../assets/images/diary.jpg';
 import axios from 'axios';
 
 const TodoMainList = ({ date }) => {

@@ -139,6 +139,7 @@ const NotificationModal = ({ onClose }) => {
       });
       dispatch(removeRequests(index));
       console.log('요청 수락 완료!');
+      dispatch(removeRequests(index));
       window.location.reload();
     } catch (error) {
       console.error('Error accepting friend request:', error);
