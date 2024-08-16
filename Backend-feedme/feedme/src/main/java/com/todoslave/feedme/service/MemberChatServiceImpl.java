@@ -225,15 +225,18 @@ public class MemberChatServiceImpl implements MemberChatService{
     // 채팅방 갱신 (나)
     alarmService.renewChattingRoom(memberChatListResponseDTO, memberId,1);
 
-    memberChatListResponseDTO.setCounterpartNickname(member.getNickname());
+    MemberChatListResponseDTO memberChatListResponseDTO2 = new MemberChatListResponseDTO();
+    memberChatListResponseDTO2.setReceiveTime(memberChatRoom.getReceiveTime());
+    memberChatListResponseDTO2.setCounterpartNickname(member.getNickname());
+    memberChatListResponseDTO2.setFriendId(roomId);
     creature = creatureRepository.findByMemberId(memberId);
 
-    memberChatListResponseDTO.setAvatar(flaskClientUtil.getCreatureImageAsByteArray(
+    memberChatListResponseDTO2.setAvatar(flaskClientUtil.getCreatureImageAsByteArray(
         member.getNickname(), creature.getId(), creature.getLevel()
     ));
 
     // 채팅방 갱신 (상대)
-    alarmService.renewChattingRoom(memberChatListResponseDTO, counterPartId, 0);
+    alarmService.renewChattingRoom(memberChatListResponseDTO2, counterPartId, 0);
 
 
     MemberChatMessageResponseDTO response = new MemberChatMessageResponseDTO();

@@ -25,16 +25,18 @@ public class DiaryServiceImpl implements DiaryService {
 
     @Override
     public Page<DiaryResponseDTO> getDiaryList(Pageable pageable) {
-        return diaryRepository.findAll(pageable)
-                .map(this::convertToDTO); // 이렇게 하면 Page<DiaryResponseDTO>가 반환됩니다.
+        Integer memberId = SecurityUtil.getCurrentMember().getId(); // 현재 사용자의 ID를 가져오는 방법
+        return diaryRepository.findByMemberId(memberId, pageable)
+                .map(this::convertToDTO);
     }
+
 
     private DiaryResponseDTO convertToDTO(PictureDiary diary) {
         DiaryResponseDTO dto = new DiaryResponseDTO();
         dto.setContent(diary.getContent());
         dto.setCreatedAt(diary.getCreatedAt());
 
-        dto.setDiaryimg(flaskClientUtil.getCreatureDiaryAsByteArray(diary.getMember().getNickname(),diary.getCreatedAt()));
+//        dto.setDiaryimg(flaskClientUtil.getCreatureDiaryAsByteArray(diary.getMember().getNickname(),diary.getCreatedAt()));
 
         return dto;
     }
