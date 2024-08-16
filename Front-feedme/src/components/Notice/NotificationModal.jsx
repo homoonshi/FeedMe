@@ -254,12 +254,12 @@ const NotificationModal = ({ onClose }) => {
                 <ul>
                   {requests.map((request, index) => (
                     <li key={index}>
-                      <img src={request.creatureImg}
+                      {/* <img src={request.creatureImg}
                         style={{
                           width: "35px",
                           marginRight: "20px",
                           borderRadius: "50%",
-                        }} alt='creatureImg' />
+                        }} alt='creatureImg' /> */}
                       <span style={{
                         fontFamily: "PretendardM"
                       }}>{request.counterpartNickname}</span>

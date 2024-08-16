@@ -450,54 +450,31 @@ const TodoMainList = ({ date }) => {
   yesterday.setDate(today.getDate() - 1);
 
 
-// 할일 완료
+  // 할일 완료
   const handleCompleteAll = async () => {
     try {
-      const todosToComplete = categories.flatMap(category => 
-        category.items.filter(item => !item.isCompleted).map(item => item.id)
-      );
-  
-      const completedTodos = [];
-  
-      for (const todoId of todosToComplete) {
-        try {
-          const response = await axios.post(`https://i11b104.p.ssafy.io/api/todos/complete/${todoId}`, null, {
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': sessionStorage.getItem('accessToken'),
-            }
-          });
-  
-          if (response.status === 200) {
-            console.log(`할일 ${todoId} 완료 처리 성공:`, response.data);
-            completedTodos.push(todoId); // 성공한 할일 ID를 추가
-          } else {
-            console.log(`할일 ${todoId} 완료 처리 실패:`, response);
-          }
-        } catch (error) {
-          console.error(`할일 ${todoId} 완료 처리 중 오류 발생:`, error);
+      const formattedDate = currentDate.toISOString().split('T')[0]; // currentDate를 YYYY-MM-DD 형식으로 변환
+      const response = await axios.post(`https://i11b104.p.ssafy.io/api/todos/complete/complateAll`, null, {
+        headers: {
+          'Authorization': sessionStorage.getItem('accessToken'),
+        },
+        params: {
+          date: formattedDate,  // 쿼리 파라미터로 date 추가
         }
-      }
-  
-      if (completedTodos.length > 0) {
-        setCategories(prevCategories => {
-          return prevCategories.map(category => ({
-            ...category,
-            items: category.items.map(item =>
-              completedTodos.includes(item.id) ? { ...item, isCompleted: true } : item
-            )
-          }));
-        });
-  
-        console.log('완료된 할일들이 업데이트되었습니다.');
+      });
+
+      if (response.status === 200) {
+        console.log('할일 모두 완료 성공:', response.data);
+        // 필요한 후속 처리를 여기에 추가할 수 있습니다.
       } else {
-        console.log('완료된 할일이 없습니다.');
+        console.log('할일 모두 완료 실패:', response);
       }
     } catch (error) {
-      console.error('모든 할일 완료 처리 중 오류 발생:', error);
+      console.error('할일 모두 완료 요청 중 오류 발생:', error);
     }
   };
-  
+
+
   return (
     <div className="TodoMainListContainer">
       <div className="TodoHeader">
