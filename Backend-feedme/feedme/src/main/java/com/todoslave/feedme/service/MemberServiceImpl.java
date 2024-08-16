@@ -7,7 +7,6 @@ import com.todoslave.feedme.domain.entity.avatar.Creature;
 import com.todoslave.feedme.domain.entity.communication.FriendRequest;
 import com.todoslave.feedme.domain.entity.membership.Member;
 import com.todoslave.feedme.login.util.SecurityUtil;
-import com.todoslave.feedme.repository.CreatureRepository;
 import com.todoslave.feedme.repository.FriendRepository;
 import com.todoslave.feedme.repository.FriendRequestRepository;
 import com.todoslave.feedme.repository.MemberRepository;
@@ -38,12 +37,11 @@ public class MemberServiceImpl implements MemberService {
 
     private final FriendRequestRepository friendRequestRepository;
     private final FlaskClientUtil flaskClientUtil;
-    private final CreatureRepository creatureRepository;
 
     @Override
     public Member findById(int userId) {
         return memberRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("Member not found by id: " + userId));
+            .orElseThrow(() -> new RuntimeException("Member not found by id: " + userId));
     }
 
     @Override
@@ -65,10 +63,6 @@ public class MemberServiceImpl implements MemberService {
         member.setNickname(memberSignupRequestDTO.getNickname());
         member.setUserRole(memberSignupRequestDTO.getUserRole());
 
-        Creature creature = new Creature();
-        creature.setMember(member);
-        creatureRepository.save(creature);
-
         return memberRepository.save(member);
     }
 
@@ -77,7 +71,7 @@ public class MemberServiceImpl implements MemberService {
         int id = SecurityUtil.getCurrentUserId();
 
         Member member = memberRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+            .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
         member.setNickname(memberSignupRequestDTO.getNickname());
         member.setBirthday(memberSignupRequestDTO.getBirthday());
@@ -103,7 +97,7 @@ public class MemberServiceImpl implements MemberService {
     // 친구 인지 확인하기!!!
     public boolean isFriend(int memberId, int friendId) {
         return friendRepository.existsByMemberIdAndCounterpartId(memberId, friendId) ||
-                friendRepository.existsByCounterpartIdAndMemberId(friendId, memberId);
+            friendRepository.existsByCounterpartIdAndMemberId(friendId, memberId);
     }
 
     @Override //맴버 리스트 검색 가져오기
