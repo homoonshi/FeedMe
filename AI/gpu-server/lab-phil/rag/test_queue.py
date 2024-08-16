@@ -29,7 +29,7 @@ semaphore = threading.Semaphore(max_workers)
 USE_BGE_EMBEDDING = False
 
 if not USE_BGE_EMBEDDING:
-    os.environ["OPENAI_API_KEY"] = "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"
+    os.environ["OPENAI_API_KEY"] = "YOUT_KEY"
 
 LANGSERVE_ENDPOINT = "http://localhost:1234/v1"
 OLLAMA = ChatOpenAI(
