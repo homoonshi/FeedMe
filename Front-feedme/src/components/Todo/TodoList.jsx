@@ -10,7 +10,7 @@ const ToDoList = ({ onClick }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('https://i11b104.p.ssafy.io/api/todos/main/daily', {
+        const response = await axios.get('http://localhost:8080/todos/main/daily', {
           headers: {
             'Content-Type': 'application/json',
             'Authorization': sessionStorage.getItem('accessToken'),
@@ -24,7 +24,7 @@ const ToDoList = ({ onClick }) => {
           console.log('불러오기 실패', response);
         }
 
-        const creatureRes = await axios.get(`https://i11b104.p.ssafy.io/api/creatureTodo/main/daily`, {
+        const creatureRes = await axios.get(`http://localhost:8080/creatureTodo/main/daily`, {
           headers: {
             'Content-Type': 'application/json',
             'Authorization': sessionStorage.getItem('accessToken'),
