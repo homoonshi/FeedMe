@@ -29,7 +29,7 @@ import java.time.Period;
 @RequiredArgsConstructor
 public class CreatureServiceImpl implements CreatureService {
 
-//    @Autowired
+    //    @Autowired
 //    final private MemberRepository memberRepository;
 //    @Autowired
 //    final private CreatureRepository creatureRepository;
@@ -223,3 +223,4 @@ public class CreatureServiceImpl implements CreatureService {
 
 
 }
+
