@@ -6,6 +6,7 @@
   import { fetchUserData } from '../../store/userSlice';
   import './FeedList.css';
   import '../../assets/font/Font.css' 
+  import d from "../../assets/images/ddddd.png"
 
 
   const FeedList = () => {
@@ -176,7 +177,8 @@
               />
             ) : (
               <>
-                <img src={feedList[currentIndex].img} alt="feed" className="FeedListImg" />
+                {/* <img src={feedList[currentIndex].img} alt="feed" className="FeedListImg" /> */}
+                <img src={feedList[currentIndex].img || d} alt="feed" className="FeedListImg" />
                 <p className="FeedListCaption">{feedList[currentIndex].caption}</p>
               </>
             )}
