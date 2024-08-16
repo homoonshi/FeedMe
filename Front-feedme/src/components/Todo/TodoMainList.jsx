@@ -605,7 +605,9 @@ const TodoMainList = ({ date }) => {
         overlayClassName="TodoMainOverlay"
       >
         <h2 className="TodoMainModalTitle">그림일기 생성</h2>
-        <img src={diary} alt="그림일기 이미지" className="TodoMainModalDImage" />
+        <div className='TodoMainModalDImageContainer'>
+          <img src={diary} alt="그림일기 이미지" className="TodoMainModalDImage" />
+        </div>
         <div className="TodoMainModalButtons">
           <button className="TodoMainModalButton" onClick={() => setDrawingModalIsOpen(false)}>취소</button>
           <button className="TodoMainModalButton" onClick={handleCompleteAll}>생성</button>
