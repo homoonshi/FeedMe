@@ -7,4 +7,6 @@ import org.springframework.data.util.Streamable;
 
 public interface DiaryService {
     Page<DiaryResponseDTO> getDiaryList(Pageable pageable);
+
 }
+
