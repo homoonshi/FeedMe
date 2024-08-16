@@ -465,7 +465,7 @@ const TodoMainList = ({ date }) => {
 
       if (response.status === 200) {
         console.log('할일 모두 완료 성공:', response.data);
-        // 필요한 후속 처리를 여기에 추가할 수 있습니다.
+        setDrawingModalIsOpen(false)
       } else {
         console.log('할일 모두 완료 실패:', response);
       }
