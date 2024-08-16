@@ -7,6 +7,8 @@ import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.ZoneId;
 
 
 @Entity
@@ -16,7 +18,7 @@ public class CreatureTodo {
 
     //크리쳐 숙제 ID
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     // 회원 ID
@@ -29,14 +31,15 @@ public class CreatureTodo {
     @Column(name = "content", nullable = false, length = 255)
     private String content;
 
+
     // 생성일자
-    @CreationTimestamp
+//    @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
-    private Timestamp createdAt;
+    private LocalDate createdAt;
 
     // 완료여부
     @Column(name = "is_completed")
-    private boolean isCompleted;
+    private int isCompleted = 0;
 
     //==연관관계 메서드==//
     public void setMember(Member member) {

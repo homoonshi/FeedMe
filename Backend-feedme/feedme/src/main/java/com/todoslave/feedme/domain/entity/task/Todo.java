@@ -3,6 +3,7 @@ package com.todoslave.feedme.domain.entity.task;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.todoslave.feedme.domain.entity.membership.Member;
 import jakarta.persistence.*;
+import java.time.LocalDate;
 import lombok.Data;
 import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;
@@ -15,7 +16,7 @@ import java.sql.Timestamp;
 public class Todo {
 
     // 할일 ID
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     // 회원 ID
@@ -34,13 +35,12 @@ public class Todo {
     private String content;
 
     // 생성 일자
-    @CreationTimestamp
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private Timestamp createdAt;
+    @Column(name = "created_at", nullable = false)
+    private LocalDate createdAt;
 
     //완료 여부
     @Column(name = "is_completed",nullable = false)
-    private boolean isCompleted;
+    private int isCompleted;
 
   //==연관관계 메서드==//
   public void setMember(Member member) {

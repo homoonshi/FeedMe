@@ -14,7 +14,7 @@ import java.util.List;
 public class TodoCategory {
 
     // 할일 카테고리 ID
-    @Id  @GeneratedValue
+    @Id  @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     // 회원 ID
