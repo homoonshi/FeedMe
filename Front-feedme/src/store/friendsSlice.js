@@ -45,10 +45,10 @@ const friendsSlice = createSlice({
           ...newChat,
         };
         state.list.splice(index, 1);  // 기존 위치에서 제거
-        state.list.unshift(updatedFriend);  // 가장 앞으로 추가
+        state.list.push(updatedFriend);  // 가장 뒤로 추가
       } else {
-        // 새로운 친구라면 앞으로 추가
-        state.list.unshift(newChat);
+        // 새로운 친구라면 뒤에 추가
+        state.list.push(newChat);
       }
     }
   },
