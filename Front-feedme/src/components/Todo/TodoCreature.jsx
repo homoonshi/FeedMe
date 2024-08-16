@@ -9,6 +9,11 @@ import './TodoCreature.css'
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUserData } from '../../store/userSlice';
 import { setToken } from '../../store/slice';
+import eg1 from '../../assets/images/1.gif'
+import eg2 from '../../assets/images/2.gif'
+import eg3 from '../../assets/images/3.gif'
+import eg4 from '../../assets/images/4.gif'
+import eg5 from '../../assets/images/5.gif'
 
 const TodoCreature = () => {
   const dispatch = useDispatch();
@@ -67,10 +72,17 @@ const TodoCreature = () => {
   
   const maxExp = getMaxExpForLevel(level);
 
+  const getRandomEggImage = () => {
+    const eggImages = [eg1, eg2, eg3, eg4, eg5];
+    return eggImages[Math.floor(Math.random() * eggImages.length)];
+  };
+
+  const displayImage = image ? `data:image/gif;base64,${image}` : getRandomEggImage();
+
   return (
     <div className="TodoCreatureA">
       <p className="TodoCreatureAName">Lv. {level}</p> 
-      <img src={`data:image/gif;base64,${image}`} alt="creature" />
+      <img src={displayImage} alt="creature" />
       {/* <img src={test} alt="creature" /> */}
       {effectImage && <img src={effectImage} alt="effect" className="TodoCreatureEffect" />}
       <div className="TodoCreatureAInfo">
