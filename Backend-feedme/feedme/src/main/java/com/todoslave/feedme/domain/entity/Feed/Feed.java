@@ -7,6 +7,7 @@ import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +18,7 @@ public class Feed {
 
     // 피드 아이디
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     // 회원 ID
@@ -25,6 +26,14 @@ public class Feed {
     @JoinColumn(name = "member_id")
     @JsonBackReference
     private Member member;
+
+    //그림일기 날자
+    @Column(name = "diary_day")
+    private LocalDate diaryDay;
+
+    //닉네임
+    @Column(name = "nickname")
+    private String nickname;
 
     // 피드 내용
     @Lob
