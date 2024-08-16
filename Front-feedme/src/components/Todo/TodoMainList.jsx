@@ -51,7 +51,7 @@ const TodoMainList = ({ date }) => {
     console.log('categoryRequest');
     console.log('currentDate3 : ', currentDate);
     try {
-      const response = await axios.get(`http://localhost:8080/category`, {
+      const response = await axios.get(`https://i11b104.p.ssafy.io/api/category`, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem('accessToken'),
@@ -107,7 +107,7 @@ const TodoMainList = ({ date }) => {
     setIsLoading(true);
 
     try {
-      const diaryPossible = await axios.get(`http://localhost:8080/dayoff/${currentDate}`, {
+      const diaryPossible = await axios.get(`https://i11b104.p.ssafy.io/api/dayoff/${currentDate}`, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem('accessToken'),
@@ -121,7 +121,7 @@ const TodoMainList = ({ date }) => {
 
       clearCategoryItems();
 
-      const response = await axios.get(`http://localhost:8080/todos/calendar/daily`, {
+      const response = await axios.get(`https://i11b104.p.ssafy.io/api/todos/calendar/daily`, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem('accessToken'),
@@ -164,7 +164,7 @@ const TodoMainList = ({ date }) => {
 
     // 크리쳐 미션 종료
     try {
-      const mission = await axios.get(`http://localhost:8080/creatureTodo/calendar/daily`, {
+      const mission = await axios.get(`https://i11b104.p.ssafy.io/api/creatureTodo/calendar/daily`, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem('accessToken'),
@@ -201,7 +201,7 @@ const TodoMainList = ({ date }) => {
   // 크리쳐 미션 완료
   const toggleMissionComplete = async (mission, missionIndex) => {
     try {
-      const response = await axios.post(`http://localhost:8080/creatureTodo/complete/${mission}`, null, {
+      const response = await axios.post(`https://i11b104.p.ssafy.io/api/creatureTodo/complete/${mission}`, null, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem('accessToken'),
@@ -261,7 +261,7 @@ const TodoMainList = ({ date }) => {
       try {
         console.log("현재 카테고리 아이디", currentCategoryIndex);
         const response = await axios.post(
-          `http://localhost:8080/todos`,
+          `https://i11b104.p.ssafy.io/api/todos`,
           null,  // POST 요청의 본문이 없는 경우 null을 사용합니다.
           {
             headers: {
@@ -302,7 +302,7 @@ const TodoMainList = ({ date }) => {
   const handleEditTodo = async (categoryIndex, todoIndex) => {
     if (editedTodo) {
       try {
-        const response = await axios.patch(`http://localhost:8080/todos`,
+        const response = await axios.patch(`https://i11b104.p.ssafy.io/api/todos`,
           null,
           {
             headers: {
@@ -344,7 +344,7 @@ const TodoMainList = ({ date }) => {
   // 할일 삭제
   const handleDeleteTodo = async (categoryIndex, todoIndex) => {
     try {
-      const response = await axios.delete(`http://localhost:8080/todos/${todoIndex}`, {
+      const response = await axios.delete(`https://i11b104.p.ssafy.io/api/todos/${todoIndex}`, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem('accessToken'),
@@ -382,7 +382,7 @@ const TodoMainList = ({ date }) => {
   const toggleTodoComplete = async (categoryIndex, todoIndex) => {
     console.log(todoIndex);
     try {
-      const response = await axios.post(`http://localhost:8080/todos/complete/${todoIndex}`, null, {
+      const response = await axios.post(`https://i11b104.p.ssafy.io/api/todos/complete/${todoIndex}`, null, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': sessionStorage.getItem('accessToken'),
@@ -415,7 +415,7 @@ const TodoMainList = ({ date }) => {
   const handleCategoryModalSubmit = async () => {
     if (newCategoryTitle) {
       try {
-        const response = await axios.post(`http://localhost:8080/category/${newCategoryTitle}`, null, {
+        const response = await axios.post(`https://i11b104.p.ssafy.io/api/category/${newCategoryTitle}`, null, {
           headers: {
             'Authorization': sessionStorage.getItem('accessToken'),
           }
@@ -461,7 +461,7 @@ const TodoMainList = ({ date }) => {
   
       for (const todoId of todosToComplete) {
         try {
-          const response = await axios.post(`http://localhost:8080/todos/complete/${todoId}`, null, {
+          const response = await axios.post(`https://i11b104.p.ssafy.io/api/todos/complete/${todoId}`, null, {
             headers: {
               'Content-Type': 'application/json',
               'Authorization': sessionStorage.getItem('accessToken'),
