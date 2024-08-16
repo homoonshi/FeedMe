@@ -17,7 +17,7 @@ export const fetchFriendsList = createAsyncThunk(
         counterpartNickname: friend.counterpartNickname,
         avatar: friend.avatar,
         isChecked: friend.isChecked,
-        receiveTime : friend.receiveTime,
+        receiveTime: friend.receiveTime,
       }));
     } catch (error) {
       return rejectWithValue(error.response?.data || 'Something went wrong');
@@ -39,16 +39,16 @@ const friendsSlice = createSlice({
       const index = state.list.findIndex(f => f.friendId === newChat.friendId);
   
       if (index !== -1) {
-        // 이미 존재하는 친구라면 목록에서 제거하고 가장 뒤로 이동
+        // 이미 존재하는 친구라면 목록에서 제거하고 가장 앞으로 이동
         const updatedFriend = {
           ...state.list[index],
           ...newChat,
         };
         state.list.splice(index, 1);  // 기존 위치에서 제거
-        state.list.push(updatedFriend);  // 가장 뒤로 추가
+        state.list.unshift(updatedFriend);  // 가장 앞으로 추가
       } else {
-        // 새로운 친구라면 뒤에 추가
-        state.list.push(newChat);
+        // 새로운 친구라면 앞으로 추가
+        state.list.unshift(newChat);
       }
     }
   },
