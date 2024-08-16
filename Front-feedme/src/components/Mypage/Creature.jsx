@@ -29,7 +29,9 @@ const Creature = ({ creature }) => {
     return eggImages[Math.floor(Math.random() * eggImages.length)];
   };
 
+  // const displayImage = creature.image ? `data:image/gif;base64,${creature.image}` : getRandomEggImage();
   const displayImage = creature.image ? `data:image/gif;base64,${creature.image}` : getRandomEggImage();
+
 
   return (
     <div className="MCreature">
