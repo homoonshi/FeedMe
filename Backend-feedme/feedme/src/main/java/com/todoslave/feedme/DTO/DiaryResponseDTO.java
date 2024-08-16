@@ -11,5 +11,5 @@ public class DiaryResponseDTO {
     private String content;
     private LocalDate createdAt;
 //    private String diaryImg;
-    private byte[] diaryimg;
+//    private byte[] diaryimg;
 }
